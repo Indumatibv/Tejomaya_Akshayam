@@ -1,0 +1,6 @@
+2025-11-19 13:08:41,482 INFO Scheduler started... waiting for triggers
+2025-11-19 13:09:00,557 INFO ⏳ Trigger received: running ETL pipeline
+2025-11-19 13:09:00,563 INFO 🚀 ETL pipeline started
+2025-11-19 13:09:22,929 INFO Scheduler started... waiting for triggers
+2025-11-19 13:10:00,072 INFO ⏳ Trigger received: running ETL pipeline
+2025-11-19 13:10:00,077 INFO 🚀 ETL pipeline started

@@ -1,0 +1,23 @@
+2025-11-19 12:52:23,066 INFO ===== Starting 2-Agent ETL Chain =====
+2025-11-19 12:52:23,066 INFO 🚀 Running script → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/agents/searching_agent.py
+2025-11-19 12:52:24,993 INFO ===== Starting 2-Agent ETL Chain =====
+2025-11-19 12:52:24,993 INFO 🚀 Running script → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/agents/searching_agent.py
+2025-11-19 12:53:46,005 INFO ✔ Completed with returncode=0
+2025-11-19 12:53:46,006 INFO 📄 Excel found: /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/weekly_sebi_downloads.xlsx
+2025-11-19 12:53:46,006 INFO 🚀 Running script → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/agents/parsing_agent.py
+2025-11-19 12:53:47,644 INFO ✔ Completed with returncode=0
+2025-11-19 12:53:47,645 INFO 📄 Excel found: /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/weekly_sebi_downloads.xlsx
+2025-11-19 12:53:47,645 INFO 🚀 Running script → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/agents/parsing_agent.py
+2025-11-19 12:55:18,834 INFO ✔ Completed with returncode=0
+2025-11-19 12:55:18,834 INFO 🎉 BOTH AGENTS COMPLETED SUCCESSFULLY!
+2025-11-19 12:55:24,274 INFO ✔ Completed with returncode=0
+2025-11-19 12:55:24,274 INFO 🎉 BOTH AGENTS COMPLETED SUCCESSFULLY!
+2025-11-19 13:09:00,606 INFO ===== Starting 2-Agent ETL Chain =====
+2025-11-19 13:09:00,607 INFO 🚀 Running script → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/agents/searching_agent.py
+2025-11-19 13:10:00,116 INFO ===== Starting 2-Agent ETL Chain =====
+2025-11-19 13:10:00,117 INFO 🚀 Running script → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/agents/searching_agent.py
+2025-11-19 13:11:33,675 INFO ✔ Completed with returncode=0
+2025-11-19 13:11:33,675 INFO 📄 Excel found: /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/weekly_sebi_downloads.xlsx
+2025-11-19 13:11:33,675 INFO 🚀 Running script → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/agents/parsing_agent.py
+2025-11-19 13:12:32,334 INFO ✔ Completed with returncode=0
+2025-11-19 13:12:32,334 INFO 🎉 BOTH AGENTS COMPLETED SUCCESSFULLY!

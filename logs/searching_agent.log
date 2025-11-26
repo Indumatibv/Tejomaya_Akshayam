@@ -1,0 +1,1660 @@
+
+📅 Target range (1 week(s) back): 2025-11-10 → 2025-11-16
+
+--- Processing SEBI Page 1 ---
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/inauguration-of-sebi-s-pavilion-at-the-iitf-2025-by-chairman-sebi_97763.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 
+2.37s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 
+2.41s 
+✅ MATCH (in week): 2025-11-14
+📥 PDF downloaded: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1763122672135.pdf
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/report-of-the-high-level-committee-on-conflict-of-interest-disclosures-and-related-matters-in-respect-of-members-and-officials-of-sebi_97732.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 
+2.71s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 
+2.74s 
+✅ MATCH (in week): 2025-11-12
+📥 PDF downloaded: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762943978568.pdf
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/sebi-and-iepfa-conducted-the-third-niveshak-shivir-at-amritsar-proactive-joint-initiative-to-minimize-unclaimed-assets-and-facilitate-investor-claims-for-unpaid-dividends-and-shares_97711.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 
+2.31s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 
+2.34s 
+✅ MATCH (in week): 2025-11-11
+📥 PDF downloaded: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762858201080.pdf
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/high-level-committee-on-conflict-of-interest-disclosures-and-related-matters-in-respect-of-members-and-officials-of-sebi-submits-its-report_97691.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 
+2.28s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 
+2.31s 
+✅ MATCH (in week): 2025-11-10
+📥 PDF downloaded: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762786201875.pdf
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/caution-to-public-regarding-dealing-in-digital-gold-_97676.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ic-regarding-dealing-in-digital-gold-_97676.html  | ✓ | ⏱: 
+2.31s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ic-regarding-dealing-in-digital-gold-_97676.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ic-regarding-dealing-in-digital-gold-_97676.html  | ✓ | ⏱: 
+2.34s 
+⏭️ Skipping (not in week): 2025-11-08
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/sebi-intensifies-efforts-to-combat-online-investment-scams-calls-for-greater-collaboration-from-social-media-platforms_97655.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...aboration-from-social-media-platforms_97655.html  | ✓ | ⏱: 
+2.34s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...aboration-from-social-media-platforms_97655.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...aboration-from-social-media-platforms_97655.html  | ✓ | ⏱: 
+2.37s 
+⏭️ Skipping (not in week): 2025-11-06
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/sebi-hosts-municipal-bond-and-reit-invit-outreach-programme-in-raipur-to-boost-urban-infrastructure-financing_97650.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_97650.html  | ✓ | ⏱: 
+2.33s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_97650.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_97650.html  | ✓ | ⏱: 
+2.37s 
+⏭️ Skipping (not in week): 2025-11-06
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/niveshak-shivir-to-be-held-on-november-01-2025-in-the-city-of-amritsar-punjab_97576.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...1-2025-in-the-city-of-amritsar-punjab_97576.html  | ✓ | ⏱: 
+2.28s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...1-2025-in-the-city-of-amritsar-punjab_97576.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...1-2025-in-the-city-of-amritsar-punjab_97576.html  | ✓ | ⏱: 
+2.32s 
+⏭️ Skipping (not in week): 2025-10-31
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/ease-of-doing-business-rationalisation-and-standardisation-of-penalties-levied-on-stock-brokers-by-stock-exchanges_97248.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...d-on-stock-brokers-by-stock-exchanges_97248.html  | ✓ | ⏱: 
+2.74s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...d-on-stock-brokers-by-stock-exchanges_97248.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...d-on-stock-brokers-by-stock-exchanges_97248.html  | ✓ | ⏱: 
+2.77s 
+⏭️ Skipping (not in week): 2025-10-10
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/clarification-on-media-reports-regarding-regulatory-oversight-of-family-offices_97047.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...egulatory-oversight-of-family-offices_97047.html  | ✓ | ⏱: 
+2.37s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...egulatory-oversight-of-family-offices_97047.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...egulatory-oversight-of-family-offices_97047.html  | ✓ | ⏱: 
+2.40s 
+⏭️ Skipping (not in week): 2025-10-03
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/sebi-rolls-out-validated-upi-handles-and-sebi-check-for-secure-investor-payments_97020.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...bi-check-for-secure-investor-payments_97020.html  | ✓ | ⏱: 
+2.28s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...bi-check-for-secure-investor-payments_97020.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...bi-check-for-secure-investor-payments_97020.html  | ✓ | ⏱: 
+2.31s 
+⏭️ Skipping (not in week): 2025-10-01
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-releases-investor-survey-2025-findings-to-guide-inclusive-and-responsible-investing_96984.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...e-inclusive-and-responsible-investing_96984.html  | ✓ | ⏱: 
+2.28s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...e-inclusive-and-responsible-investing_96984.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...e-inclusive-and-responsible-investing_96984.html  | ✓ | ⏱: 
+2.31s 
+⏭️ Skipping (not in week): 2025-09-30
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-board-meeting_96601.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-releases/sep-2025/sebi-board-meeting_96601.html  | ✓ | ⏱: 
+2.85s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-releases/sep-2025/sebi-board-meeting_96601.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-releases/sep-2025/sebi-board-meeting_96601.html  | ✓ | ⏱: 
+2.88s 
+⏭️ Skipping (not in week): 2025-09-12
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/change-in-settlement-dates-for-cash-and-slbm-segments-and-its-impact_96459.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...cash-and-slbm-segments-and-its-impact_96459.html  | ✓ | ⏱: 
+8.12s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...cash-and-slbm-segments-and-its-impact_96459.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...cash-and-slbm-segments-and-its-impact_96459.html  | ✓ | ⏱: 
+8.15s 
+⏭️ Skipping (not in week): 2025-09-08
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/caution-to-the-public-regarding-impersonation-of-sebi_96449.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ublic-regarding-impersonation-of-sebi_96449.html  | ✓ | ⏱: 
+2.26s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ublic-regarding-impersonation-of-sebi_96449.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ublic-regarding-impersonation-of-sebi_96449.html  | ✓ | ⏱: 
+2.30s 
+⏭️ Skipping (not in week): 2025-09-05
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-hosts-municipal-bond-outreach-programme-in-bhopal-to-boost-urban-infrastructure-financing_96406.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_96406.html  | ✓ | ⏱: 
+2.33s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_96406.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_96406.html  | ✓ | ⏱: 
+2.37s 
+⏭️ Skipping (not in week): 2025-09-03
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-and-iepfa-conducted-the-second-niveshak-shivir-in-hyderabad-proactive-joint-initiative-to-minimize-unclaimed-assets-and-facilitate-investor-claims-for-unpaid-dividends-and-shares_96393.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_96393.html  | ✓ | ⏱: 
+2.26s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_96393.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_96393.html  | ✓ | ⏱: 
+2.30s 
+⏭️ Skipping (not in week): 2025-09-02
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/niveshak-shivir-to-be-held-on-august-30-2025-in-the-city-of-hyderabad-telangana_96334.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...25-in-the-city-of-hyderabad-telangana_96334.html  | ✓ | ⏱: 
+2.26s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...25-in-the-city-of-hyderabad-telangana_96334.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...25-in-the-city-of-hyderabad-telangana_96334.html  | ✓ | ⏱: 
+2.29s 
+⏭️ Skipping (not in week): 2025-08-28
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/shri-sanjay-chandrakant-purao-takes-charge-as-executive-director-sebi_96248.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96248.html  | ✓ | ⏱: 
+2.39s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96248.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96248.html  | ✓ | ⏱: 
+2.43s 
+⏭️ Skipping (not in week): 2025-08-22
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/shri-avneesh-pandey-takes-charge-as-executive-director-sebi_96246.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96246.html  | ✓ | ⏱: 
+2.50s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96246.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96246.html  | ✓ | ⏱: 
+2.53s 
+⏭️ Skipping (not in week): 2025-08-22
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/shri-amit-pradhan-takes-charge-as-executive-director-sebi_96245.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96245.html  | ✓ | ⏱: 
+2.79s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96245.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96245.html  | ✓ | ⏱: 
+2.83s 
+⏭️ Skipping (not in week): 2025-08-22
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/advisory-against-investment-in-fraudulent-trading-schemes-claiming-to-be-offered-to-indian-residents-by-fpis_96244.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...e-offered-to-indian-residents-by-fpis_96244.html  | ✓ | ⏱: 
+2.31s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...e-offered-to-indian-residents-by-fpis_96244.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...e-offered-to-indian-residents-by-fpis_96244.html  | ✓ | ⏱: 
+2.34s 
+⏭️ Skipping (not in week): 2025-08-22
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/extension-of-deadline-for-filing-claims-in-the-matter-of-karvy-stock-broking-limited_96191.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_96191.html  | ✓ | ⏱: 
+2.60s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_96191.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_96191.html  | ✓ | ⏱: 
+2.63s 
+⏭️ Skipping (not in week): 2025-08-21
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/sebi-and-nism-launch-sebi-arth-yatra-contest-2025-_96087.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-launch-sebi-arth-yatra-contest-2025-_96087.html  | ✓ | ⏱: 
+2.31s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-launch-sebi-arth-yatra-contest-2025-_96087.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-launch-sebi-arth-yatra-contest-2025-_96087.html  | ✓ | ⏱: 
+2.34s 
+⏭️ Skipping (not in week): 2025-08-14
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/sebi-s-investor-awareness-campaign-on-all-india-radio-_96086.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...wareness-campaign-on-all-india-radio-_96086.html  | ✓ | ⏱: 
+2.87s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...wareness-campaign-on-all-india-radio-_96086.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...wareness-campaign-on-all-india-radio-_96086.html  | ✓ | ⏱: 
+2.90s 
+⏭️ Skipping (not in week): 2025-08-14
+
+--- Processing SEBI Page 2 ---
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/sebi-collaborates-with-ministry-of-panchayati-raj-to-build-financial-literacy-and-investor-awareness-capacities-at-grassroots-level_96084.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...reness-capacities-at-grassroots-level_96084.html  | ✓ | ⏱: 
+2.29s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...reness-capacities-at-grassroots-level_96084.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...reness-capacities-at-grassroots-level_96084.html  | ✓ | ⏱: 
+2.32s 
+⏭️ Skipping (not in week): 2025-08-14
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/sebi-annual-report-2024-25_96016.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...s/aug-2025/sebi-annual-report-2024-25_96016.html  | ✓ | ⏱: 
+2.36s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...s/aug-2025/sebi-annual-report-2024-25_96016.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...s/aug-2025/sebi-annual-report-2024-25_96016.html  | ✓ | ⏱: 
+2.40s 
+⏭️ Skipping (not in week): 2025-08-12
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/chairman-sebi-shri-tuhin-kanta-pandey-leads-wreath-laying-ceremony-to-commemorate-kargil-vijay-diwas_95621.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ony-to-commemorate-kargil-vijay-diwas_95621.html  | ✓ | ⏱: 
+2.32s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ony-to-commemorate-kargil-vijay-diwas_95621.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ony-to-commemorate-kargil-vijay-diwas_95621.html  | ✓ | ⏱: 
+2.35s 
+⏭️ Skipping (not in week): 2025-07-26
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/sebi-and-miis-launch-joint-investor-awareness-campaign-sebi-vs-scam_95575.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...estor-awareness-campaign-sebi-vs-scam_95575.html  | ✓ | ⏱: 
+2.33s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...estor-awareness-campaign-sebi-vs-scam_95575.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...estor-awareness-campaign-sebi-vs-scam_95575.html  | ✓ | ⏱: 
+2.37s 
+⏭️ Skipping (not in week): 2025-07-24
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/update-on-the-jane-street-interim-order_95491.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...date-on-the-jane-street-interim-order_95491.html  | ✓ | ⏱: 
+2.52s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...date-on-the-jane-street-interim-order_95491.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...date-on-the-jane-street-interim-order_95491.html  | ✓ | ⏱: 
+2.55s 
+⏭️ Skipping (not in week): 2025-07-21
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/newspaper-advertisement-in-navbharat-on-13th-july-2025-promoting-illegal-dabba-trading-activities_95489.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ting-illegal-dabba-trading-activities_95489.html  | ✓ | ⏱: 
+2.30s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ting-illegal-dabba-trading-activities_95489.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ting-illegal-dabba-trading-activities_95489.html  | ✓ | ⏱: 
+2.33s 
+⏭️ Skipping (not in week): 2025-07-21
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/samuhik-prativedan-manch-for-stock-brokers_95487.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ik-prativedan-manch-for-stock-brokers_95487.html  | ✓ | ⏱: 
+2.26s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ik-prativedan-manch-for-stock-brokers_95487.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ik-prativedan-manch-for-stock-brokers_95487.html  | ✓ | ⏱: 
+2.30s 
+⏭️ Skipping (not in week): 2025-07-21
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/launch-of-securities-market-hackathon-at-global-fintech-fest-2025-gff-25-_95410.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...n-at-global-fintech-fest-2025-gff-25-_95410.html  | ✓ | ⏱: 
+2.24s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...n-at-global-fintech-fest-2025-gff-25-_95410.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...n-at-global-fintech-fest-2025-gff-25-_95410.html  | ✓ | ⏱: 
+2.27s 
+⏭️ Skipping (not in week): 2025-07-18
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/sebi-and-nism-launch-national-financial-literacy-quiz-nflq-2025_95269.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...nal-financial-literacy-quiz-nflq-2025_95269.html  | ✓ | ⏱: 
+2.33s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...nal-financial-literacy-quiz-nflq-2025_95269.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...nal-financial-literacy-quiz-nflq-2025_95269.html  | ✓ | ⏱: 
+2.36s 
+⏭️ Skipping (not in week): 2025-07-15
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/update-on-interim-order-compliance-by-jane-street_95237.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...terim-order-compliance-by-jane-street_95237.html  | ✓ | ⏱: 
+2.46s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...terim-order-compliance-by-jane-street_95237.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...terim-order-compliance-by-jane-street_95237.html  | ✓ | ⏱: 
+2.49s 
+⏭️ Skipping (not in week): 2025-07-14
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/comparative-study-of-growth-in-trading-in-equity-derivatives-segment-eds-vis-vis-cash-market-after-recent-measures_95106.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...vis-cash-market-after-recent-measures_95106.html  | ✓ | ⏱: 
+2.29s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...vis-cash-market-after-recent-measures_95106.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...vis-cash-market-after-recent-measures_95106.html  | ✓ | ⏱: 
+2.32s 
+⏭️ Skipping (not in week): 2025-07-07
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/common-contract-note-with-single-volume-weighted-average-price-vwap-enhancing-ease-of-doing-business-for-market-participants_94976.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...oing-business-for-market-participants_94976.html  | ✓ | ⏱: 
+2.28s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...oing-business-for-market-participants_94976.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...oing-business-for-market-participants_94976.html  | ✓ | ⏱: 
+2.31s 
+⏭️ Skipping (not in week): 2025-07-02
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/shri-sunil-jayawant-kadam-takes-charge-as-executive-director-sebi_94940.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_94940.html  | ✓ | ⏱: 
+2.24s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_94940.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_94940.html  | ✓ | ⏱: 
+2.27s 
+⏭️ Skipping (not in week): 2025-07-01
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/sebi-conducts-municipal-bond-outreach-programme-to-enhance-urban-financing_94927.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-programme-to-enhance-urban-financing_94927.html  | ✓ | ⏱: 
+2.35s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-programme-to-enhance-urban-financing_94927.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-programme-to-enhance-urban-financing_94927.html  | ✓ | ⏱: 
+2.39s 
+⏭️ Skipping (not in week): 2025-07-01
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/registered-intermediaries-are-allowed-to-use-e-kyc-setu-system-of-national-payments-corporation-of-india-to-perform-aadhaar-based-e-kyc-authentication-for-ease-of-doing-business_94904.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...entication-for-ease-of-doing-business_94904.html  | ✓ | ⏱: 
+2.46s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...entication-for-ease-of-doing-business_94904.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...entication-for-ease-of-doing-business_94904.html  | ✓ | ⏱: 
+2.49s 
+⏭️ Skipping (not in week): 2025-06-30
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/clarification-on-news-reports_94855.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...un-2025/clarification-on-news-reports_94855.html  | ✓ | ⏱: 
+4.39s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...un-2025/clarification-on-news-reports_94855.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...un-2025/clarification-on-news-reports_94855.html  | ✓ | ⏱: 
+4.43s 
+⏭️ Skipping (not in week): 2025-06-27
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/sebi-board-meeting_94657.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-releases/jun-2025/sebi-board-meeting_94657.html  | ✓ | ⏱: 
+3.01s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-releases/jun-2025/sebi-board-meeting_94657.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-releases/jun-2025/sebi-board-meeting_94657.html  | ✓ | ⏱: 
+3.04s 
+⏭️ Skipping (not in week): 2025-06-18
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/centralized-fee-collection-mechanism-for-investment-advisers-and-research-analysts-cefcom-a-secure-and-closed-ecosystem-for-investors-to-pay-fees-to-registered-investment-advisers-and-research-a-_94553.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...d-investment-advisers-and-research-a-_94553.html  | ✓ | ⏱: 
+2.31s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...d-investment-advisers-and-research-a-_94553.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...d-investment-advisers-and-research-a-_94553.html  | ✓ | ⏱: 
+2.35s 
+⏭️ Skipping (not in week): 2025-06-12
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/sebi-to-introduce-validated-upi-handles-and-sebi-check-for-secured-payments-by-investors-to-enhance-investor-protection-and-combat-fraud_94539.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-investor-protection-and-combat-fraud_94539.html  | ✓ | ⏱: 
+2.24s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-investor-protection-and-combat-fraud_94539.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-investor-protection-and-combat-fraud_94539.html  | ✓ | ⏱: 
+2.27s 
+⏭️ Skipping (not in week): 2025-06-11
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/caution-to-public_94402.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/caution-to-public_94402.html | ✓ | ⏱: 
+2.30s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/caution-to-public_94402.html | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/caution-to-public_94402.html | ✓ | ⏱: 
+2.33s 
+⏭️ Skipping (not in week): 2025-06-04
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/sebi-and-iepfa-conduct-the-first-niveshak-shivir-in-pune-proactive-joint-initiative-to-minimise-unclaimed-assets-and-facilitate-investor-claims-for-unpaid-dividends-and-shares_94347.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_94347.html  | ✓ | ⏱: 
+2.35s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_94347.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_94347.html  | ✓ | ⏱: 
+2.38s 
+⏭️ Skipping (not in week): 2025-06-02
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/may-2025/niveshak-shivir-to-be-held-on-june-01-2025-in-the-city-of-pune-maharashtra_94331.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-2025-in-the-city-of-pune-maharashtra_94331.html  | ✓ | ⏱: 
+2.99s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-2025-in-the-city-of-pune-maharashtra_94331.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-2025-in-the-city-of-pune-maharashtra_94331.html  | ✓ | ⏱: 
+3.03s 
+⏭️ Skipping (not in week): 2025-05-30
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/may-2025/caution-to-investors-on-stock-market-scams-through-social-media-platforms_94064.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-scams-through-social-media-platforms_94064.html  | ✓ | ⏱: 
+2.37s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-scams-through-social-media-platforms_94064.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-scams-through-social-media-platforms_94064.html  | ✓ | ⏱: 
+2.40s 
+⏭️ Skipping (not in week): 2025-05-21
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/may-2025/approaching-deadline-for-filing-claims-in-the-matter-of-karvy-stock-broking-limited_94009.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_94009.html  | ✓ | ⏱: 
+2.35s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_94009.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_94009.html  | ✓ | ⏱: 
+2.39s 
+⏭️ Skipping (not in week): 2025-05-16
+
+🔗 Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/may-2025/caution-to-investors-sebi-accepts-surrender-application-of-strata-sm-reit_93907.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...rrender-application-of-strata-sm-reit_93907.html  | ✓ | ⏱: 
+2.28s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...rrender-application-of-strata-sm-reit_93907.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...rrender-application-of-strata-sm-reit_93907.html  | ✓ | ⏱: 
+2.31s 
+⏭️ Skipping (not in week): 2025-05-14
+
+📄 FINAL EXCEL GENERATED:
+/Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/weekly_sebi_downloads.xlsx
+
+
+=== RUN AT 2025-11-18 13:12:00 ===
+2025-11-19 12:52:24,788 [INFO] Target range (1 week(s) back): 2025-11-10 → 2025-11-16
+2025-11-19 12:52:24,788 [INFO] Processing SEBI Page 1
+2025-11-19 12:52:25,733 [INFO] Target range (1 week(s) back): 2025-11-10 → 2025-11-16
+2025-11-19 12:52:25,733 [INFO] Processing SEBI Page 1
+[INIT].... → Crawl4AI 0.7.7 
+[INIT].... → Crawl4AI 0.7.7 
+2025-11-19 12:52:30,561 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/inauguration-of-sebi-s-pavilion-at-the-iitf-2025-by-chairman-sebi_97763.html
+2025-11-19 12:52:30,561 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/inauguration-of-sebi-s-pavilion-at-the-iitf-2025-by-chairman-sebi_97763.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 
+4.06s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 
+4.10s 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 
+4.11s 
+2025-11-19 12:52:34,687 [INFO] MATCH (in week): 2025-11-14
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 
+4.14s 
+2025-11-19 12:52:34,732 [INFO] MATCH (in week): 2025-11-14
+2025-11-19 12:52:35,099 [INFO] Downloaded PDF: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1763122672135.pdf
+2025-11-19 12:52:35,099 [INFO] Downloaded PDF: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1763122672135.pdf
+2025-11-19 12:52:35,100 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/report-of-the-high-level-committee-on-conflict-of-interest-disclosures-and-related-matters-in-respect-of-members-and-officials-of-sebi_97732.html
+2025-11-19 12:52:35,100 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/report-of-the-high-level-committee-on-conflict-of-interest-disclosures-and-related-matters-in-respect-of-members-and-officials-of-sebi_97732.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 
+1.24s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 
+1.27s 
+2025-11-19 12:52:36,393 [INFO] MATCH (in week): 2025-11-12
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 
+1.31s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 
+1.34s 
+2025-11-19 12:52:36,463 [INFO] MATCH (in week): 2025-11-12
+2025-11-19 12:52:36,703 [INFO] Downloaded PDF: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762943978568.pdf
+2025-11-19 12:52:36,704 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/sebi-and-iepfa-conducted-the-third-niveshak-shivir-at-amritsar-proactive-joint-initiative-to-minimize-unclaimed-assets-and-facilitate-investor-claims-for-unpaid-dividends-and-shares_97711.html
+2025-11-19 12:52:36,778 [INFO] Downloaded PDF: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762943978568.pdf
+2025-11-19 12:52:36,779 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/sebi-and-iepfa-conducted-the-third-niveshak-shivir-at-amritsar-proactive-joint-initiative-to-minimize-unclaimed-assets-and-facilitate-investor-claims-for-unpaid-dividends-and-shares_97711.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 
+1.34s 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 
+1.29s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 
+1.37s 
+2025-11-19 12:52:38,105 [INFO] MATCH (in week): 2025-11-11
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 
+1.32s 
+2025-11-19 12:52:38,125 [INFO] MATCH (in week): 2025-11-11
+2025-11-19 12:52:38,478 [INFO] Downloaded PDF: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762858201080.pdf
+2025-11-19 12:52:38,479 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/high-level-committee-on-conflict-of-interest-disclosures-and-related-matters-in-respect-of-members-and-officials-of-sebi-submits-its-report_97691.html
+2025-11-19 12:52:38,483 [INFO] Downloaded PDF: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762858201080.pdf
+2025-11-19 12:52:38,483 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/high-level-committee-on-conflict-of-interest-disclosures-and-related-matters-in-respect-of-members-and-officials-of-sebi-submits-its-report_97691.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 
+1.22s 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 
+1.25s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 
+1.25s 
+2025-11-19 12:52:39,759 [INFO] MATCH (in week): 2025-11-10
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 
+1.28s 
+2025-11-19 12:52:39,785 [INFO] MATCH (in week): 2025-11-10
+2025-11-19 12:52:39,979 [INFO] Downloaded PDF: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762786201875.pdf
+2025-11-19 12:52:39,980 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/caution-to-public-regarding-dealing-in-digital-gold-_97676.html
+2025-11-19 12:52:40,011 [INFO] Downloaded PDF: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762786201875.pdf
+2025-11-19 12:52:40,011 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/caution-to-public-regarding-dealing-in-digital-gold-_97676.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ic-regarding-dealing-in-digital-gold-_97676.html  | ✓ | ⏱: 
+1.17s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ic-regarding-dealing-in-digital-gold-_97676.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ic-regarding-dealing-in-digital-gold-_97676.html  | ✓ | ⏱: 
+1.20s 
+2025-11-19 12:52:41,206 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/sebi-intensifies-efforts-to-combat-online-investment-scams-calls-for-greater-collaboration-from-social-media-platforms_97655.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ic-regarding-dealing-in-digital-gold-_97676.html  | ✓ | ⏱: 
+1.34s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ic-regarding-dealing-in-digital-gold-_97676.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ic-regarding-dealing-in-digital-gold-_97676.html  | ✓ | ⏱: 
+1.37s 
+2025-11-19 12:52:41,405 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/sebi-intensifies-efforts-to-combat-online-investment-scams-calls-for-greater-collaboration-from-social-media-platforms_97655.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...aboration-from-social-media-platforms_97655.html  | ✓ | ⏱: 
+1.14s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...aboration-from-social-media-platforms_97655.html  | ✓ | ⏱: 
+0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...aboration-from-social-media-platforms_97655.html  | ✓ | ⏱: 
+1.18s 
+2025-11-19 12:52:42,611 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/sebi-hosts-municipal-bond-and-reit-invit-outreach-programme-in-raipur-to-boost-urban-infrastructure-financing_97650.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...aboration-from-social-media-platforms_97655.html  | ✓ | ⏱: 
+1.51s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...aboration-from-social-media-platforms_97655.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...aboration-from-social-media-platforms_97655.html  | ✓ | ⏱: 
+1.54s 
+2025-11-19 12:52:42,768 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/sebi-hosts-municipal-bond-and-reit-invit-outreach-programme-in-raipur-to-boost-urban-infrastructure-financing_97650.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_97650.html  | ✓ | ⏱: 
+1.20s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_97650.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_97650.html  | ✓ | ⏱: 
+1.23s 
+2025-11-19 12:52:43,868 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/niveshak-shivir-to-be-held-on-november-01-2025-in-the-city-of-amritsar-punjab_97576.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_97650.html  | ✓ | ⏱: 
+1.17s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_97650.html  | ✓ | ⏱: 
+0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_97650.html  | ✓ | ⏱: 
+1.21s 
+2025-11-19 12:52:44,002 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/niveshak-shivir-to-be-held-on-november-01-2025-in-the-city-of-amritsar-punjab_97576.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...1-2025-in-the-city-of-amritsar-punjab_97576.html  | ✓ | ⏱: 
+1.18s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...1-2025-in-the-city-of-amritsar-punjab_97576.html  | ✓ | ⏱: 
+0.07s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...1-2025-in-the-city-of-amritsar-punjab_97576.html  | ✓ | ⏱: 
+1.25s 
+2025-11-19 12:52:45,147 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/ease-of-doing-business-rationalisation-and-standardisation-of-penalties-levied-on-stock-brokers-by-stock-exchanges_97248.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...1-2025-in-the-city-of-amritsar-punjab_97576.html  | ✓ | ⏱: 
+1.20s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...1-2025-in-the-city-of-amritsar-punjab_97576.html  | ✓ | ⏱: 
+0.07s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...1-2025-in-the-city-of-amritsar-punjab_97576.html  | ✓ | ⏱: 
+1.28s 
+2025-11-19 12:52:45,302 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/ease-of-doing-business-rationalisation-and-standardisation-of-penalties-levied-on-stock-brokers-by-stock-exchanges_97248.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...d-on-stock-brokers-by-stock-exchanges_97248.html  | ✓ | ⏱: 
+1.53s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...d-on-stock-brokers-by-stock-exchanges_97248.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...d-on-stock-brokers-by-stock-exchanges_97248.html  | ✓ | ⏱: 
+1.56s 
+2025-11-19 12:52:46,884 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/clarification-on-media-reports-regarding-regulatory-oversight-of-family-offices_97047.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...d-on-stock-brokers-by-stock-exchanges_97248.html  | ✓ | ⏱: 
+2.88s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...d-on-stock-brokers-by-stock-exchanges_97248.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...d-on-stock-brokers-by-stock-exchanges_97248.html  | ✓ | ⏱: 
+2.91s 
+2025-11-19 12:52:48,081 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/clarification-on-media-reports-regarding-regulatory-oversight-of-family-offices_97047.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...egulatory-oversight-of-family-offices_97047.html  | ✓ | ⏱: 
+1.38s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...egulatory-oversight-of-family-offices_97047.html  | ✓ | ⏱: 
+0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...egulatory-oversight-of-family-offices_97047.html  | ✓ | ⏱: 
+1.42s 
+2025-11-19 12:52:48,327 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/sebi-rolls-out-validated-upi-handles-and-sebi-check-for-secure-investor-payments_97020.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...egulatory-oversight-of-family-offices_97047.html  | ✓ | ⏱: 
+1.93s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...egulatory-oversight-of-family-offices_97047.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...egulatory-oversight-of-family-offices_97047.html  | ✓ | ⏱: 
+1.96s 
+2025-11-19 12:52:50,065 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/sebi-rolls-out-validated-upi-handles-and-sebi-check-for-secure-investor-payments_97020.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...bi-check-for-secure-investor-payments_97020.html  | ✓ | ⏱: 
+1.91s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...bi-check-for-secure-investor-payments_97020.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...bi-check-for-secure-investor-payments_97020.html  | ✓ | ⏱: 
+1.94s 
+2025-11-19 12:52:50,300 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-releases-investor-survey-2025-findings-to-guide-inclusive-and-responsible-investing_96984.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...bi-check-for-secure-investor-payments_97020.html  | ✓ | ⏱: 
+1.15s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...bi-check-for-secure-investor-payments_97020.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...bi-check-for-secure-investor-payments_97020.html  | ✓ | ⏱: 
+1.18s 
+2025-11-19 12:52:51,268 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-releases-investor-survey-2025-findings-to-guide-inclusive-and-responsible-investing_96984.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...e-inclusive-and-responsible-investing_96984.html  | ✓ | ⏱: 
+1.19s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...e-inclusive-and-responsible-investing_96984.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...e-inclusive-and-responsible-investing_96984.html  | ✓ | ⏱: 
+1.22s 
+2025-11-19 12:52:51,543 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-board-meeting_96601.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...e-inclusive-and-responsible-investing_96984.html  | ✓ | ⏱: 
+1.14s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...e-inclusive-and-responsible-investing_96984.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...e-inclusive-and-responsible-investing_96984.html  | ✓ | ⏱: 
+1.17s 
+2025-11-19 12:52:52,462 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-board-meeting_96601.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-releases/sep-2025/sebi-board-meeting_96601.html  | ✓ | ⏱: 
+1.20s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-releases/sep-2025/sebi-board-meeting_96601.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-releases/sep-2025/sebi-board-meeting_96601.html  | ✓ | ⏱: 
+1.23s 
+2025-11-19 12:52:52,799 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/change-in-settlement-dates-for-cash-and-slbm-segments-and-its-impact_96459.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-releases/sep-2025/sebi-board-meeting_96601.html  | ✓ | ⏱: 
+1.15s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-releases/sep-2025/sebi-board-meeting_96601.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-releases/sep-2025/sebi-board-meeting_96601.html  | ✓ | ⏱: 
+1.18s 
+2025-11-19 12:52:53,667 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/change-in-settlement-dates-for-cash-and-slbm-segments-and-its-impact_96459.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...cash-and-slbm-segments-and-its-impact_96459.html  | ✓ | ⏱: 
+1.14s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...cash-and-slbm-segments-and-its-impact_96459.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...cash-and-slbm-segments-and-its-impact_96459.html  | ✓ | ⏱: 
+1.18s 
+2025-11-19 12:52:53,996 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/caution-to-the-public-regarding-impersonation-of-sebi_96449.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...cash-and-slbm-segments-and-its-impact_96459.html  | ✓ | ⏱: 
+1.16s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...cash-and-slbm-segments-and-its-impact_96459.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...cash-and-slbm-segments-and-its-impact_96459.html  | ✓ | ⏱: 
+1.19s 
+2025-11-19 12:52:54,886 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/caution-to-the-public-regarding-impersonation-of-sebi_96449.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ublic-regarding-impersonation-of-sebi_96449.html  | ✓ | ⏱: 
+1.18s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ublic-regarding-impersonation-of-sebi_96449.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ublic-regarding-impersonation-of-sebi_96449.html  | ✓ | ⏱: 
+1.21s 
+2025-11-19 12:52:55,235 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-hosts-municipal-bond-outreach-programme-in-bhopal-to-boost-urban-infrastructure-financing_96406.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ublic-regarding-impersonation-of-sebi_96449.html  | ✓ | ⏱: 
+1.30s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ublic-regarding-impersonation-of-sebi_96449.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ublic-regarding-impersonation-of-sebi_96449.html  | ✓ | ⏱: 
+1.33s 
+2025-11-19 12:52:56,246 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-hosts-municipal-bond-outreach-programme-in-bhopal-to-boost-urban-infrastructure-financing_96406.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_96406.html  | ✓ | ⏱: 
+1.18s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_96406.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_96406.html  | ✓ | ⏱: 
+1.21s 
+2025-11-19 12:52:56,464 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-and-iepfa-conducted-the-second-niveshak-shivir-in-hyderabad-proactive-joint-initiative-to-minimize-unclaimed-assets-and-facilitate-investor-claims-for-unpaid-dividends-and-shares_96393.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_96393.html  | ✓ | ⏱: 
+1.18s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_96393.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_96393.html  | ✓ | ⏱: 
+1.21s 
+2025-11-19 12:52:57,700 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/niveshak-shivir-to-be-held-on-august-30-2025-in-the-city-of-hyderabad-telangana_96334.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_96406.html  | ✓ | ⏱: 
+1.79s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_96406.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_96406.html  | ✓ | ⏱: 
+1.82s 
+2025-11-19 12:52:58,095 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-and-iepfa-conducted-the-second-niveshak-shivir-in-hyderabad-proactive-joint-initiative-to-minimize-unclaimed-assets-and-facilitate-investor-claims-for-unpaid-dividends-and-shares_96393.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...25-in-the-city-of-hyderabad-telangana_96334.html  | ✓ | ⏱: 
+1.15s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...25-in-the-city-of-hyderabad-telangana_96334.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...25-in-the-city-of-hyderabad-telangana_96334.html  | ✓ | ⏱: 
+1.18s 
+2025-11-19 12:52:58,937 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/shri-sanjay-chandrakant-purao-takes-charge-as-executive-director-sebi_96248.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_96393.html  | ✓ | ⏱: 
+1.17s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_96393.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_96393.html  | ✓ | ⏱: 
+1.21s 
+2025-11-19 12:52:59,323 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/niveshak-shivir-to-be-held-on-august-30-2025-in-the-city-of-hyderabad-telangana_96334.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96248.html  | ✓ | ⏱: 
+1.42s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96248.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96248.html  | ✓ | ⏱: 
+1.45s 
+2025-11-19 12:53:00,408 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/shri-avneesh-pandey-takes-charge-as-executive-director-sebi_96246.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...25-in-the-city-of-hyderabad-telangana_96334.html  | ✓ | ⏱: 
+1.18s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...25-in-the-city-of-hyderabad-telangana_96334.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...25-in-the-city-of-hyderabad-telangana_96334.html  | ✓ | ⏱: 
+1.21s 
+2025-11-19 12:53:00,597 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/shri-sanjay-chandrakant-purao-takes-charge-as-executive-director-sebi_96248.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96246.html  | ✓ | ⏱: 
+1.20s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96246.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96246.html  | ✓ | ⏱: 
+1.23s 
+2025-11-19 12:53:01,661 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/shri-amit-pradhan-takes-charge-as-executive-director-sebi_96245.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96248.html  | ✓ | ⏱: 
+1.20s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96248.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96248.html  | ✓ | ⏱: 
+1.23s 
+2025-11-19 12:53:01,853 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/shri-avneesh-pandey-takes-charge-as-executive-director-sebi_96246.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96245.html  | ✓ | ⏱: 
+1.22s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96245.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96245.html  | ✓ | ⏱: 
+1.25s 
+2025-11-19 12:53:02,938 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/advisory-against-investment-in-fraudulent-trading-schemes-claiming-to-be-offered-to-indian-residents-by-fpis_96244.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96246.html  | ✓ | ⏱: 
+1.59s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96246.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96246.html  | ✓ | ⏱: 
+1.62s 
+2025-11-19 12:53:03,495 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/shri-amit-pradhan-takes-charge-as-executive-director-sebi_96245.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...e-offered-to-indian-residents-by-fpis_96244.html  | ✓ | ⏱: 
+1.16s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...e-offered-to-indian-residents-by-fpis_96244.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...e-offered-to-indian-residents-by-fpis_96244.html  | ✓ | ⏱: 
+1.19s 
+2025-11-19 12:53:04,151 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/extension-of-deadline-for-filing-claims-in-the-matter-of-karvy-stock-broking-limited_96191.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96245.html  | ✓ | ⏱: 
+1.14s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96245.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96245.html  | ✓ | ⏱: 
+1.17s 
+2025-11-19 12:53:04,691 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/advisory-against-investment-in-fraudulent-trading-schemes-claiming-to-be-offered-to-indian-residents-by-fpis_96244.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_96191.html  | ✓ | ⏱: 
+1.22s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_96191.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_96191.html  | ✓ | ⏱: 
+1.25s 
+2025-11-19 12:53:05,421 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/sebi-and-nism-launch-sebi-arth-yatra-contest-2025-_96087.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...e-offered-to-indian-residents-by-fpis_96244.html  | ✓ | ⏱: 
+1.14s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...e-offered-to-indian-residents-by-fpis_96244.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...e-offered-to-indian-residents-by-fpis_96244.html  | ✓ | ⏱: 
+1.17s 
+2025-11-19 12:53:05,883 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/extension-of-deadline-for-filing-claims-in-the-matter-of-karvy-stock-broking-limited_96191.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-launch-sebi-arth-yatra-contest-2025-_96087.html  | ✓ | ⏱: 
+1.16s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-launch-sebi-arth-yatra-contest-2025-_96087.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-launch-sebi-arth-yatra-contest-2025-_96087.html  | ✓ | ⏱: 
+1.20s 
+2025-11-19 12:53:06,641 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/sebi-s-investor-awareness-campaign-on-all-india-radio-_96086.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_96191.html  | ✓ | ⏱: 
+1.18s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_96191.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_96191.html  | ✓ | ⏱: 
+1.21s 
+2025-11-19 12:53:07,118 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/sebi-and-nism-launch-sebi-arth-yatra-contest-2025-_96087.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-launch-sebi-arth-yatra-contest-2025-_96087.html  | ✓ | ⏱: 
+1.18s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-launch-sebi-arth-yatra-contest-2025-_96087.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-launch-sebi-arth-yatra-contest-2025-_96087.html  | ✓ | ⏱: 
+1.21s 
+2025-11-19 12:53:08,351 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/sebi-s-investor-awareness-campaign-on-all-india-radio-_96086.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...wareness-campaign-on-all-india-radio-_96086.html  | ✓ | ⏱: 
+1.89s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...wareness-campaign-on-all-india-radio-_96086.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...wareness-campaign-on-all-india-radio-_96086.html  | ✓ | ⏱: 
+1.92s 
+2025-11-19 12:53:08,794 [INFO] Processing SEBI Page 2
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...wareness-campaign-on-all-india-radio-_96086.html  | ✓ | ⏱: 
+1.19s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...wareness-campaign-on-all-india-radio-_96086.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...wareness-campaign-on-all-india-radio-_96086.html  | ✓ | ⏱: 
+1.22s 
+2025-11-19 12:53:09,789 [INFO] Processing SEBI Page 2
+[INIT].... → Crawl4AI 0.7.7 
+2025-11-19 12:53:12,819 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/sebi-collaborates-with-ministry-of-panchayati-raj-to-build-financial-literacy-and-investor-awareness-capacities-at-grassroots-level_96084.html
+[INIT].... → Crawl4AI 0.7.7 
+2025-11-19 12:53:13,575 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/sebi-collaborates-with-ministry-of-panchayati-raj-to-build-financial-literacy-and-investor-awareness-capacities-at-grassroots-level_96084.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...reness-capacities-at-grassroots-level_96084.html  | ✓ | ⏱: 
+2.90s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...reness-capacities-at-grassroots-level_96084.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...reness-capacities-at-grassroots-level_96084.html  | ✓ | ⏱: 
+2.94s 
+2025-11-19 12:53:15,780 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/sebi-annual-report-2024-25_96016.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...reness-capacities-at-grassroots-level_96084.html  | ✓ | ⏱: 
+2.40s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...reness-capacities-at-grassroots-level_96084.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...reness-capacities-at-grassroots-level_96084.html  | ✓ | ⏱: 
+2.43s 
+2025-11-19 12:53:16,030 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/sebi-annual-report-2024-25_96016.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...s/aug-2025/sebi-annual-report-2024-25_96016.html  | ✓ | ⏱: 
+1.17s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...s/aug-2025/sebi-annual-report-2024-25_96016.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...s/aug-2025/sebi-annual-report-2024-25_96016.html  | ✓ | ⏱: 
+1.20s 
+2025-11-19 12:53:17,047 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/chairman-sebi-shri-tuhin-kanta-pandey-leads-wreath-laying-ceremony-to-commemorate-kargil-vijay-diwas_95621.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...s/aug-2025/sebi-annual-report-2024-25_96016.html  | ✓ | ⏱: 
+1.38s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...s/aug-2025/sebi-annual-report-2024-25_96016.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...s/aug-2025/sebi-annual-report-2024-25_96016.html  | ✓ | ⏱: 
+1.41s 
+2025-11-19 12:53:17,501 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/chairman-sebi-shri-tuhin-kanta-pandey-leads-wreath-laying-ceremony-to-commemorate-kargil-vijay-diwas_95621.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ony-to-commemorate-kargil-vijay-diwas_95621.html  | ✓ | ⏱: 
+1.12s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ony-to-commemorate-kargil-vijay-diwas_95621.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ony-to-commemorate-kargil-vijay-diwas_95621.html  | ✓ | ⏱: 
+1.15s 
+2025-11-19 12:53:18,218 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/sebi-and-miis-launch-joint-investor-awareness-campaign-sebi-vs-scam_95575.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ony-to-commemorate-kargil-vijay-diwas_95621.html  | ✓ | ⏱: 
+1.16s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ony-to-commemorate-kargil-vijay-diwas_95621.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ony-to-commemorate-kargil-vijay-diwas_95621.html  | ✓ | ⏱: 
+1.20s 
+2025-11-19 12:53:18,723 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/sebi-and-miis-launch-joint-investor-awareness-campaign-sebi-vs-scam_95575.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...estor-awareness-campaign-sebi-vs-scam_95575.html  | ✓ | ⏱: 
+1.16s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...estor-awareness-campaign-sebi-vs-scam_95575.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...estor-awareness-campaign-sebi-vs-scam_95575.html  | ✓ | ⏱: 
+1.20s 
+2025-11-19 12:53:19,435 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/update-on-the-jane-street-interim-order_95491.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...estor-awareness-campaign-sebi-vs-scam_95575.html  | ✓ | ⏱: 
+1.17s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...estor-awareness-campaign-sebi-vs-scam_95575.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...estor-awareness-campaign-sebi-vs-scam_95575.html  | ✓ | ⏱: 
+1.21s 
+2025-11-19 12:53:19,953 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/update-on-the-jane-street-interim-order_95491.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...date-on-the-jane-street-interim-order_95491.html  | ✓ | ⏱: 
+1.13s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...date-on-the-jane-street-interim-order_95491.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...date-on-the-jane-street-interim-order_95491.html  | ✓ | ⏱: 
+1.16s 
+2025-11-19 12:53:20,622 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/newspaper-advertisement-in-navbharat-on-13th-july-2025-promoting-illegal-dabba-trading-activities_95489.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...date-on-the-jane-street-interim-order_95491.html  | ✓ | ⏱: 
+1.12s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...date-on-the-jane-street-interim-order_95491.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...date-on-the-jane-street-interim-order_95491.html  | ✓ | ⏱: 
+1.15s 
+2025-11-19 12:53:21,125 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/newspaper-advertisement-in-navbharat-on-13th-july-2025-promoting-illegal-dabba-trading-activities_95489.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ting-illegal-dabba-trading-activities_95489.html  | ✓ | ⏱: 
+1.14s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ting-illegal-dabba-trading-activities_95489.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ting-illegal-dabba-trading-activities_95489.html  | ✓ | ⏱: 
+1.17s 
+2025-11-19 12:53:21,819 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/samuhik-prativedan-manch-for-stock-brokers_95487.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ting-illegal-dabba-trading-activities_95489.html  | ✓ | ⏱: 
+1.13s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ting-illegal-dabba-trading-activities_95489.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ting-illegal-dabba-trading-activities_95489.html  | ✓ | ⏱: 
+1.17s 
+2025-11-19 12:53:22,315 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/samuhik-prativedan-manch-for-stock-brokers_95487.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ik-prativedan-manch-for-stock-brokers_95487.html  | ✓ | ⏱: 
+1.19s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ik-prativedan-manch-for-stock-brokers_95487.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ik-prativedan-manch-for-stock-brokers_95487.html  | ✓ | ⏱: 
+1.22s 
+2025-11-19 12:53:23,063 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/launch-of-securities-market-hackathon-at-global-fintech-fest-2025-gff-25-_95410.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ik-prativedan-manch-for-stock-brokers_95487.html  | ✓ | ⏱: 
+1.21s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ik-prativedan-manch-for-stock-brokers_95487.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ik-prativedan-manch-for-stock-brokers_95487.html  | ✓ | ⏱: 
+1.24s 
+2025-11-19 12:53:23,580 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/launch-of-securities-market-hackathon-at-global-fintech-fest-2025-gff-25-_95410.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...n-at-global-fintech-fest-2025-gff-25-_95410.html  | ✓ | ⏱: 
+1.16s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...n-at-global-fintech-fest-2025-gff-25-_95410.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...n-at-global-fintech-fest-2025-gff-25-_95410.html  | ✓ | ⏱: 
+1.19s 
+2025-11-19 12:53:24,278 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/sebi-and-nism-launch-national-financial-literacy-quiz-nflq-2025_95269.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...n-at-global-fintech-fest-2025-gff-25-_95410.html  | ✓ | ⏱: 
+1.19s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...n-at-global-fintech-fest-2025-gff-25-_95410.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...n-at-global-fintech-fest-2025-gff-25-_95410.html  | ✓ | ⏱: 
+1.23s 
+2025-11-19 12:53:24,830 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/sebi-and-nism-launch-national-financial-literacy-quiz-nflq-2025_95269.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...nal-financial-literacy-quiz-nflq-2025_95269.html  | ✓ | ⏱: 
+1.23s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...nal-financial-literacy-quiz-nflq-2025_95269.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...nal-financial-literacy-quiz-nflq-2025_95269.html  | ✓ | ⏱: 
+1.26s 
+2025-11-19 12:53:25,563 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/update-on-interim-order-compliance-by-jane-street_95237.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...nal-financial-literacy-quiz-nflq-2025_95269.html  | ✓ | ⏱: 
+1.36s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...nal-financial-literacy-quiz-nflq-2025_95269.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...nal-financial-literacy-quiz-nflq-2025_95269.html  | ✓ | ⏱: 
+1.39s 
+2025-11-19 12:53:26,247 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/update-on-interim-order-compliance-by-jane-street_95237.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...terim-order-compliance-by-jane-street_95237.html  | ✓ | ⏱: 
+1.17s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...terim-order-compliance-by-jane-street_95237.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...terim-order-compliance-by-jane-street_95237.html  | ✓ | ⏱: 
+1.20s 
+2025-11-19 12:53:26,789 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/comparative-study-of-growth-in-trading-in-equity-derivatives-segment-eds-vis-vis-cash-market-after-recent-measures_95106.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...terim-order-compliance-by-jane-street_95237.html  | ✓ | ⏱: 
+1.48s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...terim-order-compliance-by-jane-street_95237.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...terim-order-compliance-by-jane-street_95237.html  | ✓ | ⏱: 
+1.51s 
+2025-11-19 12:53:27,781 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/comparative-study-of-growth-in-trading-in-equity-derivatives-segment-eds-vis-vis-cash-market-after-recent-measures_95106.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...vis-cash-market-after-recent-measures_95106.html  | ✓ | ⏱: 
+1.13s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...vis-cash-market-after-recent-measures_95106.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...vis-cash-market-after-recent-measures_95106.html  | ✓ | ⏱: 
+1.16s 
+2025-11-19 12:53:27,974 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/common-contract-note-with-single-volume-weighted-average-price-vwap-enhancing-ease-of-doing-business-for-market-participants_94976.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...vis-cash-market-after-recent-measures_95106.html  | ✓ | ⏱: 
+1.19s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...vis-cash-market-after-recent-measures_95106.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...vis-cash-market-after-recent-measures_95106.html  | ✓ | ⏱: 
+1.22s 
+2025-11-19 12:53:29,023 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/common-contract-note-with-single-volume-weighted-average-price-vwap-enhancing-ease-of-doing-business-for-market-participants_94976.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...oing-business-for-market-participants_94976.html  | ✓ | ⏱: 
+1.16s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...oing-business-for-market-participants_94976.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...oing-business-for-market-participants_94976.html  | ✓ | ⏱: 
+1.20s 
+2025-11-19 12:53:29,195 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/shri-sunil-jayawant-kadam-takes-charge-as-executive-director-sebi_94940.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...oing-business-for-market-participants_94976.html  | ✓ | ⏱: 
+1.15s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...oing-business-for-market-participants_94976.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...oing-business-for-market-participants_94976.html  | ✓ | ⏱: 
+1.19s 
+2025-11-19 12:53:30,234 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/shri-sunil-jayawant-kadam-takes-charge-as-executive-director-sebi_94940.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_94940.html  | ✓ | ⏱: 
+1.15s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_94940.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_94940.html  | ✓ | ⏱: 
+1.18s 
+2025-11-19 12:53:30,433 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/sebi-conducts-municipal-bond-outreach-programme-to-enhance-urban-financing_94927.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_94940.html  | ✓ | ⏱: 
+1.14s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_94940.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_94940.html  | ✓ | ⏱: 
+1.18s 
+2025-11-19 12:53:31,474 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/sebi-conducts-municipal-bond-outreach-programme-to-enhance-urban-financing_94927.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-programme-to-enhance-urban-financing_94927.html  | ✓ | ⏱: 
+1.33s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-programme-to-enhance-urban-financing_94927.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-programme-to-enhance-urban-financing_94927.html  | ✓ | ⏱: 
+1.36s 
+2025-11-19 12:53:31,816 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/registered-intermediaries-are-allowed-to-use-e-kyc-setu-system-of-national-payments-corporation-of-india-to-perform-aadhaar-based-e-kyc-authentication-for-ease-of-doing-business_94904.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-programme-to-enhance-urban-financing_94927.html  | ✓ | ⏱: 
+1.22s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-programme-to-enhance-urban-financing_94927.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-programme-to-enhance-urban-financing_94927.html  | ✓ | ⏱: 
+1.25s 
+2025-11-19 12:53:32,746 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/registered-intermediaries-are-allowed-to-use-e-kyc-setu-system-of-national-payments-corporation-of-india-to-perform-aadhaar-based-e-kyc-authentication-for-ease-of-doing-business_94904.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...entication-for-ease-of-doing-business_94904.html  | ✓ | ⏱: 
+1.26s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...entication-for-ease-of-doing-business_94904.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...entication-for-ease-of-doing-business_94904.html  | ✓ | ⏱: 
+1.29s 
+2025-11-19 12:53:33,130 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/clarification-on-news-reports_94855.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...entication-for-ease-of-doing-business_94904.html  | ✓ | ⏱: 
+1.25s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...entication-for-ease-of-doing-business_94904.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...entication-for-ease-of-doing-business_94904.html  | ✓ | ⏱: 
+1.28s 
+2025-11-19 12:53:34,047 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/clarification-on-news-reports_94855.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...un-2025/clarification-on-news-reports_94855.html  | ✓ | ⏱: 
+1.25s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...un-2025/clarification-on-news-reports_94855.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...un-2025/clarification-on-news-reports_94855.html  | ✓ | ⏱: 
+1.28s 
+2025-11-19 12:53:34,431 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/sebi-board-meeting_94657.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...un-2025/clarification-on-news-reports_94855.html  | ✓ | ⏱: 
+1.22s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...un-2025/clarification-on-news-reports_94855.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...un-2025/clarification-on-news-reports_94855.html  | ✓ | ⏱: 
+1.25s 
+2025-11-19 12:53:35,317 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/sebi-board-meeting_94657.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-releases/jun-2025/sebi-board-meeting_94657.html  | ✓ | ⏱: 
+1.19s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-releases/jun-2025/sebi-board-meeting_94657.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-releases/jun-2025/sebi-board-meeting_94657.html  | ✓ | ⏱: 
+1.22s 
+2025-11-19 12:53:35,676 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/centralized-fee-collection-mechanism-for-investment-advisers-and-research-analysts-cefcom-a-secure-and-closed-ecosystem-for-investors-to-pay-fees-to-registered-investment-advisers-and-research-a-_94553.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-releases/jun-2025/sebi-board-meeting_94657.html  | ✓ | ⏱: 
+1.44s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-releases/jun-2025/sebi-board-meeting_94657.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-releases/jun-2025/sebi-board-meeting_94657.html  | ✓ | ⏱: 
+1.48s 
+2025-11-19 12:53:36,817 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/centralized-fee-collection-mechanism-for-investment-advisers-and-research-analysts-cefcom-a-secure-and-closed-ecosystem-for-investors-to-pay-fees-to-registered-investment-advisers-and-research-a-_94553.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...d-investment-advisers-and-research-a-_94553.html  | ✓ | ⏱: 
+1.15s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...d-investment-advisers-and-research-a-_94553.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...d-investment-advisers-and-research-a-_94553.html  | ✓ | ⏱: 
+1.19s 
+2025-11-19 12:53:36,884 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/sebi-to-introduce-validated-upi-handles-and-sebi-check-for-secured-payments-by-investors-to-enhance-investor-protection-and-combat-fraud_94539.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...d-investment-advisers-and-research-a-_94553.html  | ✓ | ⏱: 
+1.12s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...d-investment-advisers-and-research-a-_94553.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...d-investment-advisers-and-research-a-_94553.html  | ✓ | ⏱: 
+1.15s 
+2025-11-19 12:53:37,994 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/sebi-to-introduce-validated-upi-handles-and-sebi-check-for-secured-payments-by-investors-to-enhance-investor-protection-and-combat-fraud_94539.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-investor-protection-and-combat-fraud_94539.html  | ✓ | ⏱: 
+1.18s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-investor-protection-and-combat-fraud_94539.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-investor-protection-and-combat-fraud_94539.html  | ✓ | ⏱: 
+1.22s 
+2025-11-19 12:53:38,122 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/caution-to-public_94402.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-investor-protection-and-combat-fraud_94539.html  | ✓ | ⏱: 
+1.20s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-investor-protection-and-combat-fraud_94539.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-investor-protection-and-combat-fraud_94539.html  | ✓ | ⏱: 
+1.23s 
+2025-11-19 12:53:39,245 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/caution-to-public_94402.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/caution-to-public_94402.html | ✓ | ⏱: 
+1.16s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/caution-to-public_94402.html | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/caution-to-public_94402.html | ✓ | ⏱: 
+1.19s 
+2025-11-19 12:53:39,333 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/sebi-and-iepfa-conduct-the-first-niveshak-shivir-in-pune-proactive-joint-initiative-to-minimise-unclaimed-assets-and-facilitate-investor-claims-for-unpaid-dividends-and-shares_94347.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_94347.html  | ✓ | ⏱: 
+1.23s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_94347.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_94347.html  | ✓ | ⏱: 
+1.26s 
+2025-11-19 12:53:40,613 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/may-2025/niveshak-shivir-to-be-held-on-june-01-2025-in-the-city-of-pune-maharashtra_94331.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/caution-to-public_94402.html | ✓ | ⏱: 
+1.46s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/caution-to-public_94402.html | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/caution-to-public_94402.html | ✓ | ⏱: 
+1.49s 
+2025-11-19 12:53:40,762 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/sebi-and-iepfa-conduct-the-first-niveshak-shivir-in-pune-proactive-joint-initiative-to-minimise-unclaimed-assets-and-facilitate-investor-claims-for-unpaid-dividends-and-shares_94347.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-2025-in-the-city-of-pune-maharashtra_94331.html  | ✓ | ⏱: 
+1.16s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-2025-in-the-city-of-pune-maharashtra_94331.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-2025-in-the-city-of-pune-maharashtra_94331.html  | ✓ | ⏱: 
+1.19s 
+2025-11-19 12:53:41,824 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/may-2025/caution-to-investors-on-stock-market-scams-through-social-media-platforms_94064.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_94347.html  | ✓ | ⏱: 
+1.14s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_94347.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_94347.html  | ✓ | ⏱: 
+1.18s 
+2025-11-19 12:53:41,960 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/may-2025/niveshak-shivir-to-be-held-on-june-01-2025-in-the-city-of-pune-maharashtra_94331.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-scams-through-social-media-platforms_94064.html  | ✓ | ⏱: 
+1.19s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-scams-through-social-media-platforms_94064.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-scams-through-social-media-platforms_94064.html  | ✓ | ⏱: 
+1.22s 
+2025-11-19 12:53:43,064 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/may-2025/approaching-deadline-for-filing-claims-in-the-matter-of-karvy-stock-broking-limited_94009.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-2025-in-the-city-of-pune-maharashtra_94331.html  | ✓ | ⏱: 
+1.56s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-2025-in-the-city-of-pune-maharashtra_94331.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-2025-in-the-city-of-pune-maharashtra_94331.html  | ✓ | ⏱: 
+1.59s 
+2025-11-19 12:53:43,575 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/may-2025/caution-to-investors-on-stock-market-scams-through-social-media-platforms_94064.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_94009.html  | ✓ | ⏱: 
+1.21s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_94009.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_94009.html  | ✓ | ⏱: 
+1.24s 
+2025-11-19 12:53:44,364 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/may-2025/caution-to-investors-sebi-accepts-surrender-application-of-strata-sm-reit_93907.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-scams-through-social-media-platforms_94064.html  | ✓ | ⏱: 
+1.17s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-scams-through-social-media-platforms_94064.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-scams-through-social-media-platforms_94064.html  | ✓ | ⏱: 
+1.21s 
+2025-11-19 12:53:44,803 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/may-2025/approaching-deadline-for-filing-claims-in-the-matter-of-karvy-stock-broking-limited_94009.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...rrender-application-of-strata-sm-reit_93907.html  | ✓ | ⏱: 
+1.17s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...rrender-application-of-strata-sm-reit_93907.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...rrender-application-of-strata-sm-reit_93907.html  | ✓ | ⏱: 
+1.21s 
+2025-11-19 12:53:45,822 [INFO] FINAL EXCEL GENERATED: /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/weekly_sebi_downloads.xlsx
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_94009.html  | ✓ | ⏱: 
+1.16s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_94009.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_94009.html  | ✓ | ⏱: 
+1.19s 
+
+
+=== Run at 2025-11-19 12:52:23 ===
+2025-11-19 12:53:46,080 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/may-2025/caution-to-investors-sebi-accepts-surrender-application-of-strata-sm-reit_93907.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...rrender-application-of-strata-sm-reit_93907.html  | ✓ | ⏱: 
+1.18s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...rrender-application-of-strata-sm-reit_93907.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...rrender-application-of-strata-sm-reit_93907.html  | ✓ | ⏱: 
+1.21s 
+2025-11-19 12:53:47,522 [INFO] FINAL EXCEL GENERATED: /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/weekly_sebi_downloads.xlsx
+
+
+=== Run at 2025-11-19 12:52:24 ===
+2025-11-19 13:09:01,761 [INFO] Target range (1 week(s) back): 2025-11-10 → 2025-11-16
+2025-11-19 13:09:01,761 [INFO] Processing SEBI Page 1
+[INIT].... → Crawl4AI 0.7.7 
+2025-11-19 13:09:06,326 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/inauguration-of-sebi-s-pavilion-at-the-iitf-2025-by-chairman-sebi_97763.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 
+2.39s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 
+0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 
+2.43s 
+2025-11-19 13:09:08,779 [INFO] MATCH (in week): 2025-11-14
+2025-11-19 13:09:08,782 [INFO] Skipping download (exists): /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1763122672135.pdf
+2025-11-19 13:09:08,783 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/report-of-the-high-level-committee-on-conflict-of-interest-disclosures-and-related-matters-in-respect-of-members-and-officials-of-sebi_97732.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 
+1.69s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 
+1.72s 
+2025-11-19 13:09:10,523 [INFO] MATCH (in week): 2025-11-12
+2025-11-19 13:09:10,525 [INFO] Skipping download (exists): /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762943978568.pdf
+2025-11-19 13:09:10,526 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/sebi-and-iepfa-conducted-the-third-niveshak-shivir-at-amritsar-proactive-joint-initiative-to-minimize-unclaimed-assets-and-facilitate-investor-claims-for-unpaid-dividends-and-shares_97711.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 
+1.69s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 
+1.72s 
+2025-11-19 13:09:12,266 [INFO] MATCH (in week): 2025-11-11
+2025-11-19 13:09:12,268 [INFO] Skipping download (exists): /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762858201080.pdf
+2025-11-19 13:09:12,269 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/high-level-committee-on-conflict-of-interest-disclosures-and-related-matters-in-respect-of-members-and-officials-of-sebi-submits-its-report_97691.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 
+1.23s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 
+1.27s 
+2025-11-19 13:09:13,558 [INFO] MATCH (in week): 2025-11-10
+2025-11-19 13:09:13,561 [INFO] Skipping download (exists): /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762786201875.pdf
+2025-11-19 13:09:13,561 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/caution-to-public-regarding-dealing-in-digital-gold-_97676.html
+
+
+=== Run at 2025-11-19 13:09:00 ===
+2025-11-19 13:10:01,036 [INFO] Target range (1 week(s) back): 2025-11-10 → 2025-11-16
+2025-11-19 13:10:01,036 [INFO] Processing SEBI Page 1
+[INIT].... → Crawl4AI 0.7.7 
+2025-11-19 13:10:04,501 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/inauguration-of-sebi-s-pavilion-at-the-iitf-2025-by-chairman-sebi_97763.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 
+2.25s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 
+2.29s 
+2025-11-19 13:10:06,813 [INFO] MATCH (in week): 2025-11-14
+2025-11-19 13:10:06,816 [INFO] Skipping download (exists): /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1763122672135.pdf
+2025-11-19 13:10:06,816 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/report-of-the-high-level-committee-on-conflict-of-interest-disclosures-and-related-matters-in-respect-of-members-and-officials-of-sebi_97732.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 
+1.28s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 
+1.31s 
+2025-11-19 13:10:08,147 [INFO] MATCH (in week): 2025-11-12
+2025-11-19 13:10:08,150 [INFO] Skipping download (exists): /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762943978568.pdf
+2025-11-19 13:10:08,150 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/sebi-and-iepfa-conducted-the-third-niveshak-shivir-at-amritsar-proactive-joint-initiative-to-minimize-unclaimed-assets-and-facilitate-investor-claims-for-unpaid-dividends-and-shares_97711.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 
+1.24s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 
+1.28s 
+2025-11-19 13:10:09,449 [INFO] MATCH (in week): 2025-11-11
+2025-11-19 13:10:09,451 [INFO] Skipping download (exists): /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762858201080.pdf
+2025-11-19 13:10:09,451 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/high-level-committee-on-conflict-of-interest-disclosures-and-related-matters-in-respect-of-members-and-officials-of-sebi-submits-its-report_97691.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 
+1.20s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 
+1.24s 
+2025-11-19 13:10:10,708 [INFO] MATCH (in week): 2025-11-10
+2025-11-19 13:10:10,711 [INFO] Skipping download (exists): /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762786201875.pdf
+2025-11-19 13:10:10,711 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/caution-to-public-regarding-dealing-in-digital-gold-_97676.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ic-regarding-dealing-in-digital-gold-_97676.html  | ✓ | ⏱: 
+1.64s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ic-regarding-dealing-in-digital-gold-_97676.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ic-regarding-dealing-in-digital-gold-_97676.html  | ✓ | ⏱: 
+1.67s 
+2025-11-19 13:10:12,401 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/sebi-intensifies-efforts-to-combat-online-investment-scams-calls-for-greater-collaboration-from-social-media-platforms_97655.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...aboration-from-social-media-platforms_97655.html  | ✓ | ⏱: 
+1.31s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...aboration-from-social-media-platforms_97655.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...aboration-from-social-media-platforms_97655.html  | ✓ | ⏱: 
+1.35s 
+2025-11-19 13:10:13,768 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/sebi-hosts-municipal-bond-and-reit-invit-outreach-programme-in-raipur-to-boost-urban-infrastructure-financing_97650.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_97650.html  | ✓ | ⏱: 
+1.60s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_97650.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_97650.html  | ✓ | ⏱: 
+1.64s 
+2025-11-19 13:10:15,428 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/niveshak-shivir-to-be-held-on-november-01-2025-in-the-city-of-amritsar-punjab_97576.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...1-2025-in-the-city-of-amritsar-punjab_97576.html  | ✓ | ⏱: 
+1.51s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...1-2025-in-the-city-of-amritsar-punjab_97576.html  | ✓ | ⏱: 
+0.06s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...1-2025-in-the-city-of-amritsar-punjab_97576.html  | ✓ | ⏱: 
+1.57s 
+2025-11-19 13:10:17,023 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/ease-of-doing-business-rationalisation-and-standardisation-of-penalties-levied-on-stock-brokers-by-stock-exchanges_97248.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...d-on-stock-brokers-by-stock-exchanges_97248.html  | ✓ | ⏱: 
+2.69s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...d-on-stock-brokers-by-stock-exchanges_97248.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...d-on-stock-brokers-by-stock-exchanges_97248.html  | ✓ | ⏱: 
+2.72s 
+2025-11-19 13:10:19,768 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/clarification-on-media-reports-regarding-regulatory-oversight-of-family-offices_97047.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...egulatory-oversight-of-family-offices_97047.html  | ✓ | ⏱: 
+1.70s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...egulatory-oversight-of-family-offices_97047.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...egulatory-oversight-of-family-offices_97047.html  | ✓ | ⏱: 
+1.73s 
+2025-11-19 13:10:21,519 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/sebi-rolls-out-validated-upi-handles-and-sebi-check-for-secure-investor-payments_97020.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...bi-check-for-secure-investor-payments_97020.html  | ✓ | ⏱: 
+1.76s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...bi-check-for-secure-investor-payments_97020.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...bi-check-for-secure-investor-payments_97020.html  | ✓ | ⏱: 
+1.79s 
+2025-11-19 13:10:23,334 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-releases-investor-survey-2025-findings-to-guide-inclusive-and-responsible-investing_96984.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...e-inclusive-and-responsible-investing_96984.html  | ✓ | ⏱: 
+1.42s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...e-inclusive-and-responsible-investing_96984.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...e-inclusive-and-responsible-investing_96984.html  | ✓ | ⏱: 
+1.45s 
+2025-11-19 13:10:24,809 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-board-meeting_96601.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-releases/sep-2025/sebi-board-meeting_96601.html  | ✓ | ⏱: 
+1.52s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-releases/sep-2025/sebi-board-meeting_96601.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-releases/sep-2025/sebi-board-meeting_96601.html  | ✓ | ⏱: 
+1.56s 
+2025-11-19 13:10:26,398 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/change-in-settlement-dates-for-cash-and-slbm-segments-and-its-impact_96459.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...cash-and-slbm-segments-and-its-impact_96459.html  | ✓ | ⏱: 
+1.23s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...cash-and-slbm-segments-and-its-impact_96459.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...cash-and-slbm-segments-and-its-impact_96459.html  | ✓ | ⏱: 
+1.26s 
+2025-11-19 13:10:27,697 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/caution-to-the-public-regarding-impersonation-of-sebi_96449.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ublic-regarding-impersonation-of-sebi_96449.html  | ✓ | ⏱: 
+1.20s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ublic-regarding-impersonation-of-sebi_96449.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ublic-regarding-impersonation-of-sebi_96449.html  | ✓ | ⏱: 
+1.24s 
+2025-11-19 13:10:28,955 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-hosts-municipal-bond-outreach-programme-in-bhopal-to-boost-urban-infrastructure-financing_96406.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_96406.html  | ✓ | ⏱: 
+1.46s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_96406.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_96406.html  | ✓ | ⏱: 
+1.49s 
+2025-11-19 13:10:30,466 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-and-iepfa-conducted-the-second-niveshak-shivir-in-hyderabad-proactive-joint-initiative-to-minimize-unclaimed-assets-and-facilitate-investor-claims-for-unpaid-dividends-and-shares_96393.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_96393.html  | ✓ | ⏱: 
+2.05s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_96393.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_96393.html  | ✓ | ⏱: 
+2.09s 
+2025-11-19 13:10:32,572 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/niveshak-shivir-to-be-held-on-august-30-2025-in-the-city-of-hyderabad-telangana_96334.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...25-in-the-city-of-hyderabad-telangana_96334.html  | ✓ | ⏱: 
+1.88s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...25-in-the-city-of-hyderabad-telangana_96334.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...25-in-the-city-of-hyderabad-telangana_96334.html  | ✓ | ⏱: 
+1.92s 
+2025-11-19 13:10:34,511 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/shri-sanjay-chandrakant-purao-takes-charge-as-executive-director-sebi_96248.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96248.html  | ✓ | ⏱: 
+1.58s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96248.html  | ✓ | ⏱: 
+0.06s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96248.html  | ✓ | ⏱: 
+1.65s 
+2025-11-19 13:10:36,180 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/shri-avneesh-pandey-takes-charge-as-executive-director-sebi_96246.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96246.html  | ✓ | ⏱: 
+2.05s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96246.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96246.html  | ✓ | ⏱: 
+2.09s 
+2025-11-19 13:10:38,287 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/shri-amit-pradhan-takes-charge-as-executive-director-sebi_96245.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96245.html  | ✓ | ⏱: 
+1.78s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96245.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96245.html  | ✓ | ⏱: 
+1.82s 
+2025-11-19 13:10:40,125 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/advisory-against-investment-in-fraudulent-trading-schemes-claiming-to-be-offered-to-indian-residents-by-fpis_96244.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...e-offered-to-indian-residents-by-fpis_96244.html  | ✓ | ⏱: 
+1.35s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...e-offered-to-indian-residents-by-fpis_96244.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...e-offered-to-indian-residents-by-fpis_96244.html  | ✓ | ⏱: 
+1.38s 
+2025-11-19 13:10:41,526 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/extension-of-deadline-for-filing-claims-in-the-matter-of-karvy-stock-broking-limited_96191.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_96191.html  | ✓ | ⏱: 
+1.46s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_96191.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_96191.html  | ✓ | ⏱: 
+1.49s 
+2025-11-19 13:10:43,040 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/sebi-and-nism-launch-sebi-arth-yatra-contest-2025-_96087.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-launch-sebi-arth-yatra-contest-2025-_96087.html  | ✓ | ⏱: 
+1.72s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-launch-sebi-arth-yatra-contest-2025-_96087.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-launch-sebi-arth-yatra-contest-2025-_96087.html  | ✓ | ⏱: 
+1.75s 
+2025-11-19 13:10:44,812 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/sebi-s-investor-awareness-campaign-on-all-india-radio-_96086.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...wareness-campaign-on-all-india-radio-_96086.html  | ✓ | ⏱: 
+2.50s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...wareness-campaign-on-all-india-radio-_96086.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...wareness-campaign-on-all-india-radio-_96086.html  | ✓ | ⏱: 
+2.53s 
+2025-11-19 13:10:47,552 [INFO] Processing SEBI Page 2
+[INIT].... → Crawl4AI 0.7.7 
+2025-11-19 13:10:52,485 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/sebi-collaborates-with-ministry-of-panchayati-raj-to-build-financial-literacy-and-investor-awareness-capacities-at-grassroots-level_96084.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...reness-capacities-at-grassroots-level_96084.html  | ✓ | ⏱: 
+2.43s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...reness-capacities-at-grassroots-level_96084.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...reness-capacities-at-grassroots-level_96084.html  | ✓ | ⏱: 
+2.47s 
+2025-11-19 13:10:54,977 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/sebi-annual-report-2024-25_96016.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...s/aug-2025/sebi-annual-report-2024-25_96016.html  | ✓ | ⏱: 
+1.55s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...s/aug-2025/sebi-annual-report-2024-25_96016.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...s/aug-2025/sebi-annual-report-2024-25_96016.html  | ✓ | ⏱: 
+1.58s 
+2025-11-19 13:10:56,623 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/chairman-sebi-shri-tuhin-kanta-pandey-leads-wreath-laying-ceremony-to-commemorate-kargil-vijay-diwas_95621.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ony-to-commemorate-kargil-vijay-diwas_95621.html  | ✓ | ⏱: 
+1.69s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ony-to-commemorate-kargil-vijay-diwas_95621.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ony-to-commemorate-kargil-vijay-diwas_95621.html  | ✓ | ⏱: 
+1.73s 
+2025-11-19 13:10:58,373 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/sebi-and-miis-launch-joint-investor-awareness-campaign-sebi-vs-scam_95575.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...estor-awareness-campaign-sebi-vs-scam_95575.html  | ✓ | ⏱: 
+1.17s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...estor-awareness-campaign-sebi-vs-scam_95575.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...estor-awareness-campaign-sebi-vs-scam_95575.html  | ✓ | ⏱: 
+1.21s 
+2025-11-19 13:10:59,604 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/update-on-the-jane-street-interim-order_95491.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...date-on-the-jane-street-interim-order_95491.html  | ✓ | ⏱: 
+1.16s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...date-on-the-jane-street-interim-order_95491.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...date-on-the-jane-street-interim-order_95491.html  | ✓ | ⏱: 
+1.20s 
+2025-11-19 13:11:00,822 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/newspaper-advertisement-in-navbharat-on-13th-july-2025-promoting-illegal-dabba-trading-activities_95489.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ting-illegal-dabba-trading-activities_95489.html  | ✓ | ⏱: 
+1.57s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ting-illegal-dabba-trading-activities_95489.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ting-illegal-dabba-trading-activities_95489.html  | ✓ | ⏱: 
+1.60s 
+2025-11-19 13:11:02,446 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/samuhik-prativedan-manch-for-stock-brokers_95487.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ik-prativedan-manch-for-stock-brokers_95487.html  | ✓ | ⏱: 
+2.19s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ik-prativedan-manch-for-stock-brokers_95487.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ik-prativedan-manch-for-stock-brokers_95487.html  | ✓ | ⏱: 
+2.22s 
+2025-11-19 13:11:04,686 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/launch-of-securities-market-hackathon-at-global-fintech-fest-2025-gff-25-_95410.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...n-at-global-fintech-fest-2025-gff-25-_95410.html  | ✓ | ⏱: 
+1.30s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...n-at-global-fintech-fest-2025-gff-25-_95410.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...n-at-global-fintech-fest-2025-gff-25-_95410.html  | ✓ | ⏱: 
+1.33s 
+2025-11-19 13:11:06,040 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/sebi-and-nism-launch-national-financial-literacy-quiz-nflq-2025_95269.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...nal-financial-literacy-quiz-nflq-2025_95269.html  | ✓ | ⏱: 
+1.19s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...nal-financial-literacy-quiz-nflq-2025_95269.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...nal-financial-literacy-quiz-nflq-2025_95269.html  | ✓ | ⏱: 
+1.23s 
+2025-11-19 13:11:07,288 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/update-on-interim-order-compliance-by-jane-street_95237.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...terim-order-compliance-by-jane-street_95237.html  | ✓ | ⏱: 
+1.17s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...terim-order-compliance-by-jane-street_95237.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...terim-order-compliance-by-jane-street_95237.html  | ✓ | ⏱: 
+1.20s 
+2025-11-19 13:11:08,510 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/comparative-study-of-growth-in-trading-in-equity-derivatives-segment-eds-vis-vis-cash-market-after-recent-measures_95106.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...vis-cash-market-after-recent-measures_95106.html  | ✓ | ⏱: 
+1.27s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...vis-cash-market-after-recent-measures_95106.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...vis-cash-market-after-recent-measures_95106.html  | ✓ | ⏱: 
+1.30s 
+2025-11-19 13:11:09,836 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/common-contract-note-with-single-volume-weighted-average-price-vwap-enhancing-ease-of-doing-business-for-market-participants_94976.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...oing-business-for-market-participants_94976.html  | ✓ | ⏱: 
+1.28s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...oing-business-for-market-participants_94976.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...oing-business-for-market-participants_94976.html  | ✓ | ⏱: 
+1.31s 
+2025-11-19 13:11:11,172 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/shri-sunil-jayawant-kadam-takes-charge-as-executive-director-sebi_94940.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_94940.html  | ✓ | ⏱: 
+1.33s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_94940.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_94940.html  | ✓ | ⏱: 
+1.36s 
+2025-11-19 13:11:12,590 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jul-2025/sebi-conducts-municipal-bond-outreach-programme-to-enhance-urban-financing_94927.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-programme-to-enhance-urban-financing_94927.html  | ✓ | ⏱: 
+1.16s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-programme-to-enhance-urban-financing_94927.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-programme-to-enhance-urban-financing_94927.html  | ✓ | ⏱: 
+1.19s 
+2025-11-19 13:11:13,803 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/registered-intermediaries-are-allowed-to-use-e-kyc-setu-system-of-national-payments-corporation-of-india-to-perform-aadhaar-based-e-kyc-authentication-for-ease-of-doing-business_94904.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...entication-for-ease-of-doing-business_94904.html  | ✓ | ⏱: 
+1.16s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...entication-for-ease-of-doing-business_94904.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...entication-for-ease-of-doing-business_94904.html  | ✓ | ⏱: 
+1.20s 
+2025-11-19 13:11:15,022 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/clarification-on-news-reports_94855.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...un-2025/clarification-on-news-reports_94855.html  | ✓ | ⏱: 
+1.20s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...un-2025/clarification-on-news-reports_94855.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...un-2025/clarification-on-news-reports_94855.html  | ✓ | ⏱: 
+1.23s 
+2025-11-19 13:11:16,273 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/sebi-board-meeting_94657.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-releases/jun-2025/sebi-board-meeting_94657.html  | ✓ | ⏱: 
+1.15s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-releases/jun-2025/sebi-board-meeting_94657.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-releases/jun-2025/sebi-board-meeting_94657.html  | ✓ | ⏱: 
+1.19s 
+2025-11-19 13:11:17,482 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/centralized-fee-collection-mechanism-for-investment-advisers-and-research-analysts-cefcom-a-secure-and-closed-ecosystem-for-investors-to-pay-fees-to-registered-investment-advisers-and-research-a-_94553.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...d-investment-advisers-and-research-a-_94553.html  | ✓ | ⏱: 
+1.94s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...d-investment-advisers-and-research-a-_94553.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...d-investment-advisers-and-research-a-_94553.html  | ✓ | ⏱: 
+1.97s 
+2025-11-19 13:11:19,478 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/sebi-to-introduce-validated-upi-handles-and-sebi-check-for-secured-payments-by-investors-to-enhance-investor-protection-and-combat-fraud_94539.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-investor-protection-and-combat-fraud_94539.html  | ✓ | ⏱: 
+1.30s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-investor-protection-and-combat-fraud_94539.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-investor-protection-and-combat-fraud_94539.html  | ✓ | ⏱: 
+1.33s 
+2025-11-19 13:11:20,832 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/caution-to-public_94402.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/caution-to-public_94402.html | ✓ | ⏱: 
+1.48s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/caution-to-public_94402.html | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/caution-to-public_94402.html | ✓ | ⏱: 
+1.51s 
+2025-11-19 13:11:22,365 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/jun-2025/sebi-and-iepfa-conduct-the-first-niveshak-shivir-in-pune-proactive-joint-initiative-to-minimise-unclaimed-assets-and-facilitate-investor-claims-for-unpaid-dividends-and-shares_94347.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_94347.html  | ✓ | ⏱: 
+1.15s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_94347.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_94347.html  | ✓ | ⏱: 
+1.18s 
+2025-11-19 13:11:23,563 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/may-2025/niveshak-shivir-to-be-held-on-june-01-2025-in-the-city-of-pune-maharashtra_94331.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-2025-in-the-city-of-pune-maharashtra_94331.html  | ✓ | ⏱: 
+1.47s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-2025-in-the-city-of-pune-maharashtra_94331.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-2025-in-the-city-of-pune-maharashtra_94331.html  | ✓ | ⏱: 
+1.50s 
+2025-11-19 13:11:25,083 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/may-2025/caution-to-investors-on-stock-market-scams-through-social-media-platforms_94064.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-scams-through-social-media-platforms_94064.html  | ✓ | ⏱: 
+5.47s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-scams-through-social-media-platforms_94064.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-scams-through-social-media-platforms_94064.html  | ✓ | ⏱: 
+5.50s 
+2025-11-19 13:11:30,606 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/may-2025/approaching-deadline-for-filing-claims-in-the-matter-of-karvy-stock-broking-limited_94009.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_94009.html  | ✓ | ⏱: 
+1.41s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_94009.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...matter-of-karvy-stock-broking-limited_94009.html  | ✓ | ⏱: 
+1.44s 
+2025-11-19 13:11:32,072 [INFO] Opening: https://www.sebi.gov.in/media-and-notifications/press-releases/may-2025/caution-to-investors-sebi-accepts-surrender-application-of-strata-sm-reit_93907.html
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...rrender-application-of-strata-sm-reit_93907.html  | ✓ | ⏱: 
+1.24s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...rrender-application-of-strata-sm-reit_93907.html  | ✓ | ⏱: 
+0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...rrender-application-of-strata-sm-reit_93907.html  | ✓ | ⏱: 
+1.27s 
+2025-11-19 13:11:33,564 [INFO] FINAL EXCEL GENERATED: /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/weekly_sebi_downloads.xlsx
+
+
+=== Run at 2025-11-19 13:10:00 ===
