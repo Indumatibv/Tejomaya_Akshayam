@@ -4,3 +4,19 @@
 2025-11-19 13:09:22,929 INFO Scheduler started... waiting for triggers
 2025-11-19 13:10:00,072 INFO ⏳ Trigger received: running ETL pipeline
 2025-11-19 13:10:00,077 INFO 🚀 ETL pipeline started
+2025-11-27 13:05:14,714 INFO Scheduler started... waiting for triggers
+2025-11-27 13:06:00,890 INFO ⏳ Trigger received: running ETL pipeline
+2025-11-27 13:06:00,893 INFO 🚀 ETL pipeline started
+2025-11-27 13:12:46,427 INFO Scheduler started... waiting for triggers
+2025-11-27 13:13:06,288 INFO Scheduler started... waiting for triggers
+2025-11-27 13:14:00,500 INFO ⏳ Trigger received: running ETL pipeline
+2025-11-27 13:14:00,507 INFO 🚀 ETL pipeline started
+2025-11-27 14:17:34,761 INFO Scheduler started... waiting for triggers
+2025-11-27 14:19:00,124 INFO ⏳ Trigger received: running ETL pipeline
+2025-11-27 14:19:00,129 INFO 🚀 ETL pipeline started
+2025-11-27 14:43:24,766 INFO Scheduler started... waiting for triggers
+2025-11-27 14:44:00,888 INFO ⏳ Trigger received: running ETL pipeline
+2025-11-27 14:44:00,893 INFO 🚀 ETL pipeline started
+2025-11-27 15:00:07,269 INFO Scheduler started... waiting for triggers
+2025-11-27 15:01:00,478 INFO ⏳ Trigger received: running ETL pipeline
+2025-11-27 15:01:00,486 INFO 🚀 ETL pipeline started

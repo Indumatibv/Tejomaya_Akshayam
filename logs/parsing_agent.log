@@ -126,3 +126,228 @@ Warning: No languages specified, defaulting to English.
 
 
 === Run at 2025-11-19 13:11:33 ===
+2025-11-27 13:06:16,236 [INFO] 💪 Using device: cpu
+2025-11-27 13:06:16,237 [INFO] Ollama GPU status: Disabled
+2025-11-27 13:06:16,238 [INFO] Auto-detected Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/weekly_sebi_downloads.xlsx
+2025-11-27 13:06:16,249 [INFO] Starting PDF processing: 4 files
+2025-11-27 13:06:16,249 [INFO] Processing PDF 1/4: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1763122672135.pdf
+2025-11-27 13:06:16,250 [INFO] PDF text extraction failed, skip text extraction...
+2025-11-27 13:06:16,252 [INFO] PDF text extraction failed, skip text extraction...
+2025-11-27 13:06:16,252 [INFO] Using hi_res OCR for: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1763122672135.pdf
+2025-11-27 13:06:16,252 [INFO] PDF text extraction failed, skip text extraction...
+2025-11-27 13:06:16,698 [INFO] Reading PDF for file: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1763122672135.pdf ...
+2025-11-27 13:06:17,443 [ERROR] Error processing PDF /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1763122672135.pdf: Unable to get page count.
+I/O Error: Couldn't open file '/Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1763122672135.pdf': No such file or directory.
+
+2025-11-27 13:06:17,456 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-11-27 13:06:17,456 [INFO] Processing PDF 2/4: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762943978568.pdf
+2025-11-27 13:06:17,456 [INFO] PDF text extraction failed, skip text extraction...
+2025-11-27 13:06:17,457 [INFO] PDF text extraction failed, skip text extraction...
+2025-11-27 13:06:17,457 [INFO] Using hi_res OCR for: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762943978568.pdf
+2025-11-27 13:06:17,457 [INFO] PDF text extraction failed, skip text extraction...
+2025-11-27 13:06:17,457 [INFO] Reading PDF for file: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762943978568.pdf ...
+2025-11-27 13:06:17,484 [ERROR] Error processing PDF /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762943978568.pdf: Unable to get page count.
+I/O Error: Couldn't open file '/Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762943978568.pdf': No such file or directory.
+
+2025-11-27 13:06:17,493 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-11-27 13:06:17,493 [INFO] Processing PDF 3/4: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762858201080.pdf
+2025-11-27 13:06:17,493 [INFO] PDF text extraction failed, skip text extraction...
+2025-11-27 13:06:17,494 [INFO] PDF text extraction failed, skip text extraction...
+2025-11-27 13:06:17,494 [INFO] Using hi_res OCR for: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762858201080.pdf
+2025-11-27 13:06:17,494 [INFO] PDF text extraction failed, skip text extraction...
+2025-11-27 13:06:17,494 [INFO] Reading PDF for file: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762858201080.pdf ...
+2025-11-27 13:06:17,520 [ERROR] Error processing PDF /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762858201080.pdf: Unable to get page count.
+I/O Error: Couldn't open file '/Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762858201080.pdf': No such file or directory.
+
+2025-11-27 13:06:17,529 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-11-27 13:06:17,529 [INFO] Processing PDF 4/4: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762786201875.pdf
+2025-11-27 13:06:17,529 [INFO] PDF text extraction failed, skip text extraction...
+2025-11-27 13:06:17,529 [INFO] PDF text extraction failed, skip text extraction...
+2025-11-27 13:06:17,529 [INFO] Using hi_res OCR for: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762786201875.pdf
+2025-11-27 13:06:17,529 [INFO] PDF text extraction failed, skip text extraction...
+2025-11-27 13:06:17,530 [INFO] Reading PDF for file: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762786201875.pdf ...
+2025-11-27 13:06:17,555 [ERROR] Error processing PDF /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762786201875.pdf: Unable to get page count.
+I/O Error: Couldn't open file '/Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762786201875.pdf': No such file or directory.
+
+2025-11-27 13:06:17,563 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-11-27 13:06:17,563 [INFO] All PDFs processed in 1.31s
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+
+
+=== Run at 2025-11-27 13:06:10 ===
+2025-11-27 13:16:53,816 [INFO] 💪 Using device: cpu
+2025-11-27 13:16:53,816 [INFO] Ollama GPU status: Disabled
+2025-11-27 13:16:53,817 [INFO] Auto-detected Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/weekly_sebi_downloads.xlsx
+2025-11-27 13:16:53,825 [INFO] Starting PDF processing: 5 files
+2025-11-27 13:16:53,825 [INFO] Processing PDF 1/5: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Consulatation Paper/2025/November/1763048588868.pdf
+2025-11-27 13:16:53,890 [INFO] pikepdf C++ to Python logger bridge initialized
+2025-11-27 13:16:57,041 [INFO] Lang: english | Index: No.
+1, No.
+1, No. 1
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Traceback (most recent call last):
+  File "/Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/agents/parsing_agent.py", line 316, in <module>
+    main(excel_file)
+  File "/Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/agents/parsing_agent.py", line 294, in main
+    processed = process_single_pdf(row)
+  File "/Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/agents/parsing_agent.py", line 254, in process_single_pdf
+    summaries = generate_summary(english)
+  File "/Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/agents/parsing_agent.py", line 202, in generate_summary
+    summary = llm.invoke(chunk_prompt.format(text=doc.page_content)).strip()
+  File "/opt/anaconda3/envs/tejomaya/lib/python3.10/site-packages/langchain_core/language_models/llms.py", line 273, in invoke
+    self.generate_prompt(
+  File "/opt/anaconda3/envs/tejomaya/lib/python3.10/site-packages/langchain_core/language_models/llms.py", line 568, in generate_prompt
+    return self.generate(prompt_strings, stop=stop, callbacks=callbacks, **kwargs)
+  File "/opt/anaconda3/envs/tejomaya/lib/python3.10/site-packages/langchain_core/language_models/llms.py", line 741, in generate
+    output = self._generate_helper(
+  File "/opt/anaconda3/envs/tejomaya/lib/python3.10/site-packages/langchain_core/language_models/llms.py", line 605, in _generate_helper
+    raise e
+  File "/opt/anaconda3/envs/tejomaya/lib/python3.10/site-packages/langchain_core/language_models/llms.py", line 592, in _generate_helper
+    self._generate(
+  File "/opt/anaconda3/envs/tejomaya/lib/python3.10/site-packages/langchain_community/llms/ollama.py", line 408, in _generate
+    final_chunk = super()._stream_with_aggregation(
+  File "/opt/anaconda3/envs/tejomaya/lib/python3.10/site-packages/langchain_community/llms/ollama.py", line 317, in _stream_with_aggregation
+    for stream_resp in self._create_generate_stream(prompt, stop, **kwargs):
+  File "/opt/anaconda3/envs/tejomaya/lib/python3.10/site-packages/langchain_community/llms/ollama.py", line 159, in _create_generate_stream
+    yield from self._create_stream(
+  File "/opt/anaconda3/envs/tejomaya/lib/python3.10/site-packages/requests/models.py", line 869, in iter_lines
+    for chunk in self.iter_content(
+  File "/opt/anaconda3/envs/tejomaya/lib/python3.10/site-packages/requests/utils.py", line 562, in stream_decode_response_unicode
+    for chunk in iterator:
+  File "/opt/anaconda3/envs/tejomaya/lib/python3.10/site-packages/requests/models.py", line 820, in generate
+    yield from self.raw.stream(chunk_size, decode_content=True)
+  File "/opt/anaconda3/envs/tejomaya/lib/python3.10/site-packages/urllib3/response.py", line 1088, in stream
+    yield from self.read_chunked(amt, decode_content=decode_content)
+  File "/opt/anaconda3/envs/tejomaya/lib/python3.10/site-packages/urllib3/response.py", line 1248, in read_chunked
+    self._update_chunk_length()
+  File "/opt/anaconda3/envs/tejomaya/lib/python3.10/site-packages/urllib3/response.py", line 1167, in _update_chunk_length
+    line = self._fp.fp.readline()  # type: ignore[union-attr]
+  File "/opt/anaconda3/envs/tejomaya/lib/python3.10/socket.py", line 717, in readinto
+    return self._sock.recv_into(b)
+KeyboardInterrupt
+
+
+=== Run at 2025-11-27 13:16:49 ===
+2025-11-27 14:25:01,802 [INFO] 💪 Using device: cpu
+2025-11-27 14:25:01,802 [INFO] Ollama GPU status: Disabled
+2025-11-27 14:25:01,803 [INFO] Auto-detected Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/weekly_sebi_downloads.xlsx
+2025-11-27 14:25:01,814 [INFO] Starting PDF processing: 5 files
+2025-11-27 14:25:01,814 [INFO] Processing PDF 1/5: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1763122672135.pdf
+2025-11-27 14:25:01,838 [INFO] pikepdf C++ to Python logger bridge initialized
+2025-11-27 14:25:02,302 [INFO] Lang: english | Index: No.74/2025
+2025-11-27 14:25:21,145 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-11-27 14:25:21,146 [INFO] Processing PDF 2/5: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762943978568.pdf
+2025-11-27 14:25:21,204 [INFO] Lang: english | Index: No. 73/2025
+2025-11-27 14:25:27,630 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-11-27 14:25:27,631 [INFO] Processing PDF 3/5: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762858201080.pdf
+2025-11-27 14:25:27,808 [INFO] Lang: english | Index: No.72/2025
+2025-11-27 14:25:43,883 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-11-27 14:25:43,884 [INFO] Processing PDF 4/5: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762786201875.pdf
+2025-11-27 14:25:43,991 [INFO] Lang: english | Index: No.71/2025
+2025-11-27 14:25:59,158 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-11-27 14:25:59,158 [INFO] Processing PDF 5/5: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Consulatation Paper/2025/November/1763048588868.pdf
+2025-11-27 14:26:02,089 [INFO] Lang: english | Index: No.
+1, No.
+1, No. 1
+2025-11-27 14:28:11,155 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Consulatation Paper)
+2025-11-27 14:28:11,156 [INFO] All PDFs processed in 189.34s
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+
+
+=== Run at 2025-11-27 14:24:57 ===
+2025-11-27 14:49:34,372 [INFO] 💪 Using device: cpu
+2025-11-27 14:49:34,372 [INFO] Ollama GPU status: Disabled
+2025-11-27 14:49:34,373 [INFO] Auto-detected Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/weekly_sebi_downloads.xlsx
+2025-11-27 14:49:34,383 [INFO] Starting PDF processing: 5 files
+2025-11-27 14:49:34,383 [INFO] Processing PDF 1/5: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1763122672135.pdf
+2025-11-27 14:49:34,404 [INFO] pikepdf C++ to Python logger bridge initialized
+2025-11-27 14:49:34,803 [INFO] Lang: english | Index: No.74/2025
+2025-11-27 14:49:52,648 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-11-27 14:49:52,649 [INFO] Processing PDF 2/5: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762943978568.pdf
+2025-11-27 14:49:52,711 [INFO] Lang: english | Index: No. 73/2025
+2025-11-27 14:49:59,988 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-11-27 14:49:59,989 [INFO] Processing PDF 3/5: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762858201080.pdf
+2025-11-27 14:50:00,142 [INFO] Lang: english | Index: No.72/2025
+2025-11-27 14:50:15,133 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-11-27 14:50:15,134 [INFO] Processing PDF 4/5: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1762786201875.pdf
+2025-11-27 14:50:15,238 [INFO] Lang: english | Index: No.71/2025
+2025-11-27 14:50:27,151 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-11-27 14:50:27,151 [INFO] Processing PDF 5/5: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Consulatation Paper/2025/November/1763048588868.pdf
+2025-11-27 14:50:29,995 [INFO] Lang: english | Index: No.
+1, No.
+1, No. 1
+2025-11-27 14:52:33,321 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Consulatation Paper)
+2025-11-27 14:52:33,321 [INFO] All PDFs processed in 178.94s
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+
+
+=== Run at 2025-11-27 14:49:29 ===
+2025-11-27 15:07:11,897 [INFO] 💪 Using device: cpu
+2025-11-27 15:07:11,897 [INFO] Ollama GPU status: Disabled
+2025-11-27 15:07:11,898 [INFO] Auto-detected Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/weekly_sebi_downloads.xlsx
+2025-11-27 15:07:11,908 [INFO] Starting PDF processing: 6 files
+2025-11-27 15:07:11,908 [INFO] Processing PDF 1/6: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Circulars/2025/November/1764072855448.pdf
+2025-11-27 15:07:11,935 [INFO] pikepdf C++ to Python logger bridge initialized
+2025-11-27 15:07:12,507 [INFO] Lang: english | Index: NA
+2025-11-27 15:07:45,206 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Circulars)
+2025-11-27 15:07:45,208 [INFO] Processing PDF 2/6: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Circulars/2025/November/1764072737631.pdf
+2025-11-27 15:07:45,433 [INFO] Lang: english | Index: NA
+2025-11-27 15:08:10,821 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Circulars)
+2025-11-27 15:08:10,822 [INFO] Processing PDF 3/6: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Circulars/2025/November/1764072664415.pdf
+2025-11-27 15:08:10,991 [INFO] Lang: english | Index: NA
+2025-11-27 15:08:27,272 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Circulars)
+2025-11-27 15:08:27,272 [INFO] Processing PDF 4/6: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/November/1764065882362.pdf
+2025-11-27 15:08:27,365 [INFO] Lang: english | Index: No.76/2025
+2025-11-27 15:08:37,756 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-11-27 15:08:37,757 [INFO] Processing PDF 5/6: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Consulatation Paper/2025/November/1764065506896.pdf
+2025-11-27 15:08:38,488 [INFO] Lang: english | Index: NA
+2025-11-27 15:09:21,088 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Consulatation Paper)
+2025-11-27 15:09:21,089 [INFO] Processing PDF 6/6: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Consulatation Paper/2025/November/1763983154863.pdf
+2025-11-27 15:09:21,619 [INFO] Lang: english | Index: No. CIR/MRD/DP/20/2010
+2025-11-27 15:10:11,276 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Consulatation Paper)
+2025-11-27 15:10:11,276 [INFO] All PDFs processed in 179.37s
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+
+
+=== Run at 2025-11-27 15:07:07 ===
