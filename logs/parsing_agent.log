@@ -351,3 +351,48 @@ Warning: No languages specified, defaulting to English.
 
 
 === Run at 2025-11-27 15:07:07 ===
+2025-12-02 14:08:06,418 [INFO] 💪 Using device: cpu
+2025-12-02 14:08:06,419 [INFO] Ollama GPU status: Disabled
+2025-12-02 14:08:06,420 [INFO] Auto-detected Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/weekly_sebi_downloads.xlsx
+2025-12-02 14:08:06,429 [INFO] Starting PDF processing: 6 files
+2025-12-02 14:08:06,430 [INFO] Processing PDF 1/6: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/Listed Companies/Circular-NSE/2025/October/SEBI_Circular_on_Minimum_information_to_be_provided_to_the_Audit_Committee_and_Shareholders_for_appr.pdf
+2025-12-02 14:08:06,514 [INFO] pikepdf C++ to Python logger bridge initialized
+2025-12-02 14:08:07,297 [INFO] Lang: english | Index: NA
+2025-12-02 14:08:46,276 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/Listed Companies.xlsx (Circular-NSE)
+2025-12-02 14:08:46,278 [INFO] Processing PDF 2/6: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/Listed Companies/Circular-BSE/2025/October/SEBI_Circular_on_Minimum_information_to_be_provided_to_the_Audit_Committee_and_Shareholders_for_appr.pdf
+2025-12-02 14:08:46,694 [INFO] Lang: english | Index: NA
+2025-12-02 14:09:16,139 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/Listed Companies.xlsx (Circular-BSE)
+2025-12-02 14:09:16,140 [INFO] Processing PDF 3/6: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/AIF/Circulars/2025/October/1760525216783.pdf
+2025-12-02 14:09:16,332 [INFO] Lang: english | Index: NA
+2025-12-02 14:09:30,935 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/AIF.xlsx (Circulars)
+2025-12-02 14:09:30,936 [INFO] Processing PDF 4/6: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Circulars/2025/October/1760356560260.pdf
+2025-12-02 14:09:31,523 [INFO] Lang: english | Index: NA
+2025-12-02 14:10:00,940 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Circulars)
+2025-12-02 14:10:00,941 [INFO] Processing PDF 5/6: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Consulatation Paper/2025/October/1760699641194.pdf
+2025-12-02 14:10:02,004 [INFO] Lang: english | Index: No. 12/2019
+2025-12-02 14:11:16,617 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Consulatation Paper)
+2025-12-02 14:11:16,618 [INFO] Processing PDF 6/6: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Master circular/2025/October/1760532257519.pdf
+2025-12-02 14:11:38,527 [INFO] Lang: english | Index: No.
+CIR/MIRSD/4/2011, No
+0, No
+0, No.
+1, No. 1, No
+49, No. 1, No. 1, No.
+9
+2025-12-02 14:32:06,902 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Master circular)
+2025-12-02 14:32:06,903 [INFO] All PDFs processed in 1440.47s
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+
+
+=== Run at 2025-12-02 14:08:00 ===

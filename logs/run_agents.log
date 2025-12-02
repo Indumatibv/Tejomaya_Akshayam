@@ -54,3 +54,10 @@
 2025-11-27 15:07:07,326 INFO 🚀 Running script → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/agents/parsing_agent.py
 2025-11-27 15:10:11,988 INFO ✔ Completed with returncode=0
 2025-11-27 15:10:11,988 INFO 🎉 BOTH AGENTS COMPLETED SUCCESSFULLY!
+2025-12-02 14:02:00,865 INFO ===== Starting 2-Agent ETL Chain =====
+2025-12-02 14:02:00,865 INFO 🚀 Running script → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/agents/searching_agent.py
+2025-12-02 14:08:00,474 INFO ✔ Completed with returncode=0
+2025-12-02 14:08:00,475 INFO 📄 Excel found: /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/weekly_sebi_downloads.xlsx
+2025-12-02 14:08:00,475 INFO 🚀 Running script → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/agents/parsing_agent.py
+2025-12-02 14:32:07,771 INFO ✔ Completed with returncode=0
+2025-12-02 14:32:07,771 INFO 🎉 BOTH AGENTS COMPLETED SUCCESSFULLY!

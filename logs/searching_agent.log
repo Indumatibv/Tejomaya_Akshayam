@@ -3941,3 +3941,681 @@ Code context:
 
 
 === Run at 2025-11-27 15:01:00 ===
+2025-12-02 14:02:01,995 [INFO] Target range (7 week(s) back): 2025-10-13 → 2025-10-19
+2025-12-02 14:02:02,289 [INFO] Loaded 7 link tasks from Excel
+2025-12-02 14:02:02,289 [INFO] Processing [Listed Companies > Circular-NSE] => https://www.nseindia.com/companies-listing/circular-for-listed-companies-equity-market
+2025-12-02 14:02:02,289 [INFO] 🔵 NSE LISTED COMPANIES SCRAPER → https://www.nseindia.com/companies-listing/circular-for-listed-companies-equity-market
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.nseindia.com/companies-listing/circular-for-listed-companies-equity-market               | ✓ | ⏱: 4.61s 
+[SCRAPE].. ◆ https://www.nseindia.com/companies-listing/circular-for-listed-companies-equity-market               | ✓ | ⏱: 0.41s 
+[COMPLETE] ● https://www.nseindia.com/companies-listing/circular-for-listed-companies-equity-market               | ✓ | ⏱: 5.02s 
+2025-12-02 14:02:09,076 [INFO] ✔ NSE rows detected: 585
+2025-12-02 14:02:09,076 [INFO] ✔ Processing top 10 NSE circulars
+2025-12-02 14:02:09,076 [INFO] → NSE PDF URL: https://nsearchives.nseindia.com//web/circular/2025-10/NSE_Circular_14102025_20251014172300.pdf
+2025-12-02 14:02:09,282 [INFO] ✔ Direct NSE PDF downloaded: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/Listed Companies/Circular-NSE/2025/October/SEBI_Circular_on_Minimum_information_to_be_provided_to_the_Audit_Committee_and_Shareholders_for_appr.pdf
+2025-12-02 14:02:09,283 [INFO] ✔ NSE PDF Saved → /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/Listed Companies/Circular-NSE/2025/October/SEBI_Circular_on_Minimum_information_to_be_provided_to_the_Audit_Committee_and_Shareholders_for_appr.pdf
+2025-12-02 14:02:09,283 [INFO] Skipping 2025-10-09 (outside week)
+2025-12-02 14:02:09,283 [INFO] Skipping 2025-09-12 (outside week)
+2025-12-02 14:02:09,283 [INFO] Skipping 2025-09-04 (outside week)
+2025-12-02 14:02:09,283 [INFO] Skipping 2025-08-26 (outside week)
+2025-12-02 14:02:09,283 [INFO] Skipping 2025-08-12 (outside week)
+2025-12-02 14:02:09,283 [INFO] Skipping 2025-08-01 (outside week)
+2025-12-02 14:02:09,284 [INFO] Skipping 2025-07-31 (outside week)
+2025-12-02 14:02:09,284 [INFO] Skipping 2025-07-23 (outside week)
+2025-12-02 14:02:09,284 [INFO] NSE LISTED COMPANIES → DONE
+2025-12-02 14:02:09,284 [INFO] Processing [Listed Companies > Circular-BSE] => https://www.bseindia.com/corporates/CirularToListedComp.html
+2025-12-02 14:02:09,285 [INFO] 🟣 BSE LISTED COMPANIES SCRAPER → https://www.bseindia.com/corporates/CirularToListedComp.html
+2025-12-02 14:02:14,228 [INFO] ✔ Processing TOP 10 BSE Circulars
+2025-12-02 14:02:14,229 [INFO] Skipping (outside week): 2025-11-27
+2025-12-02 14:02:14,229 [INFO] Skipping (outside week): 2025-11-27
+2025-12-02 14:02:14,229 [INFO] Skipping (outside week): 2025-11-27
+2025-12-02 14:02:14,229 [INFO] Skipping (outside week): 2025-11-27
+2025-12-02 14:02:14,229 [INFO] Skipping (outside week): 2025-11-21
+2025-12-02 14:02:14,229 [INFO] Skipping (outside week): 2025-11-21
+2025-12-02 14:02:14,230 [INFO] Skipping (outside week): 2025-11-17
+2025-12-02 14:02:14,230 [INFO] → Opening detail page: https://www.bseindia.com/markets/MarketInfo/DispNewNoticesCirculars.aspx?page=20251014-34
+2025-12-02 14:02:16,381 [INFO] 📎 Attachment → https://www.bseindia.com/markets/MarketInfo/DownloadAttach.aspx?id=20251014-34&attachedId=dbe355c0-4b37-4967-8429-b7b6c97dbeba
+2025-12-02 14:02:19,539 [INFO] ✔ Downloaded via click → /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/Listed Companies/Circular-BSE/2025/October/SEBI_Circular_on_Minimum_information_to_be_provided_to_the_Audit_Committee_and_Shareholders_for_appr.pdf
+2025-12-02 14:02:20,804 [INFO] Skipping (outside week): 2025-10-09
+2025-12-02 14:02:20,804 [INFO] Skipping (outside week): 2025-09-26
+2025-12-02 14:02:20,901 [INFO] 🟣 BSE LISTED COMPANIES → DONE
+2025-12-02 14:02:20,901 [INFO] Processing [SEBI > Circulars] => https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=7&smid=0
+2025-12-02 14:02:20,901 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=7&smid=0
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=7&smid=0                 | ✓ | ⏱: 2.51s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=7&smid=0                 | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=7&smid=0                 | ✓ | ⏱: 2.55s 
+2025-12-02 14:02:24,192 [INFO] Found 25 SEBI inner links in listing: https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=7&smid=0
+2025-12-02 14:02:24,192 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/nov-2025/reclassification-of-real-estate-investment-trusts-reits-as-equity-related-instruments-for-facilitating-enhanced-participation-by-mutual-funds-and-specialized-investment-funds-sifs-_98031.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/nov-2025...nd-specialized-investment-funds-sifs-_98031.html  | ✓ | ⏱: 2.46s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/nov-2025...nd-specialized-investment-funds-sifs-_98031.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/nov-2025...nd-specialized-investment-funds-sifs-_98031.html  | ✓ | ⏱: 2.50s 
+2025-12-02 14:02:27,382 [INFO] Skipping (out of weekly range): 2025-11-28
+2025-12-02 14:02:27,382 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/nov-2025/additional-incentives-to-distributors-for-onboarding-new-individual-investors-from-b-30-cities-and-women-investors_98007.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/nov-2025...-from-b-30-cities-and-women-investors_98007.html  | ✓ | ⏱: 2.82s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/nov-2025...-from-b-30-cities-and-women-investors_98007.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/nov-2025...-from-b-30-cities-and-women-investors_98007.html  | ✓ | ⏱: 2.85s 
+2025-12-02 14:02:31,022 [INFO] Skipping (out of weekly range): 2025-11-27
+2025-12-02 14:02:31,023 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/nov-2025/specification-of-the-terms-and-conditions-for-debenture-trustees-for-carrying-out-activities-outside-the-purview-of-sebi_97944.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/nov-2025...ctivities-outside-the-purview-of-sebi_97944.html  | ✓ | ⏱: 2.36s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/nov-2025...ctivities-outside-the-purview-of-sebi_97944.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/nov-2025...ctivities-outside-the-purview-of-sebi_97944.html  | ✓ | ⏱: 2.39s 
+2025-12-02 14:02:34,082 [INFO] Skipping (out of weekly range): 2025-11-25
+2025-12-02 14:02:34,083 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/nov-2025/modifications-to-chapter-iv-of-the-master-circular-for-debenture-trustees-dated-august-13-2025_97943.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/nov-2025...benture-trustees-dated-august-13-2025_97943.html  | ✓ | ⏱: 2.40s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/nov-2025...benture-trustees-dated-august-13-2025_97943.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/nov-2025...benture-trustees-dated-august-13-2025_97943.html  | ✓ | ⏱: 2.43s 
+2025-12-02 14:02:37,185 [INFO] Skipping (out of weekly range): 2025-11-25
+2025-12-02 14:02:37,185 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/nov-2025/timeline-for-submission-of-information-by-the-issuer-to-the-debenture-trustee-s-_97942.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/nov-2025...he-issuer-to-the-debenture-trustee-s-_97942.html  | ✓ | ⏱: 2.52s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/nov-2025...he-issuer-to-the-debenture-trustee-s-_97942.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/nov-2025...he-issuer-to-the-debenture-trustee-s-_97942.html  | ✓ | ⏱: 2.55s 
+2025-12-02 14:02:40,415 [INFO] Skipping (out of weekly range): 2025-11-25
+2025-12-02 14:02:40,415 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/oct-2025/implementation-of-eligibility-criteria-for-derivatives-on-existing-non-benchmark-indices_97564.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/oct-2025...ves-on-existing-non-benchmark-indices_97564.html  | ✓ | ⏱: 2.42s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/oct-2025...ves-on-existing-non-benchmark-indices_97564.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/oct-2025...ves-on-existing-non-benchmark-indices_97564.html  | ✓ | ⏱: 2.46s 
+2025-12-02 14:02:43,535 [INFO] Skipping (out of weekly range): 2025-10-30
+2025-12-02 14:02:43,535 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/oct-2025/ease-of-doing-business-interim-arrangement-for-certified-past-performance-of-investment-advisers-and-research-analysts-prior-to-operationalisation-of-past-risk-and-return-verification-agency-parrv-_97556.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/oct-2025...and-return-verification-agency-parrv-_97556.html  | ✓ | ⏱: 2.47s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/oct-2025...and-return-verification-agency-parrv-_97556.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/oct-2025...and-return-verification-agency-parrv-_97556.html  | ✓ | ⏱: 2.51s 
+2025-12-02 14:02:46,706 [INFO] Skipping (out of weekly range): 2025-10-30
+2025-12-02 14:02:46,706 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/oct-2025/ease-of-doing-business-measures-enabling-investment-advisers-ias-to-provide-second-opinion-to-clients-on-assets-under-pre-existing-distribution-arrangement_97555.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/oct-2025...pre-existing-distribution-arrangement_97555.html  | ✓ | ⏱: 2.54s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/oct-2025...pre-existing-distribution-arrangement_97555.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/oct-2025...pre-existing-distribution-arrangement_97555.html  | ✓ | ⏱: 2.57s 
+2025-12-02 14:02:49,946 [INFO] Skipping (out of weekly range): 2025-10-30
+2025-12-02 14:02:49,946 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/oct-2025/further-extension-of-timeline-for-mandatory-implementation-of-systems-and-processes-by-qualified-stock-brokers-qsbs-with-respect-to-t-0-settlement-cycle_97551.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/oct-2025...-with-respect-to-t-0-settlement-cycle_97551.html  | ✓ | ⏱: 2.41s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/oct-2025...-with-respect-to-t-0-settlement-cycle_97551.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/oct-2025...-with-respect-to-t-0-settlement-cycle_97551.html  | ✓ | ⏱: 2.44s 
+2025-12-02 14:02:53,104 [INFO] Skipping (out of weekly range): 2025-10-30
+2025-12-02 14:02:53,104 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/oct-2025/transfer-of-portfolios-of-clients-pms-business-by-portfolio-managers-_97443.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/oct-2025...s-pms-business-by-portfolio-managers-_97443.html  | ✓ | ⏱: 3.04s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/oct-2025...s-pms-business-by-portfolio-managers-_97443.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/oct-2025...s-pms-business-by-portfolio-managers-_97443.html  | ✓ | ⏱: 3.07s 
+2025-12-02 14:02:56,847 [INFO] Skipping (out of weekly range): 2025-10-24
+2025-12-02 14:02:56,847 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/oct-2025/relaxation-in-timeline-for-disclosure-of-allocation-methodology-by-angel-funds_97339.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/oct-2025...allocation-methodology-by-angel-funds_97339.html  | ✓ | ⏱: 2.46s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/oct-2025...allocation-methodology-by-angel-funds_97339.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/oct-2025...allocation-methodology-by-angel-funds_97339.html  | ✓ | ⏱: 2.50s 
+2025-12-02 14:03:00,026 [INFO] AIF detected → storing under AIF
+2025-12-02 14:03:00,525 [INFO] Downloaded PDF: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/AIF/Circulars/2025/October/1760525216783.pdf
+2025-12-02 14:03:00,527 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/oct-2025/minimum-information-to-be-provided-to-the-audit-committee-and-shareholders-for-approval-of-related-party-transactions_97281.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/oct-2025...pproval-of-related-party-transactions_97281.html  | ✓ | ⏱: 2.36s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/oct-2025...pproval-of-related-party-transactions_97281.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/oct-2025...pproval-of-related-party-transactions_97281.html  | ✓ | ⏱: 2.39s 
+2025-12-02 14:03:04,249 [INFO] Downloaded PDF: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Circulars/2025/October/1760356560260.pdf
+2025-12-02 14:03:04,251 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/oct-2025/review-of-block-deal-framework_97145.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/oct-2025/review-of-block-deal-framework_97145.html           | ✓ | ⏱: 2.41s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/oct-2025/review-of-block-deal-framework_97145.html           | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/oct-2025/review-of-block-deal-framework_97145.html           | ✓ | ⏱: 2.45s 
+2025-12-02 14:03:07,379 [INFO] Skipping (out of weekly range): 2025-10-08
+2025-12-02 14:03:07,379 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/sep-2025/extension-of-timeline-for-implementation-of-sebi-circular-dated-february-04-2025-on-safer-participation-of-retail-investors-in-algorithmic-trading-_96979.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/sep-2025...ail-investors-in-algorithmic-trading-_96979.html  | ✓ | ⏱: 2.44s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/sep-2025...ail-investors-in-algorithmic-trading-_96979.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/sep-2025...ail-investors-in-algorithmic-trading-_96979.html  | ✓ | ⏱: 2.48s 
+2025-12-02 14:03:10,521 [INFO] Skipping (out of weekly range): 2025-09-30
+2025-12-02 14:03:10,522 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/sep-2025/compliance-guidelines-for-digital-accessibility-circular-rights-of-persons-with-disabilities-act-2016-and-rules-made-thereunder-mandatory-compliance-by-all-regulated-entities-dated-july-31-2025-_96862.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/sep-2025...egulated-entities-dated-july-31-2025-_96862.html  | ✓ | ⏱: 2.38s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/sep-2025...egulated-entities-dated-july-31-2025-_96862.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/sep-2025...egulated-entities-dated-july-31-2025-_96862.html  | ✓ | ⏱: 2.42s 
+2025-12-02 14:03:13,597 [INFO] Skipping (out of weekly range): 2025-09-25
+2025-12-02 14:03:13,597 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/sep-2025/ease-of-doing-investment-smooth-transmission-of-securities-from-nominee-to-legal-heir_96711.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/sep-2025...securities-from-nominee-to-legal-heir_96711.html  | ✓ | ⏱: 2.41s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/sep-2025...securities-from-nominee-to-legal-heir_96711.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/sep-2025...securities-from-nominee-to-legal-heir_96711.html  | ✓ | ⏱: 2.45s 
+2025-12-02 14:03:16,745 [INFO] Skipping (out of weekly range): 2025-09-19
+2025-12-02 14:03:16,745 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/sep-2025/framework-on-social-stock-exchange_96702.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/sep-2025/framework-on-social-stock-exchange_96702.html       | ✓ | ⏱: 2.47s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/sep-2025/framework-on-social-stock-exchange_96702.html       | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/sep-2025/framework-on-social-stock-exchange_96702.html       | ✓ | ⏱: 2.50s 
+2025-12-02 14:03:19,940 [INFO] Skipping (out of weekly range): 2025-09-19
+2025-12-02 14:03:19,941 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/sep-2025/revised-regulatory-framework-for-angel-funds-under-aif-regulations_96553.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/sep-2025...for-angel-funds-under-aif-regulations_96553.html  | ✓ | ⏱: 2.79s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/sep-2025...for-angel-funds-under-aif-regulations_96553.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/sep-2025...for-angel-funds-under-aif-regulations_96553.html  | ✓ | ⏱: 2.83s 
+2025-12-02 14:03:23,457 [INFO] Skipping (out of weekly range): 2025-09-10
+2025-12-02 14:03:23,457 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/sep-2025/ease-of-regulatory-compliances-for-fpis-investing-only-in-government-securities_96549.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/sep-2025...vesting-only-in-government-securities_96549.html  | ✓ | ⏱: 2.42s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/sep-2025...vesting-only-in-government-securities_96549.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/sep-2025...vesting-only-in-government-securities_96549.html  | ✓ | ⏱: 2.46s 
+2025-12-02 14:03:26,602 [INFO] Skipping (out of weekly range): 2025-09-10
+2025-12-02 14:03:26,602 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/sep-2025/framework-for-aifs-to-make-co-investment-within-the-aif-structure-under-sebi-alternative-investment-funds-regulations-2012_96506.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/sep-2025...ive-investment-funds-regulations-2012_96506.html  | ✓ | ⏱: 2.43s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/sep-2025...ive-investment-funds-regulations-2012_96506.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/sep-2025...ive-investment-funds-regulations-2012_96506.html  | ✓ | ⏱: 2.47s 
+2025-12-02 14:03:29,728 [INFO] Skipping (out of weekly range): 2025-09-09
+2025-12-02 14:03:29,729 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/sep-2025/format-of-disclosure-document-for-portfolio-managers_96479.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/sep-2025...osure-document-for-portfolio-managers_96479.html  | ✓ | ⏱: 3.20s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/sep-2025...osure-document-for-portfolio-managers_96479.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/sep-2025...osure-document-for-portfolio-managers_96479.html  | ✓ | ⏱: 3.24s 
+2025-12-02 14:03:33,622 [INFO] Skipping (out of weekly range): 2025-09-09
+2025-12-02 14:03:33,622 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/sep-2025/streamlining-of-the-process-for-surrender-of-know-your-client-registration-agency-kra-registration_96450.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/sep-2025...-registration-agency-kra-registration_96450.html  | ✓ | ⏱: 2.41s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/sep-2025...-registration-agency-kra-registration_96450.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/sep-2025...-registration-agency-kra-registration_96450.html  | ✓ | ⏱: 2.44s 
+2025-12-02 14:03:36,729 [INFO] Skipping (out of weekly range): 2025-09-05
+2025-12-02 14:03:36,729 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/sep-2025/framework-for-intraday-position-limits-monitoring-for-equity-index-derivatives_96376.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/sep-2025...nitoring-for-equity-index-derivatives_96376.html  | ✓ | ⏱: 2.42s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/sep-2025...nitoring-for-equity-index-derivatives_96376.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/sep-2025...nitoring-for-equity-index-derivatives_96376.html  | ✓ | ⏱: 2.45s 
+2025-12-02 14:03:39,885 [INFO] Skipping (out of weekly range): 2025-09-01
+2025-12-02 14:03:39,886 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/aug-2025/extension-of-timelines-and-update-of-reporting-authority-for-ias-and-ras-w-r-t-sebi-circular-for-compliance-to-digital-accessibility-circular-rights-of-persons-with-disabilities-act-2016-and-rules-_96353.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/aug-2025...with-disabilities-act-2016-and-rules-_96353.html  | ✓ | ⏱: 2.52s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/aug-2025...with-disabilities-act-2016-and-rules-_96353.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/aug-2025...with-disabilities-act-2016-and-rules-_96353.html  | ✓ | ⏱: 2.55s 
+2025-12-02 14:03:43,100 [INFO] Skipping (out of weekly range): 2025-08-29
+2025-12-02 14:03:43,100 [INFO] SEBI Scraper → [SEBI > Circulars]: https://www.sebi.gov.in/legal/circulars/aug-2025/technical-clarifications-to-cybersecurity-and-cyber-resilience-framework-cscrf-for-sebi-regulated-entities-res-_96329.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/circulars/aug-2025...scrf-for-sebi-regulated-entities-res-_96329.html  | ✓ | ⏱: 3.23s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/circulars/aug-2025...scrf-for-sebi-regulated-entities-res-_96329.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/circulars/aug-2025...scrf-for-sebi-regulated-entities-res-_96329.html  | ✓ | ⏱: 3.26s 
+2025-12-02 14:03:47,005 [INFO] Skipping (out of weekly range): 2025-08-28
+2025-12-02 14:03:47,006 [INFO] Processing [SEBI > Press Release] => https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=6&ssid=23&smid=0
+2025-12-02 14:03:47,006 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=6&ssid=23&smid=0
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=6&ssid=23&smid=0                | ✓ | ⏱: 2.51s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=6&ssid=23&smid=0                | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=6&ssid=23&smid=0                | ✓ | ⏱: 2.55s 
+2025-12-02 14:03:50,257 [INFO] Found 25 SEBI inner links in listing: https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=6&ssid=23&smid=0
+2025-12-02 14:03:50,257 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/securities-and-exchange-board-of-india-informal-guidance-scheme-2025_98009.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...f-india-informal-guidance-scheme-2025_98009.html  | ✓ | ⏱: 2.47s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...f-india-informal-guidance-scheme-2025_98009.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...f-india-informal-guidance-scheme-2025_98009.html  | ✓ | ⏱: 2.50s 
+2025-12-02 14:03:53,481 [INFO] Skipping (out of weekly range): 2025-11-28
+2025-12-02 14:03:53,481 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/memorandum-of-understanding-between-securities-and-exchange-board-of-india-sebi-and-national-forensic-sciences-university-nfsu-_97932.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...al-forensic-sciences-university-nfsu-_97932.html  | ✓ | ⏱: 2.37s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...al-forensic-sciences-university-nfsu-_97932.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...al-forensic-sciences-university-nfsu-_97932.html  | ✓ | ⏱: 2.41s 
+2025-12-02 14:03:56,589 [INFO] Skipping (out of weekly range): 2025-11-25
+2025-12-02 14:03:56,589 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/caution-to-public-regarding-unregistered-online-bond-platform-providers_97827.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...stered-online-bond-platform-providers_97827.html  | ✓ | ⏱: 2.45s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...stered-online-bond-platform-providers_97827.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...stered-online-bond-platform-providers_97827.html  | ✓ | ⏱: 2.48s 
+2025-12-02 14:03:59,729 [INFO] Skipping (out of weekly range): 2025-11-19
+2025-12-02 14:03:59,729 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/inauguration-of-sebi-s-pavilion-at-the-iitf-2025-by-chairman-sebi_97763.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 2.34s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ion-at-the-iitf-2025-by-chairman-sebi_97763.html  | ✓ | ⏱: 2.37s 
+2025-12-02 14:04:02,779 [INFO] Skipping (out of weekly range): 2025-11-14
+2025-12-02 14:04:02,779 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/report-of-the-high-level-committee-on-conflict-of-interest-disclosures-and-related-matters-in-respect-of-members-and-officials-of-sebi_97732.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 2.48s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...pect-of-members-and-officials-of-sebi_97732.html  | ✓ | ⏱: 2.52s 
+2025-12-02 14:04:05,959 [INFO] Skipping (out of weekly range): 2025-11-12
+2025-12-02 14:04:05,959 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/sebi-and-iepfa-conducted-the-third-niveshak-shivir-at-amritsar-proactive-joint-initiative-to-minimize-unclaimed-assets-and-facilitate-investor-claims-for-unpaid-dividends-and-shares_97711.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 2.43s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_97711.html  | ✓ | ⏱: 2.46s 
+2025-12-02 14:04:09,080 [INFO] Skipping (out of weekly range): 2025-11-11
+2025-12-02 14:04:09,081 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/high-level-committee-on-conflict-of-interest-disclosures-and-related-matters-in-respect-of-members-and-officials-of-sebi-submits-its-report_97691.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 2.83s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-officials-of-sebi-submits-its-report_97691.html  | ✓ | ⏱: 2.87s 
+2025-12-02 14:04:12,607 [INFO] Skipping (out of weekly range): 2025-11-10
+2025-12-02 14:04:12,607 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/caution-to-public-regarding-dealing-in-digital-gold-_97676.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ic-regarding-dealing-in-digital-gold-_97676.html  | ✓ | ⏱: 2.44s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ic-regarding-dealing-in-digital-gold-_97676.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ic-regarding-dealing-in-digital-gold-_97676.html  | ✓ | ⏱: 2.47s 
+2025-12-02 14:04:15,758 [INFO] Skipping (out of weekly range): 2025-11-08
+2025-12-02 14:04:15,758 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/sebi-intensifies-efforts-to-combat-online-investment-scams-calls-for-greater-collaboration-from-social-media-platforms_97655.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...aboration-from-social-media-platforms_97655.html  | ✓ | ⏱: 2.40s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...aboration-from-social-media-platforms_97655.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...aboration-from-social-media-platforms_97655.html  | ✓ | ⏱: 2.44s 
+2025-12-02 14:04:18,878 [INFO] Skipping (out of weekly range): 2025-11-06
+2025-12-02 14:04:18,878 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/nov-2025/sebi-hosts-municipal-bond-and-reit-invit-outreach-programme-in-raipur-to-boost-urban-infrastructure-financing_97650.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_97650.html  | ✓ | ⏱: 2.38s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_97650.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_97650.html  | ✓ | ⏱: 2.41s 
+2025-12-02 14:04:21,990 [INFO] Skipping (out of weekly range): 2025-11-06
+2025-12-02 14:04:21,990 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/niveshak-shivir-to-be-held-on-november-01-2025-in-the-city-of-amritsar-punjab_97576.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...1-2025-in-the-city-of-amritsar-punjab_97576.html  | ✓ | ⏱: 2.57s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...1-2025-in-the-city-of-amritsar-punjab_97576.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...1-2025-in-the-city-of-amritsar-punjab_97576.html  | ✓ | ⏱: 2.61s 
+2025-12-02 14:04:25,255 [INFO] Skipping (out of weekly range): 2025-10-31
+2025-12-02 14:04:25,255 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/ease-of-doing-business-rationalisation-and-standardisation-of-penalties-levied-on-stock-brokers-by-stock-exchanges_97248.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...d-on-stock-brokers-by-stock-exchanges_97248.html  | ✓ | ⏱: 2.42s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...d-on-stock-brokers-by-stock-exchanges_97248.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...d-on-stock-brokers-by-stock-exchanges_97248.html  | ✓ | ⏱: 2.45s 
+2025-12-02 14:04:28,386 [INFO] Skipping (out of weekly range): 2025-10-10
+2025-12-02 14:04:28,387 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/clarification-on-media-reports-regarding-regulatory-oversight-of-family-offices_97047.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...egulatory-oversight-of-family-offices_97047.html  | ✓ | ⏱: 2.44s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...egulatory-oversight-of-family-offices_97047.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...egulatory-oversight-of-family-offices_97047.html  | ✓ | ⏱: 2.47s 
+2025-12-02 14:04:31,524 [INFO] Skipping (out of weekly range): 2025-10-03
+2025-12-02 14:04:31,525 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/oct-2025/sebi-rolls-out-validated-upi-handles-and-sebi-check-for-secure-investor-payments_97020.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...bi-check-for-secure-investor-payments_97020.html  | ✓ | ⏱: 2.45s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...bi-check-for-secure-investor-payments_97020.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...bi-check-for-secure-investor-payments_97020.html  | ✓ | ⏱: 2.48s 
+2025-12-02 14:04:34,653 [INFO] Skipping (out of weekly range): 2025-10-01
+2025-12-02 14:04:34,653 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-releases-investor-survey-2025-findings-to-guide-inclusive-and-responsible-investing_96984.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...e-inclusive-and-responsible-investing_96984.html  | ✓ | ⏱: 2.57s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...e-inclusive-and-responsible-investing_96984.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...e-inclusive-and-responsible-investing_96984.html  | ✓ | ⏱: 2.60s 
+2025-12-02 14:04:37,940 [INFO] Skipping (out of weekly range): 2025-09-30
+2025-12-02 14:04:37,940 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-board-meeting_96601.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-releases/sep-2025/sebi-board-meeting_96601.html  | ✓ | ⏱: 2.47s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-releases/sep-2025/sebi-board-meeting_96601.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-releases/sep-2025/sebi-board-meeting_96601.html  | ✓ | ⏱: 2.50s 
+2025-12-02 14:04:41,147 [INFO] Skipping (out of weekly range): 2025-09-12
+2025-12-02 14:04:41,147 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/change-in-settlement-dates-for-cash-and-slbm-segments-and-its-impact_96459.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...cash-and-slbm-segments-and-its-impact_96459.html  | ✓ | ⏱: 2.43s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...cash-and-slbm-segments-and-its-impact_96459.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...cash-and-slbm-segments-and-its-impact_96459.html  | ✓ | ⏱: 2.47s 
+2025-12-02 14:04:44,628 [INFO] Skipping (out of weekly range): 2025-09-08
+2025-12-02 14:04:44,628 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/caution-to-the-public-regarding-impersonation-of-sebi_96449.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...ublic-regarding-impersonation-of-sebi_96449.html  | ✓ | ⏱: 2.38s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...ublic-regarding-impersonation-of-sebi_96449.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...ublic-regarding-impersonation-of-sebi_96449.html  | ✓ | ⏱: 2.42s 
+2025-12-02 14:04:47,697 [INFO] Skipping (out of weekly range): 2025-09-05
+2025-12-02 14:04:47,698 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-hosts-municipal-bond-outreach-programme-in-bhopal-to-boost-urban-infrastructure-financing_96406.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_96406.html  | ✓ | ⏱: 2.45s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_96406.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...-boost-urban-infrastructure-financing_96406.html  | ✓ | ⏱: 2.49s 
+2025-12-02 14:04:50,883 [INFO] Skipping (out of weekly range): 2025-09-03
+2025-12-02 14:04:50,883 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/sep-2025/sebi-and-iepfa-conducted-the-second-niveshak-shivir-in-hyderabad-proactive-joint-initiative-to-minimize-unclaimed-assets-and-facilitate-investor-claims-for-unpaid-dividends-and-shares_96393.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_96393.html  | ✓ | ⏱: 2.42s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_96393.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...laims-for-unpaid-dividends-and-shares_96393.html  | ✓ | ⏱: 2.45s 
+2025-12-02 14:04:54,021 [INFO] Skipping (out of weekly range): 2025-09-02
+2025-12-02 14:04:54,021 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/niveshak-shivir-to-be-held-on-august-30-2025-in-the-city-of-hyderabad-telangana_96334.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...25-in-the-city-of-hyderabad-telangana_96334.html  | ✓ | ⏱: 2.44s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...25-in-the-city-of-hyderabad-telangana_96334.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...25-in-the-city-of-hyderabad-telangana_96334.html  | ✓ | ⏱: 2.48s 
+2025-12-02 14:04:57,198 [INFO] Skipping (out of weekly range): 2025-08-28
+2025-12-02 14:04:57,198 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/shri-sanjay-chandrakant-purao-takes-charge-as-executive-director-sebi_96248.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96248.html  | ✓ | ⏱: 2.75s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96248.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96248.html  | ✓ | ⏱: 2.79s 
+2025-12-02 14:05:00,654 [INFO] Skipping (out of weekly range): 2025-08-22
+2025-12-02 14:05:00,654 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/shri-avneesh-pandey-takes-charge-as-executive-director-sebi_96246.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96246.html  | ✓ | ⏱: 2.54s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96246.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96246.html  | ✓ | ⏱: 2.57s 
+2025-12-02 14:05:03,888 [INFO] Skipping (out of weekly range): 2025-08-22
+2025-12-02 14:05:03,888 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/shri-amit-pradhan-takes-charge-as-executive-director-sebi_96245.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96245.html  | ✓ | ⏱: 2.47s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96245.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...kes-charge-as-executive-director-sebi_96245.html  | ✓ | ⏱: 2.51s 
+2025-12-02 14:05:07,125 [INFO] Skipping (out of weekly range): 2025-08-22
+2025-12-02 14:05:07,125 [INFO] SEBI Scraper → [SEBI > Press Release]: https://www.sebi.gov.in/media-and-notifications/press-releases/aug-2025/advisory-against-investment-in-fraudulent-trading-schemes-claiming-to-be-offered-to-indian-residents-by-fpis_96244.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/media-and-notifications/...e-offered-to-indian-residents-by-fpis_96244.html  | ✓ | ⏱: 2.67s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/media-and-notifications/...e-offered-to-indian-residents-by-fpis_96244.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/media-and-notifications/...e-offered-to-indian-residents-by-fpis_96244.html  | ✓ | ⏱: 2.71s 
+2025-12-02 14:05:10,511 [INFO] Skipping (out of weekly range): 2025-08-22
+2025-12-02 14:05:10,512 [INFO] Processing [SEBI > Consulatation Paper] => https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=4&ssid=38&smid=35
+2025-12-02 14:05:10,512 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=4&ssid=38&smid=35
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=4&ssid=38&smid=35               | ✓ | ⏱: 2.60s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=4&ssid=38&smid=35               | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=4&ssid=38&smid=35               | ✓ | ⏱: 2.64s 
+2025-12-02 14:05:13,835 [INFO] Found 25 SEBI inner links in listing: https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=4&ssid=38&smid=35
+2025-12-02 14:05:13,835 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/nov-2025/consultation-paper-on-draft-circular-disclosure-of-registered-name-and-registration-number-by-sebi-regulated-entities-and-their-agents-on-social-media-platforms-_98027.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...eir-agents-on-social-media-platforms-_98027.html  | ✓ | ⏱: 2.37s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...eir-agents-on-social-media-platforms-_98027.html  | ✓ | ⏱: 0.05s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...eir-agents-on-social-media-platforms-_98027.html  | ✓ | ⏱: 2.42s 
+2025-12-02 14:05:16,931 [INFO] Skipping (out of weekly range): 2025-11-28
+2025-12-02 14:05:16,931 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/nov-2025/ease-of-doing-investment-review-of-simplification-of-procedure-and-standardization-of-formats-of-documents-for-issuance-of-duplicate-securities-certificates-_97931.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...of-duplicate-securities-certificates-_97931.html  | ✓ | ⏱: 2.40s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...of-duplicate-securities-certificates-_97931.html  | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...of-duplicate-securities-certificates-_97931.html  | ✓ | ⏱: 2.43s 
+2025-12-02 14:05:20,047 [INFO] Skipping (out of weekly range): 2025-11-25
+2025-12-02 14:05:20,047 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/nov-2025/ease-of-investments-and-ease-of-doing-business-measures-review-of-the-facility-for-basic-services-demat-account-bsda-for-financial-inclusion-_97901.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...account-bsda-for-financial-inclusion-_97901.html  | ✓ | ⏱: 2.40s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...account-bsda-for-financial-inclusion-_97901.html  | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...account-bsda-for-financial-inclusion-_97901.html  | ✓ | ⏱: 2.43s 
+2025-12-02 14:05:23,148 [INFO] Skipping (out of weekly range): 2025-11-24
+2025-12-02 14:05:23,148 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/nov-2025/extension-of-timeline-for-submission-of-public-comments-on-the-consultation-paper-on-comprehensive-review-of-sebi-mutual-funds-regulations-1996-_97825.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...f-sebi-mutual-funds-regulations-1996-_97825.html  | ✓ | ⏱: 2.47s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...f-sebi-mutual-funds-regulations-1996-_97825.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...f-sebi-mutual-funds-regulations-1996-_97825.html  | ✓ | ⏱: 2.50s 
+2025-12-02 14:05:26,302 [INFO] Skipping (out of weekly range): 2025-11-19
+2025-12-02 14:05:26,302 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/nov-2025/consultation-paper-on-amendments-to-sebi-issue-of-capital-and-disclosure-requirements-regulations-2018-with-the-objective-of-enhancing-ease-of-doing-business-and-increasing-the-participation-of-re-_97742.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...d-increasing-the-participation-of-re-_97742.html  | ✓ | ⏱: 2.45s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...d-increasing-the-participation-of-re-_97742.html  | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...d-increasing-the-participation-of-re-_97742.html  | ✓ | ⏱: 2.49s 
+2025-12-02 14:05:29,481 [INFO] Skipping (out of weekly range): 2025-11-13
+2025-12-02 14:05:29,481 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/nov-2025/consultation-on-draft-circular-clarifications-and-specific-modalities-with-respect-to-maintaining-pro-rata-rights-of-investors-of-aifs_97671.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...-pro-rata-rights-of-investors-of-aifs_97671.html  | ✓ | ⏱: 2.44s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...-pro-rata-rights-of-investors-of-aifs_97671.html  | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...-pro-rata-rights-of-investors-of-aifs_97671.html  | ✓ | ⏱: 2.48s 
+2025-12-02 14:05:32,641 [INFO] Skipping (out of weekly range): 2025-11-07
+2025-12-02 14:05:32,641 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/nov-2025/consultation-paper-on-amendments-to-sebi-certification-of-associated-persons-in-the-securities-markets-regulations-2007_97657.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...e-securities-markets-regulations-2007_97657.html  | ✓ | ⏱: 2.35s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...e-securities-markets-regulations-2007_97657.html  | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...e-securities-markets-regulations-2007_97657.html  | ✓ | ⏱: 2.39s 
+2025-12-02 14:05:35,679 [INFO] Skipping (out of weekly range): 2025-11-06
+2025-12-02 14:05:35,679 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/oct-2025/consultation-paper-on-comprehensive-review-of-sebi-mutual-funds-regulations-1996-_97496.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...f-sebi-mutual-funds-regulations-1996-_97496.html  | ✓ | ⏱: 2.33s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...f-sebi-mutual-funds-regulations-1996-_97496.html  | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...f-sebi-mutual-funds-regulations-1996-_97496.html  | ✓ | ⏱: 2.37s 
+2025-12-02 14:05:38,712 [INFO] Skipping (out of weekly range): 2025-10-28
+2025-12-02 14:05:38,712 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/oct-2025/consultation-paper-for-permitting-debt-issuers-to-offer-incentives-in-public-issues-to-certain-category-of-investors-_97452.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...ues-to-certain-category-of-investors-_97452.html  | ✓ | ⏱: 2.41s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...ues-to-certain-category-of-investors-_97452.html  | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...ues-to-certain-category-of-investors-_97452.html  | ✓ | ⏱: 2.45s 
+2025-12-02 14:05:41,815 [INFO] Skipping (out of weekly range): 2025-10-27
+2025-12-02 14:05:41,815 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/oct-2025/consultation-paper-on-relaxation-in-the-threshold-for-identification-of-high-value-debt-listed-entities-hvdles-and-measures-facilitating-ease-of-doing-measures-for-hvdle-including-provisions-relatin-_97451.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...r-hvdle-including-provisions-relatin-_97451.html  | ✓ | ⏱: 2.45s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...r-hvdle-including-provisions-relatin-_97451.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...r-hvdle-including-provisions-relatin-_97451.html  | ✓ | ⏱: 2.48s 
+2025-12-02 14:05:44,956 [INFO] Skipping (out of weekly range): 2025-10-27
+2025-12-02 14:05:44,956 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/oct-2025/consultation-paper-for-review-of-lodr-regulations-clarification-regarding-the-timeline-for-transfer-of-unclaimed-amount-by-entity-having-listed-non-convertible-securities-_97448.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...ng-listed-non-convertible-securities-_97448.html  | ✓ | ⏱: 2.43s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...ng-listed-non-convertible-securities-_97448.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...ng-listed-non-convertible-securities-_97448.html  | ✓ | ⏱: 2.46s 
+2025-12-02 14:05:48,099 [INFO] Skipping (out of weekly range): 2025-10-24
+2025-12-02 14:05:48,099 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/oct-2025/circular-on-relaxation-of-india-geo-tagging-for-nri-clients-re-kyckyc-modification-through-digital-on-boarding-video-client-identification-process-v-cip-_97439.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...-client-identification-process-v-cip-_97439.html  | ✓ | ⏱: 2.51s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...-client-identification-process-v-cip-_97439.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...-client-identification-process-v-cip-_97439.html  | ✓ | ⏱: 2.54s 
+2025-12-02 14:05:51,329 [INFO] Skipping (out of weekly range): 2025-10-23
+2025-12-02 14:05:51,329 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/oct-2025/consultation-paper-on-standardization-of-process-for-opening-of-mutual-fund-folios-and-execution-of-first-investment_97426.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...ios-and-execution-of-first-investment_97426.html  | ✓ | ⏱: 2.49s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...ios-and-execution-of-first-investment_97426.html  | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...ios-and-execution-of-first-investment_97426.html  | ✓ | ⏱: 2.52s 
+2025-12-02 14:05:54,541 [INFO] Skipping (out of weekly range): 2025-10-23
+2025-12-02 14:05:54,541 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/oct-2025/consultation-paper-on-proposed-amendment-to-certain-provisions-of-sebi-lodr-regulations-2015-to-facilitate-transfer-of-securities-transferred-prior-to-april-1-2019-and-simplify-the-process-of-dema-_97378.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...019-and-simplify-the-process-of-dema-_97378.html  | ✓ | ⏱: 2.41s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...019-and-simplify-the-process-of-dema-_97378.html  | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...019-and-simplify-the-process-of-dema-_97378.html  | ✓ | ⏱: 2.45s 
+2025-12-02 14:05:58,154 [INFO] Downloaded PDF: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Consulatation Paper/2025/October/1760699641194.pdf
+2025-12-02 14:05:58,155 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/oct-2025/consultation-paper-on-measures-for-ease-of-doing-business-on-administration-of-exchanges_97131.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...siness-on-administration-of-exchanges_97131.html  | ✓ | ⏱: 2.38s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...siness-on-administration-of-exchanges_97131.html  | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...siness-on-administration-of-exchanges_97131.html  | ✓ | ⏱: 2.42s 
+2025-12-02 14:06:01,269 [INFO] Skipping (out of weekly range): 2025-10-08
+2025-12-02 14:06:01,269 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/sep-2025/consultation-paper-on-review-of-framework-to-address-the-technical-glitches-in-stock-brokers-electronic-trading-systems-_96751.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...k-brokers-electronic-trading-systems-_96751.html  | ✓ | ⏱: 2.44s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...k-brokers-electronic-trading-systems-_96751.html  | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...k-brokers-electronic-trading-systems-_96751.html  | ✓ | ⏱: 2.47s 
+2025-12-02 14:06:04,440 [INFO] Skipping (out of weekly range): 2025-09-22
+2025-12-02 14:06:04,440 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/sep-2025/consultation-on-draft-circular-guidelines-with-respect-to-reporting-of-value-of-units-of-alternative-investment-funds-aifs-to-depositories_96706.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...investment-funds-aifs-to-depositories_96706.html  | ✓ | ⏱: 2.39s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...investment-funds-aifs-to-depositories_96706.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...investment-funds-aifs-to-depositories_96706.html  | ✓ | ⏱: 2.42s 
+2025-12-02 14:06:07,546 [INFO] Skipping (out of weekly range): 2025-09-19
+2025-12-02 14:06:07,546 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/sep-2025/extension-in-timeline-to-submit-comments-on-the-consultation-paper-on-introduction-of-closing-auction-session-cas-in-the-equity-cash-segment-_96603.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...ssion-cas-in-the-equity-cash-segment-_96603.html  | ✓ | ⏱: 2.40s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...ssion-cas-in-the-equity-cash-segment-_96603.html  | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...ssion-cas-in-the-equity-cash-segment-_96603.html  | ✓ | ⏱: 2.43s 
+2025-12-02 14:06:10,679 [INFO] Skipping (out of weekly range): 2025-09-12
+2025-12-02 14:06:10,679 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/aug-2025/consultation-paper-on-introduction-of-closing-auction-session-in-the-equity-cash-segment-_96254.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...n-session-in-the-equity-cash-segment-_96254.html  | ✓ | ⏱: 2.43s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...n-session-in-the-equity-cash-segment-_96254.html  | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...n-session-in-the-equity-cash-segment-_96254.html  | ✓ | ⏱: 2.47s 
+2025-12-02 14:06:13,825 [INFO] Skipping (out of weekly range): 2025-08-22
+2025-12-02 14:06:13,826 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/aug-2025/consultation-paper-on-review-of-block-deal-framework_96252.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...per-on-review-of-block-deal-framework_96252.html  | ✓ | ⏱: 2.39s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...per-on-review-of-block-deal-framework_96252.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...per-on-review-of-block-deal-framework_96252.html  | ✓ | ⏱: 2.42s 
+2025-12-02 14:06:16,927 [INFO] Skipping (out of weekly range): 2025-08-22
+2025-12-02 14:06:16,927 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/aug-2025/implementation-of-eligibility-criteria-for-derivatives-on-non-benchmark-indices-based-on-sebi-circular-dated-may-29-2025_96130.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...ed-on-sebi-circular-dated-may-29-2025_96130.html  | ✓ | ⏱: 2.50s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...ed-on-sebi-circular-dated-may-29-2025_96130.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...ed-on-sebi-circular-dated-may-29-2025_96130.html  | ✓ | ⏱: 2.54s 
+2025-12-02 14:06:20,125 [INFO] Skipping (out of weekly range): 2025-08-18
+2025-12-02 14:06:20,125 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/aug-2025/consultation-paper-on-review-of-requirement-of-minimum-public-offer-and-timelines-to-comply-with-minimum-public-shareholding-for-issuers-in-terms-of-securities-contracts-regulation-rules-1957_96128.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...ities-contracts-regulation-rules-1957_96128.html  | ✓ | ⏱: 2.41s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...ities-contracts-regulation-rules-1957_96128.html  | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...ities-contracts-regulation-rules-1957_96128.html  | ✓ | ⏱: 2.45s 
+2025-12-02 14:06:23,245 [INFO] Skipping (out of weekly range): 2025-08-18
+2025-12-02 14:06:23,245 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/aug-2025/consultation-paper-on-review-of-sebi-stock-brokers-regulations-1992_96050.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...f-sebi-stock-brokers-regulations-1992_96050.html  | ✓ | ⏱: 2.41s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...f-sebi-stock-brokers-regulations-1992_96050.html  | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...f-sebi-stock-brokers-regulations-1992_96050.html  | ✓ | ⏱: 2.45s 
+2025-12-02 14:06:26,351 [INFO] Skipping (out of weekly range): 2025-08-13
+2025-12-02 14:06:26,351 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/aug-2025/consultation-paper-on-draft-circular-on-ease-of-doing-investment-smooth-transmission-of-securities-from-nominee-to-legal-heir_96034.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...securities-from-nominee-to-legal-heir_96034.html  | ✓ | ⏱: 2.50s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...securities-from-nominee-to-legal-heir_96034.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...securities-from-nominee-to-legal-heir_96034.html  | ✓ | ⏱: 2.53s 
+2025-12-02 14:06:29,552 [INFO] Skipping (out of weekly range): 2025-08-12
+2025-12-02 14:06:29,552 [INFO] SEBI Scraper → [SEBI > Consulatation Paper]: https://www.sebi.gov.in/reports-and-statistics/reports/aug-2025/addendum-to-consultation-paper-on-review-of-regulatory-framework-for-registrars-to-an-issue-and-share-transfer-agents-related-to-fees_95989.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/reports-and-statistics/r...share-transfer-agents-related-to-fees_95989.html  | ✓ | ⏱: 2.36s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/reports-and-statistics/r...share-transfer-agents-related-to-fees_95989.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/reports-and-statistics/r...share-transfer-agents-related-to-fees_95989.html  | ✓ | ⏱: 2.39s 
+2025-12-02 14:06:32,654 [INFO] Skipping (out of weekly range): 2025-08-12
+2025-12-02 14:06:32,655 [INFO] Processing [SEBI > Regulations] => https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListingLegal=yes&sid=1&ssid=3&smid=0
+2025-12-02 14:06:32,655 [INFO] SEBI Scraper → [SEBI > Regulations]: https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListingLegal=yes&sid=1&ssid=3&smid=0
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListingLegal=yes&sid=1&ssid=3&smid=0            | ✓ | ⏱: 2.40s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListingLegal=yes&sid=1&ssid=3&smid=0            | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListingLegal=yes&sid=1&ssid=3&smid=0            | ✓ | ⏱: 2.45s 
+2025-12-02 14:06:35,762 [WARNING] No date found at https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListingLegal=yes&sid=1&ssid=3&smid=0
+2025-12-02 14:06:35,762 [INFO] Processing [SEBI > Master circular] => https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=6&smid=0
+2025-12-02 14:06:35,762 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=6&smid=0
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=6&smid=0                 | ✓ | ⏱: 2.46s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=6&smid=0                 | ✓ | ⏱: 0.04s 
+[COMPLETE] ● https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=6&smid=0                 | ✓ | ⏱: 2.50s 
+2025-12-02 14:06:38,973 [INFO] Found 25 SEBI inner links in listing: https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=6&smid=0
+2025-12-02 14:06:38,973 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/oct-2025/master-circular-for-issue-and-listing-of-non-convertible-securities-securitised-debt-instruments-security-receipts-municipal-debt-securities-and-commercial-paper_97343.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/o...-debt-securities-and-commercial-paper_97343.html  | ✓ | ⏱: 2.53s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/o...-debt-securities-and-commercial-paper_97343.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/o...-debt-securities-and-commercial-paper_97343.html  | ✓ | ⏱: 2.56s 
+2025-12-02 14:06:44,953 [INFO] Downloaded PDF: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Master circular/2025/October/1760532257519.pdf
+2025-12-02 14:06:44,955 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/aug-2025/master-circular-for-debenture-trustees-dts-_96073.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/a...-circular-for-debenture-trustees-dts-_96073.html  | ✓ | ⏱: 2.41s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/a...-circular-for-debenture-trustees-dts-_96073.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/a...-circular-for-debenture-trustees-dts-_96073.html  | ✓ | ⏱: 2.45s 
+2025-12-02 14:06:48,089 [INFO] Skipping (out of weekly range): 2025-08-13
+2025-12-02 14:06:48,089 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/jul-2025/master-circular-for-portfolio-managers_95347.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/j...aster-circular-for-portfolio-managers_95347.html  | ✓ | ⏱: 2.37s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/j...aster-circular-for-portfolio-managers_95347.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/j...aster-circular-for-portfolio-managers_95347.html  | ✓ | ⏱: 2.41s 
+2025-12-02 14:06:51,160 [INFO] Skipping (out of weekly range): 2025-07-16
+2025-12-02 14:06:51,161 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/jul-2025/master-circular-for-infrastructure-investment-trusts-invits-_95233.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/j...rastructure-investment-trusts-invits-_95233.html  | ✓ | ⏱: 2.70s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/j...rastructure-investment-trusts-invits-_95233.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/j...rastructure-investment-trusts-invits-_95233.html  | ✓ | ⏱: 2.74s 
+2025-12-02 14:06:54,597 [INFO] Skipping (out of weekly range): 2025-07-11
+2025-12-02 14:06:54,597 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/jul-2025/master-circular-for-real-estate-investment-trusts-reits-_95232.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/j...-real-estate-investment-trusts-reits-_95232.html  | ✓ | ⏱: 2.44s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/j...-real-estate-investment-trusts-reits-_95232.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/j...-real-estate-investment-trusts-reits-_95232.html  | ✓ | ⏱: 2.48s 
+2025-12-02 14:06:57,750 [INFO] Skipping (out of weekly range): 2025-07-11
+2025-12-02 14:06:57,750 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/jul-2025/master-circular-for-listing-obligations-and-disclosure-requirements-for-non-convertible-securities-securitized-debt-instruments-and-or-commercial-paper_95230.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/j...t-instruments-and-or-commercial-paper_95230.html  | ✓ | ⏱: 2.42s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/j...t-instruments-and-or-commercial-paper_95230.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/j...t-instruments-and-or-commercial-paper_95230.html  | ✓ | ⏱: 2.46s 
+2025-12-02 14:07:00,880 [INFO] Skipping (out of weekly range): 2025-07-11
+2025-12-02 14:07:00,880 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/jul-2025/master-circular-for-credit-rating-agencies-cras-_95221.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/j...ular-for-credit-rating-agencies-cras-_95221.html  | ✓ | ⏱: 2.37s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/j...ular-for-credit-rating-agencies-cras-_95221.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/j...ular-for-credit-rating-agencies-cras-_95221.html  | ✓ | ⏱: 2.40s 
+2025-12-02 14:07:03,943 [INFO] Skipping (out of weekly range): 2025-07-11
+2025-12-02 14:07:03,943 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/jul-2025/master-circular-for-esg-rating-providers-erps-_95219.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/j...rcular-for-esg-rating-providers-erps-_95219.html  | ✓ | ⏱: 2.40s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/j...rcular-for-esg-rating-providers-erps-_95219.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/j...rcular-for-esg-rating-providers-erps-_95219.html  | ✓ | ⏱: 2.43s 
+2025-12-02 14:07:07,070 [INFO] Skipping (out of weekly range): 2025-07-11
+2025-12-02 14:07:07,070 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/jun-2025/master-circular-for-research-analysts_94840.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/j...master-circular-for-research-analysts_94840.html  | ✓ | ⏱: 2.40s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/j...master-circular-for-research-analysts_94840.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/j...master-circular-for-research-analysts_94840.html  | ✓ | ⏱: 2.43s 
+2025-12-02 14:07:10,174 [INFO] Skipping (out of weekly range): 2025-06-27
+2025-12-02 14:07:10,174 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/jun-2025/master-circular-for-investment-advisers_94821.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/j...ster-circular-for-investment-advisers_94821.html  | ✓ | ⏱: 2.40s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/j...ster-circular-for-investment-advisers_94821.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/j...ster-circular-for-investment-advisers_94821.html  | ✓ | ⏱: 2.44s 
+2025-12-02 14:07:13,295 [INFO] Skipping (out of weekly range): 2025-06-27
+2025-12-02 14:07:13,295 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/jun-2025/master-circular-for-registrars-to-an-issue-and-share-transfer-agents_94735.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/j...to-an-issue-and-share-transfer-agents_94735.html  | ✓ | ⏱: 2.53s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/j...to-an-issue-and-share-transfer-agents_94735.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/j...to-an-issue-and-share-transfer-agents_94735.html  | ✓ | ⏱: 2.57s 
+2025-12-02 14:07:16,560 [INFO] Skipping (out of weekly range): 2025-06-23
+2025-12-02 14:07:16,560 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/jun-2025/master-circular-for-stock-brokers_94623.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/jun-2025/master-circular-for-stock-brokers_94623.html | ✓ | ⏱: 2.40s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/jun-2025/master-circular-for-stock-brokers_94623.html | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/jun-2025/master-circular-for-stock-brokers_94623.html | ✓ | ⏱: 2.44s 
+2025-12-02 14:07:19,652 [INFO] Skipping (out of weekly range): 2025-06-17
+2025-12-02 14:07:19,653 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/dec-2024/master-circular-for-stock-exchanges-and-clearing-corporations_90353.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/d...k-exchanges-and-clearing-corporations_90353.html  | ✓ | ⏱: 2.42s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/d...k-exchanges-and-clearing-corporations_90353.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/d...k-exchanges-and-clearing-corporations_90353.html  | ✓ | ⏱: 2.46s 
+2025-12-02 14:07:22,767 [INFO] Skipping (out of weekly range): 2024-12-30
+2025-12-02 14:07:22,767 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/dec-2024/master-circular-for-depositories_89245.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/dec-2024/master-circular-for-depositories_89245.html  | ✓ | ⏱: 2.35s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/dec-2024/master-circular-for-depositories_89245.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/dec-2024/master-circular-for-depositories_89245.html  | ✓ | ⏱: 2.39s 
+2025-12-02 14:07:25,827 [INFO] Skipping (out of weekly range): 2024-12-03
+2025-12-02 14:07:25,827 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/nov-2024/master-circular-for-issue-of-capital-and-disclosure-requirements_88398.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/n...f-capital-and-disclosure-requirements_88398.html  | ✓ | ⏱: 2.50s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/n...f-capital-and-disclosure-requirements_88398.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/n...f-capital-and-disclosure-requirements_88398.html  | ✓ | ⏱: 2.54s 
+2025-12-02 14:07:29,027 [INFO] Skipping (out of weekly range): 2024-11-11
+2025-12-02 14:07:29,027 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/nov-2024/master-circular-for-compliance-with-the-provisions-of-the-securities-and-exchange-board-of-india-listing-obligations-and-disclosure-requirements-regulations-2015-by-listed-entities_88388.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/n...s-regulations-2015-by-listed-entities_88388.html  | ✓ | ⏱: 2.49s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/n...s-regulations-2015-by-listed-entities_88388.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/n...s-regulations-2015-by-listed-entities_88388.html  | ✓ | ⏱: 2.52s 
+2025-12-02 14:07:32,229 [INFO] Skipping (out of weekly range): 2024-11-11
+2025-12-02 14:07:32,229 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/sep-2024/master-circular-on-surveillance-of-securities-market_86929.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/s...-on-surveillance-of-securities-market_86929.html  | ✓ | ⏱: 2.46s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/s...-on-surveillance-of-securities-market_86929.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/s...-on-surveillance-of-securities-market_86929.html  | ✓ | ⏱: 2.50s 
+2025-12-02 14:07:35,405 [INFO] Skipping (out of weekly range): 2024-09-23
+2025-12-02 14:07:35,405 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/aug-2024/master-circular-for-stock-brokers_85605.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/aug-2024/master-circular-for-stock-brokers_85605.html | ✓ | ⏱: 2.39s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/aug-2024/master-circular-for-stock-brokers_85605.html | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/aug-2024/master-circular-for-stock-brokers_85605.html | ✓ | ⏱: 2.42s 
+2025-12-02 14:07:38,497 [INFO] Skipping (out of weekly range): 2024-08-09
+2025-12-02 14:07:38,498 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/jul-2024/master-circular-on-surveillance-of-securities-market_84680.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/j...-on-surveillance-of-securities-market_84680.html  | ✓ | ⏱: 2.39s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/j...-on-surveillance-of-securities-market_84680.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/j...-on-surveillance-of-securities-market_84680.html  | ✓ | ⏱: 2.43s 
+2025-12-02 14:07:41,608 [INFO] Skipping (out of weekly range): 2024-07-09
+2025-12-02 14:07:41,608 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/jun-2024/master-circular-for-mutual-funds_84441.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/jun-2024/master-circular-for-mutual-funds_84441.html  | ✓ | ⏱: 2.45s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/jun-2024/master-circular-for-mutual-funds_84441.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/jun-2024/master-circular-for-mutual-funds_84441.html  | ✓ | ⏱: 2.48s 
+2025-12-02 14:07:44,734 [INFO] Skipping (out of weekly range): 2024-06-27
+2025-12-02 14:07:44,734 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/jun-2024/master-circular-for-electronic-gold-receipts-egrs-_84369.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/j...ar-for-electronic-gold-receipts-egrs-_84369.html  | ✓ | ⏱: 2.35s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/j...ar-for-electronic-gold-receipts-egrs-_84369.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/j...ar-for-electronic-gold-receipts-egrs-_84369.html  | ✓ | ⏱: 2.39s 
+2025-12-02 14:07:47,782 [INFO] Skipping (out of weekly range): 2024-06-24
+2025-12-02 14:07:47,782 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/jun-2024/master-circular-for-portfolio-managers_84026.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/j...aster-circular-for-portfolio-managers_84026.html  | ✓ | ⏱: 2.40s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/j...aster-circular-for-portfolio-managers_84026.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/j...aster-circular-for-portfolio-managers_84026.html  | ✓ | ⏱: 2.43s 
+2025-12-02 14:07:50,879 [INFO] Skipping (out of weekly range): 2024-06-07
+2025-12-02 14:07:50,879 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/jun-2024/guidelines-on-anti-money-laundering-aml-standards-and-combating-the-financing-of-terrorism-cft-obligations-of-securities-market-intermediaries-under-the-prevention-of-money-laundering-act-2002-a-_83942.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/j...ntion-of-money-laundering-act-2002-a-_83942.html  | ✓ | ⏱: 2.44s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/j...ntion-of-money-laundering-act-2002-a-_83942.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/j...ntion-of-money-laundering-act-2002-a-_83942.html  | ✓ | ⏱: 2.47s 
+2025-12-02 14:07:54,017 [INFO] Skipping (out of weekly range): 2024-06-06
+2025-12-02 14:07:54,017 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/jun-2024/master-circular-for-bankers-to-an-issue_83899.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/j...ster-circular-for-bankers-to-an-issue_83899.html  | ✓ | ⏱: 2.41s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/j...ster-circular-for-bankers-to-an-issue_83899.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/j...ster-circular-for-bankers-to-an-issue_83899.html  | ✓ | ⏱: 2.45s 
+2025-12-02 14:07:57,128 [INFO] Skipping (out of weekly range): 2024-06-03
+2025-12-02 14:07:57,128 [INFO] SEBI Scraper → [SEBI > Master circular]: https://www.sebi.gov.in/legal/master-circulars/may-2024/master-circular-for-foreign-portfolio-investors-designated-depository-participants-and-eligible-foreign-investors-_83689.html
+[INIT].... → Crawl4AI 0.7.7 
+[FETCH]... ↓ https://www.sebi.gov.in/legal/master-circulars/m...pants-and-eligible-foreign-investors-_83689.html  | ✓ | ⏱: 2.49s 
+[SCRAPE].. ◆ https://www.sebi.gov.in/legal/master-circulars/m...pants-and-eligible-foreign-investors-_83689.html  | ✓ | ⏱: 0.03s 
+[COMPLETE] ● https://www.sebi.gov.in/legal/master-circulars/m...pants-and-eligible-foreign-investors-_83689.html  | ✓ | ⏱: 2.52s 
+2025-12-02 14:08:00,312 [INFO] Skipping (out of weekly range): 2024-05-30
+2025-12-02 14:08:00,338 [INFO] FINAL EXCEL GENERATED: /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/weekly_sebi_downloads.xlsx
+
+
+=== Run at 2025-12-02 14:02:00 ===
