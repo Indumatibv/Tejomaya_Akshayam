@@ -112,6 +112,24 @@ def load_link_tasks_from_excel():
     logging.info("Loaded %d link tasks from Excel", len(tasks))
     return tasks
 
+def detect_aif_category(title: str) -> bool:
+    aif_keywords = [
+        "portfolio manager",
+        "angel investor",
+        "angel fund",
+        "infrastructure investment trust",
+        "invit",
+        "real estate investment trust",
+        "reit",
+        "research analyst",
+        "investment advisor",
+        "alternative investment fund",
+        "aif"
+    ]
+
+    title_lower = title.lower()
+    return any(keyword in title_lower for keyword in aif_keywords)
+
 def extract_detail_links_from_listing(html, base_url):
     soup = BeautifulSoup(html, "html.parser")
     links = []
@@ -143,12 +161,6 @@ def get_week_range(weeks_back: int = 0):
 
 
 # -------- HELPERS --------
-# def sanitize_filename(title: str) -> str:
-#     filename = re.sub(r'[\/\\\:\*\?"<>\|]', '_', title)
-#     filename = filename.replace(" ", "_")
-#     return filename + ".pdf"
-
-#---------------------------------------scaling the downloads for testing purpose
 def sanitize_filename(title: str, max_length: int = 120) -> str:
     filename = re.sub(r'[\/\\\:\*\?"<>\|]', '_', title).strip()
     filename = filename.replace(" ", "_")
@@ -189,159 +201,6 @@ async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_path: 
         logging.exception("Error downloading PDF %s : %s", pdf_url, e)
     return None
 
-# def sync_fetch_links(page_number: int) -> list[dict]:
-#     options = webdriver.ChromeOptions()
-#     options.add_argument("--headless=new" if sys.platform != "win32" else "--headless")
-#     # improve reliability on some systems
-#     options.add_argument("--no-sandbox")
-#     options.add_argument("--disable-dev-shm-usage")
-#     options.add_argument("--disable-gpu")
-#     driver = webdriver.Chrome(options=options)
-
-#     titles_and_urls = []
-#     try:
-#         driver.get(LISTING_URL)
-#         WebDriverWait(driver, 15).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "a.points")))
-#         if page_number > 1:
-#             page_index = page_number - 1
-#             driver.execute_script(f"searchFormNewsList('n', '{page_index}');")
-#             WebDriverWait(driver, 15).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "a.points")))
-#         soup = BeautifulSoup(driver.page_source, "html.parser")
-#         for link in soup.select("a.points[href]"):
-#             detail_url = link.get("href")
-#             title = link.get_text(strip=True)
-#             if detail_url:
-#                 titles_and_urls.append({"title": title, "detail_url": urljoin(BASE_URL, detail_url)})
-#     except Exception as e:
-#         logging.exception("Error fetching listing page links: %s", e)
-#     finally:
-#         try:
-#             driver.quit()
-#         except Exception:
-#             pass
-#     return titles_and_urls
-
-
-# -------- MAIN SCRAPER --------
-# async def scrape_sebi_page(page_number: int, week_start: datetime, week_end: datetime):
-#     logging.info("Processing SEBI Page %d", page_number)
-#     links_data = await asyncio.to_thread(sync_fetch_links, page_number)
-#     if not links_data:
-#         logging.warning("No titles found on page %d", page_number)
-#         return
-
-#     async with AsyncWebCrawler() as crawler:
-#         # iterate synchronously through found links; each uses crawler/arun for the detail page
-#         for link_data in links_data:
-#             title = link_data.get("title")
-#             detail_url = link_data.get("detail_url")
-#             logging.info("Opening: %s", detail_url)
-
-#             try:
-#                 detail_result = await crawler.arun(url=detail_url)
-#             except Exception as e:
-#                 logging.exception("Crawler failed for %s : %s", detail_url, e)
-#                 continue
-
-#             soup_detail = BeautifulSoup(detail_result.html, "html.parser")
-#             date_elem = soup_detail.select_one("h5")
-#             if not date_elem:
-#                 logging.debug("No date element found for %s; skipping", detail_url)
-#                 continue
-
-#             date_str = date_elem.get_text(strip=True)
-#             try:
-#                 dt = datetime.strptime(date_str, "%b %d, %Y")
-#             except Exception:
-#                 logging.warning("Invalid date string '%s' at %s; skipping", date_str, detail_url)
-#                 continue
-
-#             # WEEK FILTER
-#             if not (week_start <= dt <= week_end):
-#                 logging.debug("Skipping (not in week): %s", dt.date())
-#                 continue
-
-#             logging.info("MATCH (in week): %s", dt.date())
-
-#             year = str(dt.year)
-#             month_full = dt.strftime("%B")
-#             save_path = ensure_year_month_structure(BASE_PATH, CATEGORY, SUBFOLDER, year, month_full)
-
-#             # PDF extraction
-#             pdf_url = None
-#             iframe = soup_detail.select_one("iframe")
-#             pdf_button = soup_detail.select_one("button#download")
-
-#             if iframe and "file=" in iframe.get("src", ""):
-#                 pdf_url = iframe["src"].split("file=")[-1]
-#                 if not pdf_url.startswith("http"):
-#                     pdf_url = urljoin(BASE_URL, pdf_url)
-#             elif pdf_button:
-#                 pdf_url = detail_url.replace(".html", ".pdf")
-
-#             file_path = None
-
-#             if pdf_url:
-#                 try:
-#                     async with aiohttp.ClientSession() as session:
-#                         file_path = await download_pdf(session, pdf_url, save_path)
-#                 except Exception:
-#                     logging.exception("aiohttp session failed for %s", pdf_url)
-
-#             if not file_path:
-#                 # Print-to-PDF fallback using chrome headless (CDP)
-#                 options = webdriver.ChromeOptions()
-#                 options.add_argument("--headless=new" if sys.platform != "win32" else "--headless")
-#                 options.add_argument("--no-sandbox")
-#                 options.add_argument("--disable-dev-shm-usage")
-#                 options.add_argument("--disable-gpu")
-#                 driver = webdriver.Chrome(options=options)
-#                 try:
-#                     driver.get(detail_url)
-#                     # allow page to settle
-#                     WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.TAG_NAME, "body")))
-#                     pdf = driver.execute_cdp_cmd("Page.printToPDF", {"printBackground": True})
-#                     pdf_data = base64.b64decode(pdf["data"])
-#                     file_path = os.path.join(save_path, sanitize_filename(title or "printed"))
-#                     with open(file_path, "wb") as f:
-#                         f.write(pdf_data)
-#                     logging.info("Printed to PDF: %s", file_path)
-#                 except Exception as e:
-#                     logging.exception("Print-to-PDF failed for %s : %s", detail_url, e)
-#                     file_path = None
-#                 finally:
-#                     try:
-#                         driver.quit()
-#                     except Exception:
-#                         pass
-
-#             if file_path:
-#                 # ALL_DOWNLOADED.append({
-#                 #     "Verticals": CATEGORY,
-#                 #     "SubCategory": SUBFOLDER,
-#                 #     "Year": year,
-#                 #     "Month": month_full,
-#                 #     "File Name": os.path.basename(file_path),
-#                 #     "Path": os.path.abspath(file_path)
-#                 # })
-#                 ALL_DOWNLOADED.append({
-#                     "Verticals": CATEGORY,
-#                     "SubCategory": SUBFOLDER,
-#                     "Year": year,
-#                     "Month": month_full,
-#                     "IssueDate": dt.strftime("%Y-%m-%d"),
-#                     "Title": title,
-#                     "PDF_URL": pdf_url if pdf_url else "Generated via print",
-#                     "File Name": os.path.basename(file_path),
-#                     "Path": os.path.abspath(file_path)
-#                 })
-
-#             else:
-#                 logging.warning("No PDF produced for %s", detail_url)
-
-#-------------------------------------------------------scaling the downloads for testing purpose
-
-
 async def scrape_generic_link(task, week_start, week_end):
     category = task["category"]
     subfolder = task["subfolder"]
@@ -378,16 +237,7 @@ async def scrape_generic_link(task, week_start, week_end):
         logging.info("Found %d detail links inside listing: %s", len(detail_links), detail_url)
 
         # Recursively process each detail link
-        # for link in detail_links:
-        #     await scrape_generic_link(
-        #         {
-        #             "category": category,
-        #             "subfolder": subfolder,
-        #             "url": link
-        #         },
-        #         week_start,
-        #         week_end
-        #     )
+
         for item in detail_links:
             await scrape_generic_link(
                 {
@@ -421,6 +271,16 @@ async def scrape_generic_link(task, week_start, week_end):
 
     year = str(dt.year)
     month_full = dt.strftime("%B")
+
+    # ---------- AIF Logic ----------
+    original_category = category  # preserve original
+
+    if original_category == "SEBI":
+        if detect_aif_category(task["title"]):
+            logging.info("AIF match detected → Storing under AIF")
+            category = "AIF"
+        else:
+            category = "SEBI"
 
     save_path = ensure_year_month_structure(BASE_PATH, category, subfolder, year, month_full)
 
@@ -482,29 +342,8 @@ async def scrape_generic_link(task, week_start, week_end):
 
 #---------------------------------------------------------------------
 
-# -------- MAIN PROGRAM --------
-# async def main():
-#     weeks_back = 1   # 0=this week, 1=last week (change as needed)
-#     week_start, week_end = get_week_range(weeks_back)
-
-#     # scrape first 2 pages (configurable)
-#     for page in range(1, 3):
-#         await scrape_sebi_page(page, week_start, week_end)
-
-#     # FINAL EXCEL
-#     if ALL_DOWNLOADED:
-#         try:
-#             df = pd.DataFrame(ALL_DOWNLOADED)
-#             df.to_excel(EXCEL_OUTPUT, index=False)
-#             logging.info("FINAL EXCEL GENERATED: %s", EXCEL_OUTPUT)
-#         except Exception as e:
-#             logging.exception("Failed to write excel %s : %s", EXCEL_OUTPUT, e)
-#     else:
-#         logging.info("No PDFs found for this week.")
-
-#---------------------------------------------------------------------scaling the downloads for testing purpose
 async def main():
-    weeks_back = 0   # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
+    weeks_back = 6   # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
     week_start, week_end = get_week_range(weeks_back)
 
     tasks = load_link_tasks_from_excel()
