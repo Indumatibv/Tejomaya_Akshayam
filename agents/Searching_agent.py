@@ -460,7 +460,8 @@ async def scrape_bse(task, week_start, week_end):
                 "Month": month_full,
                 "IssueDate": dt.strftime("%Y-%m-%d"),
                 "Title": title,
-                "PDF_URL": "PrintToPDF",
+                # "PDF_URL": "PrintToPDF",
+                "PDF_URL": detail_link,   # use detail page when no direct attachment
                 "File Name": filename,
                 "Path": final_path
             })
@@ -656,7 +657,7 @@ async def scrape_generic_link(task, week_start, week_end):
 #---------------------------------------------------------------------
 
 async def main():
-    weeks_back = 0 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
+    weeks_back = 2 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
     week_start, week_end = get_week_range(weeks_back)
 
     tasks = load_link_tasks_from_excel()
