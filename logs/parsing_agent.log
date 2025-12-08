@@ -396,3 +396,32 @@ Warning: No languages specified, defaulting to English.
 
 
 === Run at 2025-12-02 14:08:00 ===
+2025-12-08 11:57:29,554 [INFO] 💪 Using device: cpu
+2025-12-08 11:57:29,554 [INFO] Ollama GPU status: Disabled
+2025-12-08 11:57:29,555 [INFO] Auto-detected Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/weekly_sebi_downloads.xlsx
+2025-12-08 11:57:29,563 [INFO] Starting PDF processing: 4 files
+2025-12-08 11:57:29,563 [INFO] Processing PDF 1/4: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/December/1764949323355.pdf
+2025-12-08 11:57:29,635 [INFO] pikepdf C++ to Python logger bridge initialized
+2025-12-08 11:57:30,041 [INFO] Lang: english | Index: No. 80/2025
+2025-12-08 11:57:45,766 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-12-08 11:57:45,768 [INFO] Processing PDF 2/4: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Press Release/2025/December/1764675345527.pdf
+2025-12-08 11:57:45,866 [INFO] Lang: english | Index: No.78/2025
+2025-12-08 11:58:01,764 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-12-08 11:58:01,764 [INFO] Processing PDF 3/4: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Consultation Paper/2025/December/1764943412112.pdf
+2025-12-08 11:58:08,798 [INFO] Lang: english | Index: No. 4/15/2016, No. 10/06/2010, No 1
+2025-12-08 12:07:51,123 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Consultation Paper)
+2025-12-08 12:07:51,124 [INFO] Processing PDF 4/4: /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Consultation Paper/2025/December/1764859538149.pdf
+2025-12-08 12:07:51,548 [INFO] Lang: english | Index: NA
+2025-12-08 12:08:26,455 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Consultation Paper)
+2025-12-08 12:08:26,456 [INFO] All PDFs processed in 656.89s
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+
+
+=== Run at 2025-12-08 11:57:23 ===
