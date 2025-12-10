@@ -425,3 +425,67 @@ Warning: No languages specified, defaulting to English.
 
 
 === Run at 2025-12-08 11:57:23 ===
+2025-12-08 14:09:40,018 [INFO] 💪 Using device: cpu
+2025-12-08 14:09:40,019 [INFO] Ollama GPU status: Disabled
+2025-12-08 14:09:40,020 [INFO] Auto-detected Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/weekly_sebi_downloads.xlsx
+2025-12-08 14:09:40,029 [INFO] Starting PDF processing: 11 files
+2025-12-08 14:09:40,029 [INFO] Processing PDF 1/11: /Users/admin/Downloads/Tejomaya_pdfs_test/Akshayam Data/SEBI/Press Release/2025/December/1764949323355.pdf
+2025-12-08 14:09:40,056 [INFO] pikepdf C++ to Python logger bridge initialized
+2025-12-08 14:09:40,471 [INFO] Lang: english | Index: No. 80/2025
+2025-12-08 14:09:54,151 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-12-08 14:09:54,153 [INFO] Processing PDF 2/11: /Users/admin/Downloads/Tejomaya_pdfs_test/Akshayam Data/SEBI/Press Release/2025/December/1764758072366.pdf
+2025-12-08 14:09:54,384 [INFO] Lang: english | Index: No.79/2025
+2025-12-08 14:10:24,999 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-12-08 14:10:24,999 [INFO] Processing PDF 3/11: /Users/admin/Downloads/Tejomaya_pdfs_test/Akshayam Data/SEBI/Press Release/2025/December/1764675345527.pdf
+2025-12-08 14:10:25,098 [INFO] Lang: english | Index: No.78/2025
+2025-12-08 14:10:40,931 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Press Release)
+2025-12-08 14:10:40,932 [INFO] Processing PDF 4/11: /Users/admin/Downloads/Tejomaya_pdfs_test/Akshayam Data/SEBI/Consultation Paper/2025/December/1764943412112.pdf
+2025-12-08 14:10:48,176 [INFO] Lang: english | Index: No. 4/15/2016, No. 10/06/2010, No 1
+2025-12-08 14:20:34,759 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Consultation Paper)
+2025-12-08 14:20:34,760 [INFO] Processing PDF 5/11: /Users/admin/Downloads/Tejomaya_pdfs_test/Akshayam Data/SEBI/Consultation Paper/2025/December/1764859538149.pdf
+2025-12-08 14:20:35,365 [INFO] Lang: english | Index: NA
+2025-12-08 14:21:08,794 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Consultation Paper)
+2025-12-08 14:21:08,795 [INFO] Processing PDF 6/11: /Users/admin/Downloads/Tejomaya_pdfs_test/Akshayam Data/SEBI/Regulations/2025/December/1765172737392.pdf
+2025-12-08 14:21:10,618 [INFO] Lang: mixed | Index: REGD. No. D. L.-33004/99, No. 787, CG-MH-E-05122025-268274, No. SEBI/LAD-NRO/GN/2025/285, No. LAD-NRO/GN/2008/11/126538, No. LAD-NRO/GN/2008
+2025-12-08 14:21:28,796 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Regulations)
+2025-12-08 14:21:28,797 [INFO] Processing PDF 7/11: /Users/admin/Downloads/Tejomaya_pdfs_test/Akshayam Data/SEBI/Regulations/2025/December/1765172337309.pdf
+2025-12-08 14:21:31,001 [INFO] Lang: mixed | Index: REGD. No. D. L.-33004/99, No. 785, CG-MH-E-05122025-268273, No. SEBI/LAD-NRO/GN/2025/283, No. LAD-NRO/GN/2011, No. LAD-NRO/GN/201213/36/7368, No. LAD-NRO/GN/2013, No. LAD-NRO/GN/2014, No. LAD-NRO/GN/2014, No. SEBI/LAD-NRO/GN/2015, No. SEBI/LAD-NRO/GN/2015, No. SEBI/LAD/NRO/GN/2016, No. SEBI/LAD/NRO/GN/2016, No. SEBI/LAD-NRO/GN/2017, No. SEBI/LAD-NRO/GN/2018/20, No. SEBI/LAD-NRO/GN/2020/10, No. SEBI/LAD-NRO/GN/2021/30, No. SEBI/LAD-NRO/GN/2022/98, No. SEBI/LAD-NRO/GN/2023/121, No. LAD-NRO/GN/2024/179, No. LAD-NRO/GN/2024/212
+2025-12-08 14:22:19,814 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Regulations)
+2025-12-08 14:22:19,814 [INFO] Processing PDF 8/11: /Users/admin/Downloads/Tejomaya_pdfs_test/Akshayam Data/SEBI/Regulations/2025/December/1765171459782.pdf
+2025-12-08 14:22:24,948 [INFO] Lang: mixed | Index: REGD. No. D. L.-33004/99, No. 784, CG-MH-E-05122025-268275, No. SEBI/LAD-NRO/GN/2025/282, No. LE/11112/92, No. SEBI/LE/1/9/95, No. 398, No.11, No. 11, No. LAD-NRO/GN/2008/11/126538, No. LAD-NRO/GN/2010, No. LAD-NRO/GN/2011, No. LAD-NRO/GN/2011, No. LAD-NRO/GN/2011, No. LAD-NRO/GN/2014, No. SEBI/LAD-NRO/GN/2016, No. SEBI/LAD-NRO/GN/2020/10, No. SEBI/LAD-NRO/GN/2021/13, No. SEBI/LAD-NRO/GN/2021/30, No. SEBI/LAD-NRO/GN/2024/214, No. SEBI/LAD-NRO/GN/2025/228
+2025-12-08 14:24:11,695 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Regulations)
+2025-12-08 14:24:11,695 [INFO] Processing PDF 9/11: /Users/admin/Downloads/Tejomaya_pdfs_test/Akshayam Data/SEBI/Regulations/2025/December/1765172885621.pdf
+2025-12-08 14:24:12,993 [INFO] Lang: mixed | Index: REGD. No. D. L.-33004/99, No. 786, CG-MH-E-04122025-268233, No. SEBI/LAD-NRO/GN/2025/284, No. SEBI/LAD-NRO/GN/2021/40
+2025-12-08 14:24:29,677 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Regulations)
+2025-12-08 14:24:29,677 [INFO] Processing PDF 10/11: /Users/admin/Downloads/Tejomaya_pdfs_test/Akshayam Data/SEBI/Regulations/2025/December/1764762979981.pdf
+2025-12-08 14:24:31,407 [INFO] Lang: mixed | Index: REGD. No. D. L.-33004/99, No. 775, CG-MH-E-03122025-268196, No. SEBI/LAD-NRO/GN/2025/280, No.832, No. 501, No. 1045, No. 398, No. 469, No LAD-NRO/GN/2008/11/126538, No. LAD-NRO/GN/2009, No. LAD-NRO/GN/2012, No. LAD-NRO/GN/2014, No. SEBI/LAD/NRO/GN/2016, No. SEBI/LAD-NRO/GN/2020/10, No. SEBI/LAD-NRO/GN/2021/30, No. SEBI/LAD-NRO/GN/2022/99, No. SEBI/LAD-NRO/GN/2023/121, No. SEBI/LAD-NRO/GN/2024/203
+2025-12-08 14:24:58,726 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Regulations)
+2025-12-08 14:24:58,726 [INFO] Processing PDF 11/11: /Users/admin/Downloads/Tejomaya_pdfs_test/Akshayam Data/SEBI/Regulations/2025/December/1764762906502.pdf
+2025-12-08 14:25:00,545 [INFO] Lang: mixed | Index: REGD. No. D. L.-33004/99, No. 774, CG-MH-E-03122025-268195, No.SEBI/LAD-NRO/GN/2025/279, No. SEBI/LAD-NRO/GN/2019/36, No. SEBI/LAD-NRO/GN/2019/44, No SEBI/LAD-NRO/GN/2020/09, No. SEBI/LAD-NRO/GN/2020/10, No. SEBI/LAD-NRO/GN/2021/30, No. SEBI/LAD-NRO/GN/2021/32, No. SEBI/LAD-NRO/GN/2022/64, No. SEBI/LAD-NRO/GN/2022/99, No. SEBI/LAD-NRO/GN/2023/128, No. SEBI/LAD-NRO/GN/2024/183, No. SEBI/LAD-NRO/GN/2024/185, No. SEBI/LAD-NRO/GN/2025/228, No. SEBI/LAD-NRO/GN/2025/254
+2025-12-08 14:25:31,874 [INFO] Updated Excel → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/SEBI.xlsx (Regulations)
+2025-12-08 14:25:31,874 [INFO] All PDFs processed in 951.84s
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+
+
+=== Run at 2025-12-08 14:09:35 ===

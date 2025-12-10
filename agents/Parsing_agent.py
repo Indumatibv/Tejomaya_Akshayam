@@ -99,6 +99,38 @@ DATA_DIR = BASE_DIR / "data"
 OUTPUT_EXCEL_DIR = DATA_DIR / "output_excels"
 OUTPUT_EXCEL_DIR.mkdir(parents=True, exist_ok=True)
 
+from datetime import datetime, timedelta
+
+# ---------------------- Weekly Folder Creation ----------------------
+def get_week_folder():
+    import json
+
+    # Read week range from searching agent
+    week_json = DATA_DIR / "week_range.json"
+    if not week_json.exists():
+        raise ValueError("week_range.json not found! Run searching_agent first.")
+
+    with open(week_json, "r") as f:
+        week_info = json.load(f)
+
+    week_start = datetime.strptime(week_info["week_start"], "%Y-%m-%d")
+    week_end = datetime.strptime(week_info["week_end"], "%Y-%m-%d")
+
+    folder_name = f"{week_start.strftime('%Y-%m-%d')}_to_{week_end.strftime('%Y-%m-%d')}"
+    week_folder = OUTPUT_EXCEL_DIR / folder_name
+
+    # Replace folder ONLY if same week
+    if week_folder.exists():
+        import shutil
+        shutil.rmtree(week_folder)
+
+    week_folder.mkdir(parents=True, exist_ok=True)
+    return week_folder
+
+
+WEEK_FOLDER = get_week_folder()
+logging.info(f"Weekly output folder → {WEEK_FOLDER}")
+
 # ---------------------- PDF Cleaning ----------------------
 def clean_pdf_text(text: str) -> str:
     pages = re.split(r'\f+', text)
@@ -219,10 +251,34 @@ def generate_summary(extracted_text: str, max_tokens: int = 1000):
         return {"embedding_text": "NA", "client_summary": "NA"}
 
 # ---------------------- Excel Update ----------------------
+# def update_excel(row: pd.Series):
+#     vertical = row["Verticals"]
+#     sub = row["SubCategory"]
+#     # excel_path = OUTPUT_EXCEL_DIR / f"{vertical}.xlsx"
+#     excel_path = WEEK_FOLDER / f"{vertical}.xlsx"
+
+#     if excel_path.exists():
+#         wb = load_workbook(excel_path)
+#     else:
+#         wb = Workbook()
+#         wb.remove(wb.active)
+
+#     if sub in wb.sheetnames:
+#         ws = wb[sub]
+#     else:
+#         ws = wb.create_sheet(title=sub)
+#         ws.append(list(row.index))
+
+#     ws.append([row.get(col, "NA") or "NA" for col in row.index])
+#     wb.save(excel_path)
+#     wb.close()
+#     logging.info(f"Updated Excel → {excel_path} ({sub})")
+
 def update_excel(row: pd.Series):
     vertical = row["Verticals"]
     sub = row["SubCategory"]
-    excel_path = OUTPUT_EXCEL_DIR / f"{vertical}.xlsx"
+
+    excel_path = WEEK_FOLDER / f"{vertical}.xlsx"
 
     if excel_path.exists():
         wb = load_workbook(excel_path)
@@ -239,6 +295,7 @@ def update_excel(row: pd.Series):
     ws.append([row.get(col, "NA") or "NA" for col in row.index])
     wb.save(excel_path)
     wb.close()
+
     logging.info(f"Updated Excel → {excel_path} ({sub})")
 
 # ---------------------- Process One PDF ----------------------

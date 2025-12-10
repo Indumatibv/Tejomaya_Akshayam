@@ -27,7 +27,7 @@ def job():
     logging.info("🚀 ETL pipeline started")
 
 
-schedule.every().day.at("11:49").do(job)
+schedule.every().day.at("14:00").do(job)
 
 logging.info("Scheduler started... waiting for triggers")
 

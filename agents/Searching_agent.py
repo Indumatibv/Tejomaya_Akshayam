@@ -475,218 +475,6 @@ async def scrape_bse(task, week_start, week_end):
     driver.quit()
     logging.info("🟣 BSE LISTED COMPANIES → DONE")
 
-# async def scrape_mca(task, week_start, week_end):
-#     """
-#     Scrapes MCA Notifications/Circulars by:
-#     1) Querying Google for MCA-related pages (no date operators).
-#     2) Opening each result page.
-#     3) Extracting any PDF links (href/src containing '.pdf').
-#     4) Deriving date from the page text and applying the weekly filter.
-#     """
-#     category = task["category"]
-#     subfolder = task["subfolder"]
-#     logging.info(f"🔍 MCA/GOOGLE SCRAPER → {category} > {subfolder}")
-
-#     # ------------------ GOOGLE QUERY (NO after:/before:) ------------------
-#     if subfolder.lower() == "notifications":
-#         text_filter = '"Companies Act" "Notification"'
-#     elif subfolder.lower() == "circulars":
-#         text_filter = '"Companies Act" "General Circular"'
-#     else:
-#         text_filter = f'"{subfolder}"'
-
-#     # Restrict primarily to MCA; you can broaden to other domains if needed
-#     query = f'site:mca.gov.in {text_filter} pdf'
-#     google_url = f"https://www.google.com/search?q={query}"
-#     logging.info(f"🔎 Querying Google: {google_url}")
-
-#     # ------------------ SELENIUM SETUP ------------------
-#     chrome_opts = webdriver.ChromeOptions()
-#     prefs = {
-#         "download.default_directory": BASE_PATH,
-#         "download.prompt_for_download": False,
-#         "plugins.always_open_pdf_externally": True,
-#         "profile.default_content_settings.popups": 0,
-#     }
-#     chrome_opts.add_experimental_option("prefs", prefs)
-#     chrome_opts.add_experimental_option("excludeSwitches", ["enable-automation"])
-#     chrome_opts.add_experimental_option("useAutomationExtension", False)
-#     chrome_opts.add_argument("--headless=new")
-#     chrome_opts.add_argument("--disable-gpu")
-#     chrome_opts.add_argument("--no-sandbox")
-#     chrome_opts.add_argument("--window-size=1920,1080")
-#     chrome_opts.add_argument(
-#         "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-#         "AppleWebKit/537.36 (KHTML, like Gecko) "
-#         "Chrome/115.0.0.0 Safari/537.36"
-#     )
-
-#     driver = webdriver.Chrome(options=chrome_opts)
-
-#     try:
-#         # ------------------ OPEN GOOGLE SERP ------------------
-#         driver.get(google_url)
-#         time.sleep(5)
-
-#         # Preferred: classic Google layout: <div class="yuRUbf"><a><h3>Title</h3></a></div>
-#         result_links = driver.find_elements(
-#             By.XPATH,
-#             "//div[@class='yuRUbf']/a"
-#         )
-
-#         # Fallback: any anchor that has/contains an h3
-#         if not result_links:
-#             result_links = driver.find_elements(
-#                 By.XPATH,
-#                 "//a[h3] | //a//h3/ancestor::a[1]"
-#             )
-
-#         if not result_links:
-#             logging.warning("⚠️ Google returned no organic result links for MCA query.")
-#             return
-
-#         logging.info(f"✅ Found {len(result_links)} MCA result pages on Google.")
-
-#         max_results = 10  # limit for safety
-#         for idx, link_el in enumerate(result_links[:max_results], start=1):
-#             try:
-#                 href = link_el.get_attribute("href")
-#                 if not href:
-#                     continue
-
-#                 # Extract title if present
-#                 title = "MCA Result Page"
-#                 try:
-#                     h3 = link_el.find_element(By.TAG_NAME, "h3")
-#                     if h3:
-#                         title = h3.text.strip() or title
-#                 except Exception:
-#                     pass
-
-#                 logging.info(f"→ [{idx}] MCA page: {href} | Title: {title}")
-
-#                 # ------------------ OPEN RESULT PAGE ------------------
-#                 driver.get(href)
-#                 time.sleep(4)
-
-#                 # ------------------ FIND PDF LINKS ------------------
-#                 pdf_urls = set()
-
-#                 # a) Anchors with href containing ".pdf" (case-insensitive)
-#                 pdf_anchor_elems = driver.find_elements(
-#                     By.XPATH,
-#                     "//a[contains(translate(@href, 'PDF', 'pdf'), '.pdf')]"
-#                 )
-#                 for a_el in pdf_anchor_elems:
-#                     pdf_href = a_el.get_attribute("href")
-#                     if pdf_href:
-#                         pdf_urls.add(pdf_href)
-
-#                 # b) Iframes with src containing ".pdf"
-#                 iframe_elems = driver.find_elements(
-#                     By.XPATH,
-#                     "//iframe[contains(translate(@src, 'PDF', 'pdf'), '.pdf')]"
-#                 )
-#                 for iframe in iframe_elems:
-#                     iframe_src = iframe.get_attribute("src")
-#                     if iframe_src:
-#                         pdf_urls.add(iframe_src)
-
-#                 if not pdf_urls:
-#                     logging.info(f"ℹ️ No PDF links detected on: {href}")
-#                     continue
-
-#                 logging.info(f"📄 Found {len(pdf_urls)} PDF link(s) on: {href}")
-
-#                 # ------------------ DERIVE ISSUE DATE FROM PAGE ------------------
-#                 page_source = driver.page_source
-#                 page_soup = BeautifulSoup(page_source, "html.parser")
-#                 page_text = page_soup.get_text(" ", strip=True)
-
-#                 # Look for dd/mm/yyyy pattern
-#                 date_match = re.search(r"\b\d{2}/\d{2}/\d{4}\b", page_text)
-#                 if date_match:
-#                     try:
-#                         dt = datetime.strptime(date_match.group(), "%d/%m/%Y")
-#                     except Exception:
-#                         dt = week_start
-#                 else:
-#                     # Fallback: use week_start if no explicit date found
-#                     dt = week_start
-
-#                 # Week-range filter
-#                 if not (week_start <= dt <= week_end):
-#                     logging.info(
-#                         f"Skipping page (derived date outside week): {dt.date()} | {href}"
-#                     )
-#                     continue
-
-#                 year = str(dt.year)
-#                 month_full = dt.strftime("%B")
-#                 save_dir = ensure_year_month_structure(
-#                     BASE_PATH, category, subfolder, year, month_full
-#                 )
-
-#                 # ------------------ DOWNLOAD PDFS ------------------
-#                 async with aiohttp.ClientSession() as session:
-#                     for pdf_url in pdf_urls:
-#                         try:
-#                             # Protocol-relative URL
-#                             if pdf_url.startswith("//"):
-#                                 pdf_url = "https:" + pdf_url
-
-#                             # Relative URL → resolve against page URL
-#                             if pdf_url.startswith("/"):
-#                                 parsed = urlparse(href)
-#                                 pdf_url = f"{parsed.scheme}://{parsed.netloc}{pdf_url}"
-
-#                             filename = sanitize_filename(title)
-#                             final_path = os.path.join(save_dir, filename)
-
-#                             if os.path.exists(final_path):
-#                                 logging.info(f"⏩ Exists (skipping): {final_path}")
-#                                 continue
-
-#                             tmp_path = await download_pdf(session, pdf_url, save_dir)
-#                             if not tmp_path:
-#                                 logging.warning(
-#                                     f"❌ Failed to download PDF from: {pdf_url}"
-#                                 )
-#                                 continue
-
-#                             # Rename downloaded file to sanitized name
-#                             if tmp_path != final_path:
-#                                 os.rename(tmp_path, final_path)
-
-#                             logging.info(f"✅ Saved MCA PDF: {final_path}")
-
-#                             ALL_DOWNLOADED.append({
-#                                 "Verticals": category,
-#                                 "SubCategory": subfolder,
-#                                 "Year": year,
-#                                 "Month": month_full,
-#                                 "IssueDate": dt.strftime("%Y-%m-%d"),
-#                                 "Title": title,
-#                                 "PDF_URL": pdf_url,
-#                                 "File Name": os.path.basename(final_path),
-#                                 "Path": final_path,
-#                             })
-
-#                         except Exception as e:
-#                             logging.warning(
-#                                 f"❌ Failed processing MCA PDF link on page {href}: {e}"
-#                             )
-#                             continue
-
-#             except Exception as e:
-#                 logging.warning(f"❌ Failed processing MCA Google result {idx}: {e}")
-#                 continue
-
-#     except Exception as e:
-#         logging.exception(f"❌ MCA Google Scraper Critical Error: {e}")
-#     finally:
-#         driver.quit()
-
 
 async def scrape_sebi(task, week_start, week_end):
     category = task["category"]
@@ -715,7 +503,9 @@ async def scrape_sebi(task, week_start, week_end):
             task["title"] = "Untitled"
 
     # ---- Detect nested listing pages ----
-    if "doListing=yes" in detail_url:
+    # if "doListing=yes" in detail_url:
+    if "doListing" in detail_url:
+
         detail_links = extract_detail_links_from_listing(detail_result.html, detail_url)
 
         if not detail_links:
@@ -873,7 +663,7 @@ async def scrape_generic_link(task, week_start, week_end):
 #---------------------------------------------------------------------
 
 async def main():
-    weeks_back = 1 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
+    weeks_back = 0 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
     week_start, week_end = get_week_range(weeks_back)
 
     tasks = load_link_tasks_from_excel()
@@ -887,6 +677,15 @@ async def main():
     if ALL_DOWNLOADED:
         df = pd.DataFrame(ALL_DOWNLOADED)
         df.to_excel(EXCEL_OUTPUT, index=False)
+        # Write week range for parsing agent
+        week_info = {
+            "week_start": week_start.strftime("%Y-%m-%d"),
+            "week_end": week_end.strftime("%Y-%m-%d")
+        }
+
+        with open(DATA_DIR / "week_range.json", "w") as f:
+            json.dump(week_info, f)
+
         logging.info("FINAL EXCEL GENERATED: %s", EXCEL_OUTPUT)
     else:
         logging.info("No PDFs downloaded for this week.")
