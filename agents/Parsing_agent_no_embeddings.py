@@ -1,5 +1,3 @@
-#Using MiniLM embeddings(all-MiniLM-L6-v2) 
-# Making embeddings of chunk summaries to improve final summary relevance and reduce hallucinations.
 #!/usr/bin/env python
 # agents/parsing_agent.py
 
@@ -18,14 +16,6 @@ from openpyxl import load_workbook, Workbook
 import torch
 import warnings
 import time
-
-# ---- NEW IMPORTS FOR FAISS + MINILM ----
-from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
-
-# Load MiniLM embedding model (local / free)
-emb_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-
 
 # ---------------------- Logging ----------------------
 logging.basicConfig(
@@ -73,39 +63,44 @@ chunk_prompt = PromptTemplate(
     input_variables=["text"]
 )
 
-# Final prompt converted to bullet-style output (•). No double quotes required.
 final_prompt = PromptTemplate(
     template="""
     You are a senior communications analyst summarizing official circulars or notices for a mixed audience 
     that may include company stakeholders, investors, and general readers. 
-    Produce a concise bullet-point summary (use filled-dot bullets '•') that helps readers instantly understand the circular’s purpose, 
-    key changes, applicability, and practical impact — without needing to read the original document.
+    Write a short, clear summary that helps readers instantly understand the circular’s purpose, 
+    key changes, and practical effect — without needing to read the original document.
 
-    STRICT GUIDELINES:
-    - Use plain, professional, and neutral language.
-    - Output exactly 4–6 bullet points where applicable; fewer if the source contains fewer clear facts.
-    - The summary must be fully self-contained and understandable on its own.
-    - Rephrase any technical or legal content into simple, direct meaning.
-    - Do NOT invent any detail that is not explicitly present in the provided text.
-    - Avoid legal citations, clause numbers, regulation names, annexures, or procedural instructions.
-    - Avoid filler, speculation, or procedural instructions (e.g., how to file or whom to email).
+    Guidelines:
+    - Write in plain, professional, and neutral tone. Avoid legal or technical wording.
+    - Limit strictly to 5–6 sentences.
+    - Focus on:
+        • What the circular is about and why it was issued
+        • The main changes or relaxations introduced
+        • Who it applies to (e.g., listed companies, shareholders, investors)
+        • Key numbers, dates, or conditions that define applicability
+        • How it affects business practices or compliance steps
+    - Avoid:
+        • References like “as per the circular” or “available on SEBI’s website”
+        • Mentions of sections, annexures, or clause numbers unless essential
+        • Phrases suggesting further reading or external lookup
+        • Redundancy or disclaimers
 
-    FOCUS ON:
-        • What the circular is about and why it was issued  
-        • The key changes, relaxations, thresholds, exemptions, or requirements introduced  
-        • Who it applies to (e.g., listed companies, shareholders, investors)  
-        • Important dates or conditions that define applicability  
-        • How the update affects compliance steps or business practices  
+    The summary should read as a complete standalone explanation that helps any reader 
+    grasp the essence and impact of the circular in simple terms.
 
-    AVOID COMPLETELY:
-        • Mentions of clause numbers, paragraph numbers, annexures, or regulation names 
-        • Phrases that imply further reading is needed (e.g., “as specified”, “as per the circular”)
-        • Legal jargon, disclaimers, or procedural references like emails, filings, or submission methods  
+    Example Output:
+    "SEBI has eased approval requirements for related party transactions by listed companies to simplify oversight. 
+    Starting September 12, 2025, transactions below 1% of annual consolidated turnover or INR 10 crores 
+    will only need limited details for approval. Companies must follow standard formats for disclosures, 
+    and smaller transactions under ₹1 crore in a financial year are exempt from detailed review. 
+    The update also clarifies what information boards and shareholders should consider, 
+    such as transaction purpose, financial benefit, and valuation details."
 
     Text:
     {text}
 
-    Final bullet summary (use '•' for each bullet; do NOT wrap output in quotes; no numbered lists):
+    Short Client Summary (entire answer MUST be inside double quotes):
+    "{{ summary }}"
     """,
     input_variables=["text"]
 )
@@ -241,15 +236,13 @@ def extract_pdf_text(pdf_path: str):
     logging.info(f"Lang: {lang} | Index: {indexing}")
     return cleaned, lang, indexing
 
-# ---------------------- UPDATED Summary Generation (FAISS Integrated, fixed prompt formatting) ----------------------
+# ---------------------- Summary Generation ----------------------
 def generate_summary(extracted_text: str, max_tokens: int = 1000):
     try:
         splitter = RecursiveCharacterTextSplitter(chunk_size=4000, chunk_overlap=500)
         docs = splitter.create_documents([extracted_text])
 
         chunk_summaries = []
-
-        # ---- Step 1: Generate chunk summaries ----
         for doc in docs:
             summary = llm.invoke(chunk_prompt.format(text=doc.page_content)).strip()
             if summary:
@@ -258,39 +251,42 @@ def generate_summary(extracted_text: str, max_tokens: int = 1000):
         if not chunk_summaries:
             return {"embedding_text": "NA", "client_summary": "NA"}
 
-        # ---- Step 2: Create temporary FAISS index ----
-        faiss_index = FAISS.from_texts(chunk_summaries, emb_model)
+        embedding_text = "\n".join(chunk_summaries)
+        truncated = embedding_text[:max_tokens * 4]
 
-        # Use a small top-k to reduce hallucination risk
-        top_k = min(5, len(chunk_summaries))
-        retrieved_docs = faiss_index.similarity_search("overall summary", k=top_k)
-
-        # Concatenate retrieved chunk summaries in ranked order
-        retrieved_text = "\n".join([d.page_content for d in retrieved_docs])
-
-        # Truncate conservatively for the final prompt
-        truncated = retrieved_text[:max_tokens * 4]
-
-        # ---- Step 3: Generate FINAL summary using correct PromptTemplate formatting ----
-        final_query = final_prompt.format_prompt(text=truncated).to_string()
-        final = llm.invoke(final_query).strip()
-
-        # ---- Step 4: Delete FAISS index (temporary only) ----
-        try:
-            del faiss_index
-        except Exception:
-            pass
-
+        final = llm.invoke(final_prompt.format(text=truncated)).strip()
         return {
-            "embedding_text": retrieved_text,
+            "embedding_text": embedding_text,
             "client_summary": final or "NA"
         }
-
     except Exception as e:
         logging.error(f"Summarization failed: {e}")
         return {"embedding_text": "NA", "client_summary": "NA"}
 
 # ---------------------- Excel Update ----------------------
+# def update_excel(row: pd.Series):
+#     vertical = row["Verticals"]
+#     sub = row["SubCategory"]
+#     # excel_path = OUTPUT_EXCEL_DIR / f"{vertical}.xlsx"
+#     excel_path = WEEK_FOLDER / f"{vertical}.xlsx"
+
+#     if excel_path.exists():
+#         wb = load_workbook(excel_path)
+#     else:
+#         wb = Workbook()
+#         wb.remove(wb.active)
+
+#     if sub in wb.sheetnames:
+#         ws = wb[sub]
+#     else:
+#         ws = wb.create_sheet(title=sub)
+#         ws.append(list(row.index))
+
+#     ws.append([row.get(col, "NA") or "NA" for col in row.index])
+#     wb.save(excel_path)
+#     wb.close()
+#     logging.info(f"Updated Excel → {excel_path} ({sub})")
+
 def update_excel(row: pd.Series):
     vertical = row["Verticals"]
     sub = row["SubCategory"]
