@@ -118,30 +118,41 @@ Final Summary (use ONLY black bullet points “•”):
 
 CIRCULARS_PROMPT = PromptTemplate(
     template="""
-You are a senior regulatory analyst preparing a client-ready summary of a SEBI circular.
+You are a regulatory analyst writing a very short, client-ready summary of a SEBI circular.
 
-The reader is a business or compliance professional who will NOT read the original document.
-The summary must clearly explain the purpose and practical implications of the circular.
+The output MUST strictly match the following pattern:
+- EXACTLY TWO bullet points
+- BOTH lines must be bullet points
+- The FIRST bullet MUST start with: “The Circular”
 
-STRUCTURE (MANDATORY):
-- Start with ONE short paragraph (1 sentence) beginning with “The Circular”
-- Follow with bullet points explaining key requirements, clarifications, or impacts
-- Do NOT use headings or numbering
+HARD RULES (NON-NEGOTIABLE):
+- Output ONLY two bullet points, nothing else
+- Do NOT add headings, introductions, or explanations
+- If you output more or fewer bullets, the answer is INVALID
 
 CONTENT RULES (STRICT):
-- Focus on operational instructions, disclosures, processes, or compliance expectations
-- Clearly mention affected entities where relevant
-- Highlight risks, reporting requirements, or alignment objectives if stated
-- Do NOT quote circular numbers, sections, or legal boilerplate
+- Summarise ONLY:
+  • the core requirement or mandate
+  • the practical compliance impact
+- Mention affected entities only if essential
+- Do NOT include:
+  • internal processes
+  • committee names
+  • reporting lines
+  • appointment mechanics
+  • legal citations, dates, or circular numbers
+- Do NOT explain background or intent explicitly
 
 FORMAT RULES:
 - Use ONLY black bullet points “•”
-- Use 1–3 bullet points only
-- Each bullet must be ONE concise sentence
+- Each bullet must be ONE clear sentence
+- No colons, no numbering, no sub-bullets
 
-TONE:
-- Plain, professional, and client-facing
-- Written like a regulatory client update
+STYLE:
+- High-level
+- Client-facing
+- Similar in tone and length to:
+  “The Circular mandates risk disclosures at every client login.”
 
 Text:
 {text}
@@ -150,6 +161,7 @@ Final Summary:
 """,
     input_variables=["text"]
 )
+
 
 # ============================================================
 # PATHS
@@ -359,6 +371,8 @@ def process_circular_pdf(row: pd.Series):
             CIRCULARS_PROMPT.format(text=core_text)
         ).strip()
 
+        summary = summary.strip().strip('"')
+
         row["Summary"] = summary or "NA"
         row["EmbeddingText"] = core_text
 
@@ -405,8 +419,8 @@ def main(excel_file: str):
     for col in required:
         if col not in df.columns:
             raise ValueError(f"Missing column: {col}")
-
-    logging.info(f"Processing {len(df)} Regulations PDFs")
+    
+    logging.info(f"Processing {len(df)} PDFs across all subcategories")
 
     start = time.time()
 
