@@ -43,78 +43,6 @@ llm = Ollama(model="mistral:latest")
 # REGULATIONS SUMMARY PROMPT (FINAL, AUTHORITATIVE)
 # ============================================================
 
-# REGULATIONS_PROMPT = PromptTemplate(
-#     template="""
-# You are a senior regulatory analyst preparing a concise, client-ready summary of a SEBI regulation document
-# for business stakeholders and compliance teams.
-
-# This document establishes a regulatory framework and contains detailed legal provisions.
-# The summary must allow the reader to understand what the regulation governs without opening the document.
-
-# Focus ONLY on:
-# - What the regulation governs at a high level (e.g., REITs, InvITs, intermediaries, market participants)
-# - Who it applies to (e.g., sponsors, managers, trustees, listed entities, intermediaries)
-# - The key compliance and governance areas covered (e.g., registration, listing, valuation, disclosures, reporting)
-# - Core responsibilities imposed on regulated entities
-# - The overall regulatory intent and scope (e.g., transparency, investor protection, market integrity)
-
-# Do NOT:
-# - List clauses, chapters, or definitions
-# - Mention page counts, circular numbers, or legal citations
-# - Explain individual amendments in detail
-
-# Write a clear, professional, and self-contained summary.
-# Limit strictly to 5–6 sentences.
-
-# Text:
-# {text}
-
-# Final Summary (entire answer MUST be inside double quotes):
-# """,
-#     input_variables=["text"]
-# )
-
-# REGULATIONS_PROMPT = PromptTemplate(
-#     template="""
-# You are a senior regulatory analyst preparing a client-ready summary of a SEBI regulation or regulatory amendment.
-
-# PURPOSE:
-# The summary must clearly explain what SEBI has amended or introduced and what impact it has in practice.
-
-# CONTENT RULES:
-# - Focus ONLY on newly inserted or amended provisions
-# - Explain the change in simple, non-legal language
-# - Clearly state the impact on:
-#   • investors
-#   • market participants
-#   • regulated entities or the public
-# - Mention the practical benefit or outcome of the change
-# - Avoid lengthy legal wording, clause references, or definitions
-# - Do NOT mention clause numbers, insertions, omissions, substitutions, or editorial notes. If a change cannot be explained without referencing clauses, summarise its practical effect instead.
-
-# FORMAT RULES:
-# - Output ONLY bullet points
-# - Use ONLY black bullet points “•”
-# - Write 3–5 bullet points maximum
-# - Each bullet must be ONE concise sentence
-
-# STARTING RULE (MANDATORY):
-# - The FIRST bullet MUST start with:
-#   “SEBI has amended or added a regulation to …”
-
-# TONE:
-# - Professional
-# - Clear
-# - Suitable for business and compliance readers
-
-# Text:
-# {text}
-
-# Final Summary:
-# """,
-#     input_variables=["text"]
-# )
-
 REGULATIONS_PROMPT = PromptTemplate(
     template="""
 You are a senior regulatory analyst preparing a concise, client-ready summary of a SEBI regulation document
@@ -156,88 +84,6 @@ Final Summary (entire answer MUST be inside double quotes):
 
 # ============================================================
 
-# AMENDMENT_REGULATIONS_PROMPT = PromptTemplate(
-#     template="""
-# You are a senior regulatory analyst preparing a client-ready summary of a SEBI amendment regulation.
-
-# The reader is a business or compliance professional who will NOT read the original document.
-# The summary must clearly communicate what the amendment does in practical terms.
-
-# STRUCTURE (MANDATORY):
-# - Output ONLY bullet points (no paragraph introduction)
-# - The FIRST bullet MUST start with: “The amendment”
-# - The FIRST bullet should give a one-line overview of the nature of changes
-# - ALL remaining bullets must describe specific changes
-# - Remaining bullets MUST NOT start with headings, labels, or repeated phrases
-
-# CONTENT RULES (STRICT):
-# - Each bullet must state the outcome or impact of the change, not the legal wording
-# - Do NOT use phrases like:
-#   “definition of”, “the term”, “has been defined”, “has been introduced”
-# - Do NOT use colon-style labels (e.g., “Change in control:”)
-# - Do NOT quote or paraphrase legal definitions verbatim
-# - Avoid procedural or audit mechanics unless they materially affect compliance
-
-# FORMAT RULES (STRICT):
-# - Use ONLY black bullet points “•”
-# - Write a maximum of 6 bullet points
-# - Each bullet must be ONE concise sentence
-# - Do NOT use numbering (1., 2., 3.) or dashes (-)
-
-# TONE:
-# - Plain, professional, and client-facing
-# - Written like a regulatory update shared with senior stakeholders
-# - Outcome-focused and easy to scan
-
-# Text:
-# {text}
-
-# Final Summary (use ONLY black bullet points “•”):
-# """,
-#     input_variables=["text"]
-# )
-
-# AMENDMENT_REGULATIONS_PROMPT = PromptTemplate(
-#     template="""
-# You are a senior regulatory analyst preparing a client-ready summary of a SEBI amendment regulation.
-
-# The reader is a business or compliance professional who will NOT read the original document.
-# The summary must clearly communicate what the amendment changes and why it matters in practice.
-
-# STRUCTURE (MANDATORY):
-# - Output ONLY bullet points (no paragraph introduction)
-# - The FIRST bullet MUST start with: “The amendment”
-# - The FIRST bullet should give a one-line overview of the nature of changes
-# - ALL remaining bullets must describe specific changes and their impact
-
-# CONTENT RULES (STRICT):
-# - Each bullet must state the outcome or practical impact of the change
-# - At least ONE bullet must clearly mention the impact or benefit for investors, market participants, or other stakeholders
-# - Do NOT use phrases like:
-#   “definition of”, “the term”, “has been defined”, “has been introduced”
-# - Do NOT use colon-style labels (e.g., “Change in control:”)
-# - Do NOT quote or paraphrase legal definitions verbatim
-# - Avoid procedural or audit mechanics unless they materially affect compliance
-# - Do NOT mention clause numbers, insertions, omissions, substitutions, or editorial notes. If a change cannot be explained without referencing clauses, summarise its practical effect instead.
-
-# FORMAT RULES (STRICT):
-# - Use ONLY black bullet points “•”
-# - Write a maximum of 6 bullet points
-# - Each bullet must be ONE concise sentence
-# - Do NOT use numbering (1., 2., 3.) or dashes (-)
-
-# TONE:
-# - Plain, professional, and client-facing
-# - Written like a regulatory update shared with senior stakeholders
-# - Outcome-focused and easy to scan
-
-# Text:
-# {text}
-
-# Final Summary (use ONLY black bullet points “•”):
-# """,
-#     input_variables=["text"]
-# )
 AMENDMENT_REGULATIONS_PROMPT = PromptTemplate(
     template="""
 You are a senior regulatory analyst preparing a client-ready summary of a SEBI amendment to existing regulations.
@@ -287,90 +133,9 @@ Final Summary (use ONLY black bullet points “•”):
     input_variables=["text"]
 )
 
-
-# CIRCULARS_PROMPT = PromptTemplate(
-#     template="""
-# You are a regulatory analyst writing a very short, client-ready summary of a SEBI circular.
-
-# The output MUST strictly match the following pattern:
-# - EXACTLY TWO bullet points
-# - BOTH lines must be bullet points
-# - The FIRST bullet MUST start with: “The Circular”
-
-# HARD RULES (NON-NEGOTIABLE):
-# - Output ONLY two bullet points, nothing else
-# - Do NOT add headings, introductions, or explanations
-# - If you output more or fewer bullets, the answer is INVALID
-
-# CONTENT RULES (STRICT):
-# - Summarise ONLY:
-#   • the core requirement or mandate
-#   • the practical compliance impact
-# - Mention affected entities only if essential
-# - Do NOT include:
-#   • internal processes
-#   • committee names
-#   • reporting lines
-#   • appointment mechanics
-#   • legal citations, dates, or circular numbers
-# - Do NOT explain background or intent explicitly
-
-# FORMAT RULES:
-# - Use ONLY black bullet points “•”
-# - Each bullet must be ONE clear sentence
-# - No colons, no numbering, no sub-bullets
-
-# STYLE:
-# - High-level
-# - Client-facing
-# - Similar in tone and length to:
-#   “The Circular mandates risk disclosures at every client login.”
-
-# Text:
-# {text}
-
-# Final Summary:
-# """,
-#     input_variables=["text"]
-# )
-
-# CIRCULARS_PROMPT = PromptTemplate(
-#     template="""
-# You are a regulatory analyst writing a short, client-ready summary of a SEBI circular.
-
-# PURPOSE:
-# SEBI circulars provide clarifications, implementation guidance, or changes to existing requirements.
-# The reader should immediately understand what has changed and what it means in practice.
-
-# CONTENT RULES:
-# - Clearly state the main clarification, change, or requirement introduced by the circular
-# - Mention any key condition, threshold, or timeline if stated
-# - Briefly include other important informational points instead of vague phrases
-# - Avoid technical or legal jargon
-# - Do NOT include circular numbers, internal processes, or background explanations
-
-# FORMAT RULES:
-# - Output ONLY bullet points
-# - Use ONLY black bullet points “•”
-# - Write 2–4 bullet points maximum
-# - Each bullet must be ONE clear sentence
-
-# STARTING RULE (MANDATORY):
-# - The FIRST bullet MUST start with:
-#   “SEBI has issued this circular and …”
-
-# TONE:
-# - Plain language
-# - Client-facing
-# - Easy to understand for non-legal readers
-
-# Text:
-# {text}
-
-# Final Summary:
-# """,
-#     input_variables=["text"]
-# )
+# ============================================================
+# CIRCULARS SUMMARY PROMPT
+# ============================================================
 
 CIRCULARS_PROMPT = PromptTemplate(
     template="""
@@ -400,6 +165,44 @@ STARTING RULE (MANDATORY):
 TONE:
 - Plain language and client-facing.
 - Crisp, direct, and easy to understand for non-legal readers.
+
+Text:
+{text}
+
+Final Summary:
+""",
+    input_variables=["text"]
+)
+
+# ============================================================
+# PRESS RELEASES SUMMARY PROMPT
+# ============================================================
+
+PRESS_RELEASE_PROMPT = PromptTemplate(
+    template="""
+You are preparing a short, client-ready summary of a SEBI press release.
+
+SUB-DOMAIN: Press Releases
+
+ABOUT:
+Press releases are informational and communicate key decisions, actions, warnings, clarifications, or outcomes.
+Summarise ONLY the primary outcomes that the reader must know.
+
+STRICT RULES:
+- Output ONLY bullet points
+- Use ONLY black bullet points “•”
+- Write ONLY what SEBI has decided, clarified, approved, warned, or stated
+- Do NOT include background, explanations, names, dates, venues, links, or references to media reports
+- If there are multiple key outcomes, write 2–3 bullets (no more)
+
+STARTING RULE (MANDATORY):
+- Each bullet MUST start with:
+  “The press release issued states that …”
+
+STYLE:
+- One sentence per bullet
+- Plain, direct, client-facing language
+- No legal or procedural wording
 
 Text:
 {text}
@@ -629,6 +432,27 @@ def process_circular_pdf(row: pd.Series):
 
     return row
 
+def process_press_release_pdf(row: pd.Series):
+    pdf_path = Path(row["Path"])
+
+    try:
+        text = extract_pdf_text(pdf_path)
+        text = re.sub(r'\s+', ' ', text).strip()
+        core_text = text[:4000]
+
+        summary = llm.invoke(
+            PRESS_RELEASE_PROMPT.format(text=core_text)
+        ).strip()
+
+        row["Summary"] = summary or "NA"
+        row["EmbeddingText"] = core_text
+
+    except Exception as e:
+        logging.error(f"Failed → {pdf_path}: {e}")
+        row["Summary"] = "NA"
+        row["EmbeddingText"] = "NA"
+
+    return row
 
 def process_row_by_domain(row: pd.Series):
     sub = row["SubCategory"]
@@ -646,6 +470,9 @@ def process_row_by_domain(row: pd.Series):
 
     elif is_circular(sub_clean):
         return process_circular_pdf(row)
+
+    elif "press release" in sub_clean:
+        return process_press_release_pdf(row)
 
     else:
         logging.warning(f"Unsupported SubCategory: {sub}")
