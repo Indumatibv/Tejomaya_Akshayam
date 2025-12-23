@@ -213,6 +213,80 @@ Final Summary:
 )
 
 # ============================================================
+# CONSULTATION PAPERS SUMMARY PROMPT
+# ============================================================
+
+CONSULTATION_PAPER_PROMPT = PromptTemplate(
+    template="""
+You are a regulatory analyst preparing a client-ready summary of a SEBI consultation paper.
+
+Consultation papers propose changes to regulations and seek public feedback.
+The reader will NOT read the original document.
+
+STRICT FORMAT RULES (MANDATORY):
+- Output ONLY black bullet points “•”
+- Do NOT write any paragraph text
+- Do NOT add explanations, objectives, timelines, links, or submission details
+- Write EXACTLY 3 or 4 bullet points
+
+STRUCTURE (MANDATORY):
+- The FIRST bullet MUST start exactly with:
+  “SEBI has issued this consultation paper proposing the following changes …”
+- The NEXT bullets must list ONLY the proposed changes or amendments
+- The FINAL bullet MUST state that SEBI is seeking public comments, views, or suggestions
+
+CONTENT RULES:
+- Focus ONLY on what is proposed to change
+- Do NOT explain why the change is proposed
+- Do NOT mention consultation period, dates, emails, or links
+- Do NOT use clause numbers or legal drafting language
+
+Text:
+{text}
+
+Final Summary (use ONLY black bullet points “•”):
+""",
+    input_variables=["text"]
+)
+
+# ============================================================
+# MASTER CIRCULARS SUMMARY PROMPT
+# ============================================================
+
+MASTER_CIRCULAR_PROMPT = PromptTemplate(
+    template="""
+You are a regulatory analyst preparing a short, client-ready summary of a SEBI Master Circular.
+
+Master Circulars consolidate all existing circulars and directions on a topic into a single updated reference document.
+
+FORMAT RULES (MANDATORY):
+- Output ONLY black bullet points “•”
+- Write EXACTLY 3 bullet points
+- Each bullet must be ONE sentence
+- No sub-bullets, numbering, links, or references
+
+CONTENT RULES:
+- State that SEBI has issued a Master Circular
+- Clearly mention the topic it covers
+- Mention that it consolidates and supersedes earlier circulars where specified
+- Emphasize that it is issued for ease of reference and is to be followed going forward
+- Do NOT mention websites, URLs, departments, dates, annexures, or legal effects (such as rescission, savings, or prior actions)
+- Do NOT describe structure, categories, or internal organisation
+- Do NOT explain legal consequences, how prior actions are treated, or any procedural details
+
+STARTING RULE (MANDATORY):
+- The FIRST bullet MUST start exactly with:
+  “SEBI has issued a master circular for …”
+
+Text:
+{text}
+
+Final Summary:
+""",
+    input_variables=["text"]
+)
+
+# ============================================================
 # PATHS
 # ============================================================
 
@@ -347,7 +421,6 @@ def generate_regulation_summary(text: str) -> str:
     summary = llm.invoke(
         prompt.format(text=core_text)
     ).strip()
-    # summary = summary.replace("-", "•")
 
     return summary or "NA", core_text
 
@@ -401,11 +474,29 @@ def process_regulation_pdf(row: pd.Series):
 
     return row
 
-def is_circular(subcategory: str) -> bool:
-    if not subcategory:
-        return False
-    return "circular" in subcategory.lower()
+# ============================================================
 
+def is_circular(subcategory: str) -> bool:
+    if not isinstance(subcategory, str):
+        return False
+
+    # Normalize
+    sub = subcategory.strip().lower()
+
+    # ❌ Explicitly exclude Master Circulars
+    if "master circular" in sub:
+        return False
+
+    # Normalize spacing around hyphens (e.g., "circular - bse" → "circular-bse")
+    sub = re.sub(r'\s*-\s*', '-', sub)
+
+    # ✅ Allow only standard circular variants
+    return sub in {
+        "circular",
+        "circulars",
+        "circular-bse",
+        "circular-nse"
+    }
 
 def process_circular_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
@@ -432,6 +523,8 @@ def process_circular_pdf(row: pd.Series):
 
     return row
 
+# ============================================================
+
 def process_press_release_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
 
@@ -454,18 +547,114 @@ def process_press_release_pdf(row: pd.Series):
 
     return row
 
+# ============================================================
+
+def clean_consultation_title(title: str) -> str:
+    if not isinstance(title, str):
+        return title
+
+    # Remove trailing "Click here to provide your comments" (case-insensitive)
+    cleaned = re.sub(
+        r'\s*click here to provide your comments\s*$',
+        '',
+        title,
+        flags=re.IGNORECASE
+    )
+
+    return cleaned.strip()
+
+def process_consultation_paper_pdf(row: pd.Series):
+    pdf_path = Path(row["Path"])
+
+    try:
+        text = extract_pdf_text(pdf_path)
+
+        # No regulation-style filtering required
+        core_text = text[:12000]
+
+        summary = llm.invoke(
+            CONSULTATION_PAPER_PROMPT.format(text=core_text)
+        ).strip()
+
+        row["Summary"] = summary or "NA"
+        row["EmbeddingText"] = core_text
+
+    except Exception as e:
+        logging.error(f"Failed → {pdf_path}: {e}")
+        row["Summary"] = "NA"
+        row["EmbeddingText"] = "NA"
+
+    return row
+
+# ============================================================
+
+def is_master_circular(subcategory: str) -> bool:
+    if not isinstance(subcategory, str):
+        return False
+    return "master circular" in subcategory.lower()
+
+
+def extract_master_circular_core(text: str) -> str:
+    lines = text.splitlines()
+    keep = []
+
+    for line in lines:
+        clean = line.strip()
+
+        if not clean:
+            continue
+
+        if re.search(r'table of contents|contents|index', clean, re.IGNORECASE):
+            break
+
+        if len(clean) > 30:
+            keep.append(clean)
+
+        if len(keep) >= 25:
+            break
+
+    return "\n".join(keep)
+
+def process_master_circular_pdf(row: pd.Series):
+    pdf_path = Path(row["Path"])
+
+    try:
+        text = extract_pdf_text(pdf_path)
+
+        # 🔑 Only intro part, not full document
+        core_text = extract_master_circular_core(text)
+
+        summary = llm.invoke(
+            MASTER_CIRCULAR_PROMPT.format(text=core_text)
+        ).strip()
+        summary = re.sub(r'https?://\S+', '', summary)
+
+        row["Summary"] = summary or "NA"
+        row["EmbeddingText"] = core_text
+
+    except Exception as e:
+        logging.error(f"Failed → {pdf_path}: {e}")
+        row["Summary"] = "NA"
+        row["EmbeddingText"] = "NA"
+
+    return row
+
+# ============================================================
+
 def process_row_by_domain(row: pd.Series):
     sub = row["SubCategory"]
 
     if not isinstance(sub, str):
         logging.warning("SubCategory is missing or invalid")
-        row["Summary"] = "NA"
-        row["EmbeddingText"] = "NA"
-        return row
+        return None
 
     sub_clean = sub.strip().lower()
 
-    if sub_clean == "regulations":
+    # ✅ Master Circular FIRST (important)
+    if is_master_circular(sub_clean):
+        return process_master_circular_pdf(row)
+
+    elif sub_clean == "regulations":
         return process_regulation_pdf(row)
 
     elif is_circular(sub_clean):
@@ -474,12 +663,12 @@ def process_row_by_domain(row: pd.Series):
     elif "press release" in sub_clean:
         return process_press_release_pdf(row)
 
-    else:
-        logging.warning(f"Unsupported SubCategory: {sub}")
-        row["Summary"] = "NA"
-        row["EmbeddingText"] = "NA"
-        return row
+    elif sub_clean == "consultation paper":
+        return process_consultation_paper_pdf(row)
 
+    else:
+        logging.info(f"Skipping SubCategory → {sub}")
+        return None
 
 # ============================================================
 # MAIN
@@ -492,7 +681,17 @@ def main(excel_file: str):
     for col in required:
         if col not in df.columns:
             raise ValueError(f"Missing column: {col}")
-    
+
+    # 🔹 Clean Consultation Paper titles
+    if "Title" in df.columns:
+        df["Title"] = df.apply(
+            lambda r: clean_consultation_title(r["Title"])
+            if isinstance(r["SubCategory"], str)
+            and r["SubCategory"].strip().lower() == "consultation paper"
+            else r["Title"],
+            axis=1
+        )
+
     logging.info(f"Processing {len(df)} PDFs across all subcategories")
 
     start = time.time()
@@ -500,6 +699,8 @@ def main(excel_file: str):
     for idx, row in df.iterrows():
         logging.info(f"[{idx+1}/{len(df)}] {row['Path']}")
         processed = process_row_by_domain(row)
+        if processed is None:
+            continue    
         update_excel(processed)
 
     logging.info(f"Completed in {time.time() - start:.2f}s")
