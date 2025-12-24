@@ -220,26 +220,67 @@ CONSULTATION_PAPER_PROMPT = PromptTemplate(
     template="""
 You are a regulatory analyst preparing a client-ready summary of a SEBI consultation paper.
 
-Consultation papers propose changes to regulations and seek public feedback.
+Consultation papers propose concrete regulatory changes and seek public feedback.
 The reader will NOT read the original document.
+
+ABSOLUTE GOAL:
+- After reading the summary, the reader must clearly understand EXACTLY what regulatory areas are proposed to be changed, without opening the document.
+
+CRITICAL READING INSTRUCTION (MANDATORY):
+- The document may describe proposed changes inside tables (for example, columns such as “Current Provision”, “Proposed Change”, “Rationale”).
+- You MUST read and interpret these tables.
+- You MUST summarise the substance of the proposed changes shown in tables.
+- Do NOT repeat section headings such as “certain provisions”; always expand them using the actual table content.
 
 STRICT FORMAT RULES (MANDATORY):
 - Output ONLY black bullet points “•”
 - Do NOT write any paragraph text
-- Do NOT add explanations, objectives, timelines, links, or submission details
+- Do NOT use hyphens (-), sub-bullets, or nested points
 - Write EXACTLY 3 or 4 bullet points
+- Each bullet must be ONE complete sentence
 
 STRUCTURE (MANDATORY):
 - The FIRST bullet MUST start exactly with:
   “SEBI has issued this consultation paper proposing the following changes …”
-- The NEXT bullets must list ONLY the proposed changes or amendments
+- The NEXT bullets must each describe ONE specific proposed regulatory change
 - The FINAL bullet MUST state that SEBI is seeking public comments, views, or suggestions
 
-CONTENT RULES:
-- Focus ONLY on what is proposed to change
-- Do NOT explain why the change is proposed
-- Do NOT mention consultation period, dates, emails, or links
-- Do NOT use clause numbers or legal drafting language
+MANDATORY SENTENCE PATTERN FOR PROPOSED CHANGES (CRITICAL):
+- Every proposed-change bullet MUST follow this structure:
+  “Proposing changes to <specific regulatory area> to <specific nature of the change>.”
+- The <specific regulatory area> MUST be explicitly named, such as:
+  issuance of securities, registration and transfer of securities,
+  disclosure requirements, post-issue compliance,
+  operational and record-keeping requirements under Schedule VII,
+  governance obligations, scope of applicability.
+- Bullets that do NOT clearly name the regulatory area are INVALID and must be rewritten.
+
+SPECIFICITY RULE (NON-NEGOTIABLE):
+- Each proposed-change bullet MUST state BOTH:
+  • what regulatory area is affected, AND
+  • how that area is being changed, based on the document text or tables.
+- Do NOT describe proposals at an abstract, intent-based, or heading-based level.
+
+HARD PROHIBITIONS (STRICTLY ENFORCED):
+- Do NOT use vague or placeholder phrases such as:
+  “certain provisions”, “various changes”, “other measures”,
+  “related aspects”, “market developments”, or “regulatory landscape”.
+- Do NOT copy consultation questions or section titles as summary points.
+- Do NOT frame proposals as questions.
+- Do NOT explain why the change is proposed.
+- Do NOT mention consultation timelines, dates, emails, links,
+  clause numbers, or legal drafting language.
+
+PUBLIC COMMENTS RULE (MANDATORY):
+- The public comments bullet MUST be exactly:
+  “SEBI is seeking public comments, views, or suggestions on the proposed changes.”
+- Do NOT include, paraphrase, or list consultation questions.
+- Do NOT include dates, deadlines, links, URLs, or submission instructions.
+
+QUALITY BAR (MANDATORY SELF-CHECK):
+- If a sentence could make the reader ask “what exactly is changing?”, it is INVALID
+  and MUST be rewritten with concrete detail taken from the document or tables.
+
 
 Text:
 {text}
@@ -287,6 +328,48 @@ Final Summary:
 )
 
 # ============================================================
+# Quality Check
+# ============================================================
+
+SUMMARY_CLEANER_PROMPT = PromptTemplate(
+    template="""
+You are reviewing a generated regulatory summary before final publication.
+
+TASK:
+- Remove any bullet points or sentences that are vague, generic, or non-informative.
+- Keep ONLY bullets that state concrete regulatory actions, obligations, scope, or outcomes.
+- Do NOT rewrite or invent new content.
+- Do NOT add missing details.
+- If a bullet contains vague phrases and no concrete regulatory substance, REMOVE it entirely.
+- If a bullet is concrete and clear, KEEP it unchanged.
+
+VAGUE PHRASES INCLUDE (NON-EXHAUSTIVE):
+- certain provisions
+- various changes
+- other measures
+- related aspects
+- market developments
+- regulatory landscape
+- streamlining processes
+- reviewing provisions
+- considering changes
+
+RULES:
+- Preserve the original bullet formatting.
+- Preserve the original order of remaining bullets.
+- Output ONLY the cleaned summary.
+- If all bullets are valid, return the summary unchanged.
+- If all bullets are vague, return "NA".
+
+Summary to review:
+{summary}
+
+Cleaned Summary:
+""",
+    input_variables=["summary"]
+)
+
+# ============================================================
 # PATHS
 # ============================================================
 
@@ -329,6 +412,18 @@ WEEK_FOLDER = get_week_folder()
 logging.info(f"Weekly folder → {WEEK_FOLDER}")
 
 # ============================================================
+
+def clean_summary_with_llm(summary: str) -> str:
+    if not summary or summary.strip() == "NA":
+        return summary
+
+    cleaned = llm.invoke(
+        SUMMARY_CLEANER_PROMPT.format(summary=summary)
+    ).strip()
+
+    return cleaned or "NA"
+
+# ============================================================
 # PDF EXTRACTION (REGULATIONS-SAFE)
 # ============================================================
 
@@ -356,50 +451,43 @@ def extract_pdf_text(pdf_path: str) -> str:
 
 def extract_regulation_core(text: str) -> str:
     lines = text.splitlines()
-
     keep = []
     capture = False
-
-    CAPTURE_TRIGGERS = [
-        "In exercise of the powers",
-        "regulations may be called",
-        "shall come into force",
-        "CHAPTER",
-        "Amendment",
-        "Inserted",
-        "Substituted",
-        "Omitted"
-    ]
-
-    CONTEXT_KEYWORDS = [
-        "sponsor",
-        "manager",
-        "trustee",
-        "listing",
-        "valuation",
-        "disclosure",
-        "investor protection"
-    ]
 
     for line in lines:
         clean = line.strip()
 
-        if any(k.lower() in clean.lower() for k in CAPTURE_TRIGGERS):
+        if not clean:
+            continue
+
+        # 🔑 Start only at actual regulation body
+        if re.search(r'in exercise of the powers conferred', clean, re.IGNORECASE):
             capture = True
+            continue
 
-        if capture:
-            # Skip pure definition enumerations
-            if re.match(r'^\([a-z]+\)', clean):
-                continue
+        if not capture:
+            continue
 
-            # Keep structural + context-rich lines
-            if (
-                any(k.lower() in clean.lower() for k in CONTEXT_KEYWORDS)
-                or len(clean) > 40
-            ):
-                keep.append(clean)
+        # ❌ Skip amendment history / compilation noise
+        if re.search(
+            r'(first|second|third|fourth|fifth|sixth|seventh|eighth)\s+amendment',
+            clean,
+            re.IGNORECASE
+        ):
+            continue
 
-        if len(keep) > 3000:
+        if re.search(r'as amended upto|as amended up to', clean, re.IGNORECASE):
+            continue
+
+        # ❌ Skip definition-only enumerations
+        if re.match(r'^\([a-z]+\)', clean):
+            continue
+
+        # ✅ Keep real regulatory substance
+        if len(clean) > 40:
+            keep.append(clean)
+
+        if len(keep) >= 2500:
             break
 
     return "\n".join(keep)
@@ -464,7 +552,9 @@ def process_regulation_pdf(row: pd.Series):
         text = extract_pdf_text(pdf_path)
         summary, embedding_text = generate_regulation_summary(text)
 
-        row["Summary"] = summary
+        # row["Summary"] = summary
+        row["Summary"] = clean_summary_with_llm(summary)
+
         row["EmbeddingText"] = embedding_text
 
     except Exception as e:
@@ -513,7 +603,9 @@ def process_circular_pdf(row: pd.Series):
 
         summary = summary.strip().strip('"')
 
-        row["Summary"] = summary or "NA"
+        # row["Summary"] = summary or "NA"
+        row["Summary"] = clean_summary_with_llm(summary)
+
         row["EmbeddingText"] = core_text
 
     except Exception as e:
@@ -537,7 +629,9 @@ def process_press_release_pdf(row: pd.Series):
             PRESS_RELEASE_PROMPT.format(text=core_text)
         ).strip()
 
-        row["Summary"] = summary or "NA"
+        # row["Summary"] = summary or "NA"
+        row["Summary"] = clean_summary_with_llm(summary)
+
         row["EmbeddingText"] = core_text
 
     except Exception as e:
@@ -576,7 +670,9 @@ def process_consultation_paper_pdf(row: pd.Series):
             CONSULTATION_PAPER_PROMPT.format(text=core_text)
         ).strip()
 
-        row["Summary"] = summary or "NA"
+        # row["Summary"] = summary or "NA"
+        row["Summary"] = clean_summary_with_llm(summary)
+
         row["EmbeddingText"] = core_text
 
     except Exception as e:
@@ -629,7 +725,9 @@ def process_master_circular_pdf(row: pd.Series):
         ).strip()
         summary = re.sub(r'https?://\S+', '', summary)
 
-        row["Summary"] = summary or "NA"
+        # row["Summary"] = summary or "NA"
+        row["Summary"] = clean_summary_with_llm(summary) or "NA"
+
         row["EmbeddingText"] = core_text
 
     except Exception as e:

@@ -144,6 +144,40 @@ def extract_detail_links_from_listing(html, base_url):
 
     return links
 
+def is_ignored_sebi_title(title: str) -> bool:
+    """
+    Returns True if SEBI title should be ignored based on business rules.
+    - Most keywords: case-insensitive
+    - KRAs / CRAs: case-sensitive (exact)
+    """
+
+    if not title:
+        return False
+
+    # Case-insensitive keywords
+    ignore_keywords_ci = [
+        "mutual fund",
+        "niveshak shivir",
+        "inauguration",
+        "survey",
+        "municipal bond",
+        "contest",
+        "campaign",
+        "annual report",
+        "newspaper advertisement"
+    ]
+
+    title_lower = title.lower()
+
+    for kw in ignore_keywords_ci:
+        if kw in title_lower:
+            return True
+
+    # Case-sensitive exact checks (DO NOT lowercase)
+    if "KRAs" in title or "CRAs" in title or "KRA" in title or "CRA" in title:
+        return True
+
+    return False
 
 #-------------------------------------------------------
 
@@ -164,6 +198,9 @@ def get_week_range(weeks_back: int = 0):
 
 
 # -------- HELPERS --------
+
+def is_last_amended_title(title: str) -> bool:
+    return "last amended on" in title.lower()
 
 def sanitize_filename(title: str, max_length: int = 100) -> str:
     # 1) Normalize unicode → removes emojis, accents, fancy characters
@@ -501,6 +538,22 @@ async def scrape_sebi(task, week_start, week_end):
         else:
             logging.warning("No title found at %s", detail_url)
             task["title"] = "Untitled"
+    
+    # ---- SKIP "Last amended on" regulations ----
+    if is_last_amended_title(task["title"]):
+        logging.info(
+            "⏭ Skipping regulation (Last amended on): %s",
+            task["title"]
+        )
+        return
+
+    # ---- SKIP non-relevant SEBI PDFs based on title ----
+    if category == "SEBI" and is_ignored_sebi_title(task["title"]):
+        logging.info(
+            "⏭ Skipping SEBI document based on ignore list: %s",
+            task["title"]
+        )
+        return
 
     # ---- Detect nested listing pages ----
     # if "doListing=yes" in detail_url:
@@ -663,7 +716,7 @@ async def scrape_generic_link(task, week_start, week_end):
 #---------------------------------------------------------------------
 
 async def main():
-    weeks_back = 0 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
+    weeks_back = 1 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
     week_start, week_end = get_week_range(weeks_back)
 
     tasks = load_link_tasks_from_excel()
