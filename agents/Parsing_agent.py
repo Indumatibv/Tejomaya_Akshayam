@@ -3,6 +3,7 @@
 # ============================================================
 # REGULATIONS-ONLY PARSING & SUMMARY (TEJOMAYA v1)
 # ============================================================
+from storage.minio_client import MinIOClient
 
 import os
 import re
@@ -38,6 +39,9 @@ logging.info(f"Using device → {device}")
 
 # ---------------------- LLM ----------------------
 llm = Ollama(model="mistral:latest")
+
+# ============================================================
+CREATED_EXCELS = set()
 
 # ============================================================
 # REGULATIONS SUMMARY PROMPT (FINAL, AUTHORITATIVE)
@@ -516,11 +520,37 @@ def generate_regulation_summary(text: str) -> str:
 # EXCEL UPDATE
 # ============================================================
 
+# def update_excel(row: pd.Series):
+#     vertical = row["Verticals"]
+#     sub = row["SubCategory"]
+
+#     excel_path = WEEK_FOLDER / f"{vertical}.xlsx"
+
+#     if excel_path.exists():
+#         wb = load_workbook(excel_path)
+#     else:
+#         wb = Workbook()
+#         wb.remove(wb.active)
+
+#     if sub not in wb.sheetnames:
+#         ws = wb.create_sheet(title=sub)
+#         ws.append(list(row.index))
+#     else:
+#         ws = wb[sub]
+
+#     ws.append([row.get(c, "NA") for c in row.index])
+#     wb.save(excel_path)
+#     wb.close()
+
+#     logging.info(f"Updated Excel → {excel_path} [{sub}]")
+
 def update_excel(row: pd.Series):
     vertical = row["Verticals"]
     sub = row["SubCategory"]
 
     excel_path = WEEK_FOLDER / f"{vertical}.xlsx"
+
+    CREATED_EXCELS.add(excel_path.name)  # 🔑 TRACK OWNERSHIP
 
     if excel_path.exists():
         wb = load_workbook(excel_path)
@@ -537,9 +567,6 @@ def update_excel(row: pd.Series):
     ws.append([row.get(c, "NA") for c in row.index])
     wb.save(excel_path)
     wb.close()
-
-    logging.info(f"Updated Excel → {excel_path} [{sub}]")
-
 
 # ============================================================
 # PROCESS SINGLE PDF (REGULATIONS ONLY)
@@ -802,7 +829,70 @@ def main(excel_file: str):
         update_excel(processed)
 
     logging.info(f"Completed in {time.time() - start:.2f}s")
+    
+    # -------------------------------------------------
+    # ⬇️⬇️⬇️ EXACT PLACE FOR MINIO UPLOAD ⬇️⬇️⬇️
+    # -------------------------------------------------
+    # try:
+    #     minio = MinIOClient()
 
+    #     week_folder_name = WEEK_FOLDER.name
+    #     minio_prefix = f"weekly_outputs/{week_folder_name}"
+        
+    #     # 🔥 MATCH LOCAL BEHAVIOR
+    #     # minio.delete_prefix(minio_prefix)
+    #     minio.delete_week_excels(minio_prefix)
+
+    #     # ⬆️ Upload fresh week folder
+    #     # minio.upload_folder(
+    #     #     local_folder=str(WEEK_FOLDER),
+    #     #     prefix=minio_prefix
+    #     # )
+
+    #     # Upload ONLY Excel files created in this run
+    #     for excel_name in CREATED_EXCELS:
+    #         local_excel = WEEK_FOLDER / excel_name
+    #         object_path = f"{minio_prefix}/{excel_name}"
+
+    #         minio.upload_file(
+    #             local_path=str(local_excel),
+    #             object_path=object_path
+    #         )
+
+    #     logging.info(
+    #         f"Uploaded weekly folder to MinIO → "
+    #         f"bucket={minio.bucket}, prefix={minio_prefix}"
+    #     )
+
+    # except Exception as e:
+    #     logging.error(f"MinIO upload failed: {e}")
+
+    try:
+        minio = MinIOClient()
+
+        week_folder_name = WEEK_FOLDER.name
+        minio_prefix = f"weekly_outputs/{week_folder_name}/"
+
+        # 🔥 HARD RESET week folder
+        minio.delete_prefix(minio_prefix)
+
+        # 🔥 Upload ONLY Excel files created in THIS run
+        for excel_name in CREATED_EXCELS:
+            local_excel = WEEK_FOLDER / excel_name
+            object_path = f"{minio_prefix}{excel_name}"  # ✅ NO DOUBLE SLASH
+
+            minio.upload_file(
+                local_path=str(local_excel),
+                object_path=object_path
+            )
+
+        logging.info(
+            f"Uploaded weekly Excel files to MinIO → "
+            f"bucket={minio.bucket}, prefix={minio_prefix}"
+        )
+
+    except Exception as e:
+        logging.error(f"MinIO upload failed: {e}")
 
 # ============================================================
 # ENTRY
