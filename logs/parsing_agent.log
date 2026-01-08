@@ -489,3 +489,41 @@ Warning: No languages specified, defaulting to English.
 
 
 === Run at 2025-12-08 14:09:35 ===
+Traceback (most recent call last):
+  File "/Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/agents/parsing_agent.py", line 6, in <module>
+    from storage.minio_client import MinIOClient
+ModuleNotFoundError: No module named 'storage'
+
+
+=== Run at 2025-12-29 16:16:39 ===
+2025-12-29 16:24:11,443 [INFO] Using device → cpu
+2025-12-29 16:24:11,445 [INFO] Weekly folder → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/2025-12-22_to_2025-12-28
+2025-12-29 16:24:11,456 [INFO] Processing 2 PDFs across all subcategories
+2025-12-29 16:24:11,456 [INFO] [1/2] /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Circulars/2025/December/1766582923860.pdf
+2025-12-29 16:24:11,481 [INFO] pikepdf C++ to Python logger bridge initialized
+2025-12-29 16:24:45,566 [INFO] [2/2] /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Circulars/2025/December/1766582690382.pdf
+2025-12-29 16:25:08,878 [INFO] Completed in 57.42s
+2025-12-29 16:25:08,933 [INFO] Uploaded weekly Excel files to MinIO → bucket=tejomaya, prefix=weekly_outputs/2025-12-22_to_2025-12-28/
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+
+
+=== Run at 2025-12-29 16:24:02 ===
+2025-12-31 16:10:19,622 [INFO] Using device → cpu
+2025-12-31 16:10:19,624 [INFO] Weekly folder → /Users/admin/ai-questionnaire-project/Akshayam_ETL_scripts/Tejomaya_ETL_pipeline/data/output_excels/2025-12-22_to_2025-12-28
+2025-12-31 16:10:19,633 [INFO] Processing 2 PDFs across all subcategories
+2025-12-31 16:10:19,633 [INFO] [1/2] /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Circulars/2025/December/1766582923860.pdf
+2025-12-31 16:10:19,710 [INFO] pikepdf C++ to Python logger bridge initialized
+2025-12-31 16:10:54,496 [INFO] [2/2] /Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data/SEBI/Circulars/2025/December/1766582690382.pdf
+2025-12-31 16:11:17,706 [INFO] Completed in 58.07s
+2025-12-31 16:11:17,708 [WARNING] Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x17fb6e9e0>: Failed to establish a new connection: [Errno 61] Connection refused')': /tejomaya?location=
+2025-12-31 16:11:18,114 [WARNING] Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x17fb6f280>: Failed to establish a new connection: [Errno 61] Connection refused')': /tejomaya?location=
+2025-12-31 16:11:18,923 [WARNING] Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x17fb6f370>: Failed to establish a new connection: [Errno 61] Connection refused')': /tejomaya?location=
+2025-12-31 16:11:20,526 [WARNING] Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x17fb6d5a0>: Failed to establish a new connection: [Errno 61] Connection refused')': /tejomaya?location=
+2025-12-31 16:11:23,731 [WARNING] Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x17fb6ffa0>: Failed to establish a new connection: [Errno 61] Connection refused')': /tejomaya?location=
+2025-12-31 16:11:23,738 [ERROR] MinIO upload failed: HTTPConnectionPool(host='localhost', port=9000): Max retries exceeded with url: /tejomaya?location= (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x17fb6f460>: Failed to establish a new connection: [Errno 61] Connection refused'))
+Warning: No languages specified, defaulting to English.
+Warning: No languages specified, defaulting to English.
+
+
+=== Run at 2025-12-31 16:10:12 ===

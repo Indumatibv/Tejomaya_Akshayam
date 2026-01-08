@@ -5,6 +5,7 @@
 # =========================================================================
 import sys
 import asyncio
+from matplotlib.pyplot import title
 import nest_asyncio
 import platform
 import os
@@ -40,6 +41,25 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s",
     handlers=[logging.StreamHandler()]
 )
+
+# ---- GLOBAL TITLE TRACKING FOR BSE vs NSE DEDUP ----
+BSE_TITLES_NORMALIZED = set()
+
+def normalize_title_for_compare(title: str) -> str:
+    """
+    Normalize titles for cross-exchange comparison.
+    - lowercase
+    - remove extra spaces
+    - strip punctuation
+    """
+    if not title:
+        return ""
+
+    title = unicodedata.normalize("NFKD", title)
+    title = title.lower()
+    title = re.sub(r'[^a-z0-9\s]', '', title)
+    title = re.sub(r'\s+', ' ', title).strip()
+    return title
 
 # -------- CONFIG --------
 # BASE_URL = "https://www.sebi.gov.in"
@@ -305,6 +325,14 @@ async def scrape_nse(task, week_start, week_end):
             continue
 
         title = cols[0].get_text(strip=True)
+        normalized_title = normalize_title_for_compare(title)
+
+        if normalized_title in BSE_TITLES_NORMALIZED:
+            logging.info(
+                "⏭ Skipping NSE circular (already downloaded from BSE): %s",
+                title
+            )
+            continue
 
         # Extract date
         text = cols[1].get_text(" ", strip=True)
@@ -472,6 +500,7 @@ async def scrape_bse(task, week_start, week_end):
                     "File Name": filename,
                     "Path": final_path
                 })
+                BSE_TITLES_NORMALIZED.add(normalize_title_for_compare(title))
 
                 driver.get(task["url"])
                 time.sleep(1)
@@ -502,6 +531,7 @@ async def scrape_bse(task, week_start, week_end):
                 "File Name": filename,
                 "Path": final_path
             })
+            BSE_TITLES_NORMALIZED.add(normalize_title_for_compare(title))
 
         except Exception as e:
             logging.error("❌ printToPDF failed: %s", e)

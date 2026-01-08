@@ -3,6 +3,15 @@
 # ============================================================
 # REGULATIONS-ONLY PARSING & SUMMARY (TEJOMAYA v1)
 # ============================================================
+#!/usr/bin/env python
+
+import sys
+from pathlib import Path
+
+# ✅ FORCE project root into PYTHONPATH
+BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(BASE_DIR))
+
 from storage.minio_client import MinIOClient
 
 import os
@@ -140,35 +149,40 @@ Final Summary (use ONLY black bullet points “•”):
 # ============================================================
 # CIRCULARS SUMMARY PROMPT
 # ============================================================
-
 CIRCULARS_PROMPT = PromptTemplate(
     template="""
 You are a regulatory analyst writing a short, client-ready summary of a SEBI circular.
 
-SEBI circulars provide clarifications, implementation guidance, or changes to existing requirements.
-The reader will NOT open the original circular, so the summary must tell them clearly what has changed and what they need to know in practice.
+SEBI circulars provide clarifications, implementation guidance, amendments, or new requirements.
+The reader will NOT open the original circular, so the summary must clearly explain what has changed and what the reader needs to know in practice.
 
 CONTENT RULES:
-- Clearly state the main clarification, change, or requirement introduced by the circular in simple language.
-- Mention any key conditions, thresholds, timelines, or applicability (for example, which entities or transactions are covered) only if they are important for compliance.
-- Briefly mention other important informational points instead of using vague phrases like “other details are specified in the circular”.
-- Avoid technical or legal jargon and avoid background or policy rationale unless it directly affects what must be done.
-- Do NOT include circular numbers, SEBI file numbers, internal processes, committee names, venue details, or long legal citations.
+- Clearly state the main clarification, change, amendment, or new requirement introduced by the circular in plain language.
+- Explicitly mention what is NEW or DIFFERENT compared to earlier practice or requirements.
+- Include any key conditions, thresholds, timelines, applicability, or affected entities only if they matter for compliance.
+- Briefly include other important informational points mentioned in the circular if they help the reader understand obligations or impact.
+- Do NOT use vague phrases such as “other details are specified in the circular”; instead, state those details concisely.
+- Avoid background context, policy intent, or legal reasoning unless it directly affects what must be done.
+- Do NOT include circular numbers, file references, email IDs, internal committees, venues, or legal citations.
 
 FORMAT RULES:
-- Output ONLY bullet points (no paragraphs or headings).
+- Output ONLY bullet points (no headings or paragraphs).
 - Use ONLY black bullet points “•”.
 - Write 2 to 4 bullet points in total.
 - Each bullet must be ONE clear, concise sentence.
-- Do NOT use numbering (1., 2., 3.) or sub-bullets.
+- Do NOT use numbering, sub-bullets, or multi-line bullets.
 
 STARTING RULE (MANDATORY):
-- The FIRST bullet MUST start with:
-  “SEBI has issued this circular and …”
+- The FIRST bullet MUST start with one of the following (choose what fits best):
+  “SEBI has issued this circular and introduced …”
+  “SEBI has issued this circular and clarified …”
+  “SEBI has issued this circular and amended …”
+  “SEBI has issued this circular and changed …”
 
 TONE:
-- Plain language and client-facing.
-- Crisp, direct, and easy to understand for non-legal readers.
+- Plain, client-facing language.
+- Simple, direct, and easy to understand for non-legal readers.
+- Avoid technical or regulatory jargon wherever possible.
 
 Text:
 {text}
@@ -177,6 +191,43 @@ Final Summary:
 """,
     input_variables=["text"]
 )
+
+# CIRCULARS_PROMPT = PromptTemplate(
+#     template="""
+# You are a regulatory analyst writing a short, client-ready summary of a SEBI circular.
+
+# SEBI circulars provide clarifications, implementation guidance, or changes to existing requirements.
+# The reader will NOT open the original circular, so the summary must tell them clearly what has changed and what they need to know in practice.
+
+# CONTENT RULES:
+# - Clearly state the main clarification, change, or requirement introduced by the circular in simple language.
+# - Mention any key conditions, thresholds, timelines, or applicability (for example, which entities or transactions are covered) only if they are important for compliance.
+# - Briefly mention other important informational points instead of using vague phrases like “other details are specified in the circular”.
+# - Avoid technical or legal jargon and avoid background or policy rationale unless it directly affects what must be done.
+# - Do NOT include circular numbers, SEBI file numbers, internal processes, committee names, venue details, or long legal citations.
+
+# FORMAT RULES:
+# - Output ONLY bullet points (no paragraphs or headings).
+# - Use ONLY black bullet points “•”.
+# - Write 2 to 4 bullet points in total.
+# - Each bullet must be ONE clear, concise sentence.
+# - Do NOT use numbering (1., 2., 3.) or sub-bullets.
+
+# STARTING RULE (MANDATORY):
+# - The FIRST bullet MUST start with:
+#   “SEBI has issued this circular and …”
+
+# TONE:
+# - Plain language and client-facing.
+# - Crisp, direct, and easy to understand for non-legal readers.
+
+# Text:
+# {text}
+
+# Final Summary:
+# """,
+#     input_variables=["text"]
+# )
 
 # ============================================================
 # PRESS RELEASES SUMMARY PROMPT
