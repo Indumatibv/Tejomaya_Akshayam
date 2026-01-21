@@ -35,6 +35,8 @@ import json
 import re
 import unicodedata
 import time
+from urllib.parse import parse_qs
+
 # ---------------------- Logging ----------------------
 logging.basicConfig(
     level=logging.INFO,
@@ -90,7 +92,7 @@ ALL_DOWNLOADED = []
 LINKS_EXCEL = DATA_DIR / "Links.xlsx"
 
 # Only process these sheet names (categories)
-PROCESS_SHEETS = ["SEBI","Listed Companies"]  # <-- modify based on your file
+PROCESS_SHEETS = ["SEBI", "Listed Companies", "IFSCA"]
 
 #---------------------------------------------------
 
@@ -199,6 +201,24 @@ def is_ignored_sebi_title(title: str) -> bool:
 
     return False
 
+def is_ignored_ifsca_title(title: str) -> bool:
+    """
+    Returns True if IFSCA title should be skipped.
+    Case-insensitive keyword match.
+    """
+    if not title:
+        return False
+
+    ignore_keywords = [
+        "career",
+        "careers",
+        "tender",
+        "tenders",
+    ]
+
+    title_lower = title.lower()
+    return any(kw in title_lower for kw in ignore_keywords)
+
 #-------------------------------------------------------
 
 # -------- WEEK RANGE LOGIC --------
@@ -256,26 +276,82 @@ def ensure_year_month_structure(base_folder: str, category: str, subfolder: str,
     os.makedirs(month_path, exist_ok=True)
     return month_path
 
-async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_path: str) -> str | None:
+# async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_path: str) -> str | None:
+#     try:
+#         filename = os.path.basename(urlparse(pdf_url).path) or sanitize_filename("downloaded.pdf")
+#         file_path = os.path.join(save_path, filename)
+#         if os.path.exists(file_path):
+#             logging.info("Skipping download (exists): %s", file_path)
+#             return file_path
+
+#         async with session.get(pdf_url, timeout=30) as resp:
+#             if resp.status == 200:
+#                 content = await resp.read()
+#                 with open(file_path, "wb") as f:
+#                     f.write(content)
+#                 logging.info("Downloaded PDF: %s", file_path)
+#                 return file_path
+#             else:
+#                 logging.warning("Failed PDF download (%s) for %s", resp.status, pdf_url)
+#     except Exception as e:
+#         logging.exception("Error downloading PDF %s : %s", pdf_url, e)
+#     return None
+
+async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: str, title: str | None = None) -> str | None:
     try:
-        filename = os.path.basename(urlparse(pdf_url).path) or sanitize_filename("downloaded.pdf")
-        file_path = os.path.join(save_path, filename)
+        parsed = urlparse(pdf_url)
+        qs = parse_qs(parsed.query)
+
+        filename = qs.get("fileName", [None])[0]
+        if not filename:
+            filename = sanitize_filename(title or "document")
+
+        if not filename.lower().endswith(".pdf"):
+            filename += ".pdf"
+
+        file_path = os.path.join(save_dir, filename)
+
         if os.path.exists(file_path):
             logging.info("Skipping download (exists): %s", file_path)
             return file_path
 
-        async with session.get(pdf_url, timeout=30) as resp:
-            if resp.status == 200:
-                content = await resp.read()
-                with open(file_path, "wb") as f:
-                    f.write(content)
-                logging.info("Downloaded PDF: %s", file_path)
-                return file_path
-            else:
-                logging.warning("Failed PDF download (%s) for %s", resp.status, pdf_url)
+        headers = {
+            "User-Agent": "Mozilla/5.0",
+            "Accept": "application/pdf",
+            "Referer": "https://ifsca.gov.in/",
+        }
+
+        async with session.get(pdf_url, headers=headers, timeout=60) as resp:
+            if resp.status != 200:
+                logging.warning("IFSCA download failed (%s): %s", resp.status, pdf_url)
+                return None
+
+            data = await resp.read()
+            content_type = resp.headers.get("Content-Type", "").lower()
+
+            # ✅ HARD VALIDATION
+            if not (
+                data[:4] == b"%PDF"
+                or "pdf" in content_type
+                or "octet-stream" in content_type
+            ):
+                logging.error(
+                    "Not a valid PDF. Content-Type=%s URL=%s",
+                    content_type,
+                    pdf_url,
+                )
+                return None
+
+            with open(file_path, "wb") as f:
+                f.write(data)
+
+            logging.info("✔ Valid PDF saved → %s", file_path)
+            return file_path
+
     except Exception as e:
         logging.exception("Error downloading PDF %s : %s", pdf_url, e)
-    return None
+        return None
+
 #-----------------------------------------------------
 
 async def direct_nse_pdf_download(pdf_url: str, save_path: str):
@@ -711,6 +787,135 @@ async def scrape_sebi(task, week_start, week_end):
             "Path": os.path.abspath(file_path)
         })
 
+async def scrape_ifsca(task, week_start, week_end):
+    logging.info("🟢 IFSCA Notifications Scraper → %s", task["url"])
+
+    chrome_opts = webdriver.ChromeOptions()
+    chrome_opts.add_argument("--headless=new")
+    chrome_opts.add_argument("--no-sandbox")
+    chrome_opts.add_argument("--disable-gpu")
+
+    driver = webdriver.Chrome(options=chrome_opts)
+
+    try:
+        driver.get(task["url"])
+
+        # ✅ wait for DataTables rows (NOT just table)
+        WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, "#tblLegalFront tbody tr")
+            )
+        )
+
+        async with aiohttp.ClientSession() as session:
+            page_no = 1
+
+            while True:
+                logging.info("IFSCA scanning page %d", page_no)
+
+                soup = BeautifulSoup(driver.page_source, "html.parser")
+                rows = soup.select("#tblLegalFront tbody tr")
+
+                logging.info("IFSCA rows found on page %d: %d", page_no, len(rows))
+
+                if not rows:
+                    break
+
+                stop_pagination = False
+
+                for row in rows:
+                    try:
+                        date_td = row.select_one('td[data-label="Date"]')
+                        title_td = row.select_one('td[data-label="Title"]')
+                        download_a = row.select_one('td[data-label="Download"] a[href]')
+
+                        if not date_td or not title_td or not download_a:
+                            continue
+
+                        dt = datetime.strptime(
+                            date_td.get_text(strip=True), "%d/%m/%Y"
+                        )
+
+                        # ⛔ table sorted DESC → once older, stop fully
+                        if dt < week_start:
+                            stop_pagination = True
+                            continue
+
+                        if not (week_start <= dt <= week_end):
+                            continue
+
+                        title = title_td.get_text(strip=True)
+
+                        # 🚫 IFSCA title filter
+                        if is_ignored_ifsca_title(title):
+                            logging.info("⏭ Skipping IFSCA (filtered title): %s", title)
+                            continue
+
+                        pdf_url = urljoin(
+                            "https://ifsca.gov.in", download_a["href"]
+                        )
+
+                        year = str(dt.year)
+                        month_full = dt.strftime("%B")
+
+                        save_dir = ensure_year_month_structure(
+                            BASE_PATH,
+                            task["category"],
+                            task["subfolder"],
+                            year,
+                            month_full,
+                        )
+
+                        downloaded_path = await download_pdf(
+                            session, pdf_url, save_dir, title
+                        )
+
+                        if downloaded_path:
+                            ALL_DOWNLOADED.append({
+                                "Verticals": task["category"],
+                                "SubCategory": task["subfolder"],
+                                "Year": year,
+                                "Month": month_full,
+                                "IssueDate": dt.strftime("%Y-%m-%d"),
+                                "Title": title,
+                                "PDF_URL": pdf_url,
+                                "File Name": os.path.basename(downloaded_path),
+                                "Path": os.path.abspath(downloaded_path),
+                            })
+                            logging.info("✔ IFSCA downloaded: %s", title)
+
+                    except Exception as e:
+                        logging.warning("IFSCA row parse error: %s", e)
+
+                if stop_pagination:
+                    logging.info("Reached older IFSCA records. Stopping pagination.")
+                    break
+
+                # ▶️ click NEXT
+                try:
+                    next_btn = driver.find_element(By.ID, "tblLegalFront_next")
+                    if "disabled" in next_btn.get_attribute("class"):
+                        break
+
+                    first_row_text = rows[0].get_text(strip=True)
+                    next_btn.click()
+
+                    WebDriverWait(driver, 15).until_not(
+                        EC.text_to_be_present_in_element(
+                            (By.CSS_SELECTOR, "#tblLegalFront tbody tr"),
+                            first_row_text,
+                        )
+                    )
+
+                    page_no += 1
+
+                except Exception:
+                    break
+
+    finally:
+        driver.quit()
+        logging.info("🟢 IFSCA Notifications → DONE")
+
 
 async def scrape_generic_link(task, week_start, week_end):
     category = task["category"]
@@ -722,7 +927,11 @@ async def scrape_generic_link(task, week_start, week_end):
     # SEBI website (current logic)
     if category == "SEBI":
         return await scrape_sebi(task, week_start, week_end)
-    
+
+    # IFSCA
+    if category == "IFSCA":
+        return await scrape_ifsca(task, week_start, week_end)
+  
     # # COMPANIES ACT (MCA logic)
     # if category == "Companies Act":
     #     return await scrape_mca(task, week_start, week_end)
@@ -743,10 +952,11 @@ async def scrape_generic_link(task, week_start, week_end):
 
     logging.warning("Unknown category: %s", category)
 
+
 #---------------------------------------------------------------------
 
 async def main():
-    weeks_back = 1 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
+    weeks_back = 2 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
     week_start, week_end = get_week_range(weeks_back)
 
     tasks = load_link_tasks_from_excel()

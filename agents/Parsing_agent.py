@@ -271,6 +271,79 @@ Final Summary:
 # CONSULTATION PAPERS SUMMARY PROMPT
 # ============================================================
 
+# CONSULTATION_PAPER_PROMPT = PromptTemplate(
+#     template="""
+# You are a regulatory analyst preparing a client-ready summary of a SEBI consultation paper.
+
+# Consultation papers propose concrete regulatory changes and seek public feedback.
+# The reader will NOT read the original document.
+
+# ABSOLUTE GOAL:
+# - After reading the summary, the reader must clearly understand EXACTLY what regulatory areas are proposed to be changed, without opening the document.
+
+# CRITICAL READING INSTRUCTION (MANDATORY):
+# - The document may describe proposed changes inside tables (for example, columns such as “Current Provision”, “Proposed Change”, “Rationale”).
+# - You MUST read and interpret these tables.
+# - You MUST summarise the substance of the proposed changes shown in tables.
+# - Do NOT repeat section headings such as “certain provisions”; always expand them using the actual table content.
+
+# STRICT FORMAT RULES (MANDATORY):
+# - Output ONLY black bullet points “•”
+# - Do NOT write any paragraph text
+# - Do NOT use hyphens (-), sub-bullets, or nested points
+# - Write EXACTLY 3 or 4 bullet points
+# - Each bullet must be ONE complete sentence
+
+# STRUCTURE (MANDATORY):
+# - The FIRST bullet MUST start exactly with:
+#   “SEBI has issued this consultation paper proposing the following changes …”
+# - The NEXT bullets must each describe ONE specific proposed regulatory change
+# - The FINAL bullet MUST state that SEBI is seeking public comments, views, or suggestions
+
+# MANDATORY SENTENCE PATTERN FOR PROPOSED CHANGES (CRITICAL):
+# - Every proposed-change bullet MUST follow this structure:
+#   “Proposing changes to <specific regulatory area> to <specific nature of the change>.”
+# - The <specific regulatory area> MUST be explicitly named, such as:
+#   issuance of securities, registration and transfer of securities,
+#   disclosure requirements, post-issue compliance,
+#   operational and record-keeping requirements under Schedule VII,
+#   governance obligations, scope of applicability.
+# - Bullets that do NOT clearly name the regulatory area are INVALID and must be rewritten.
+
+# SPECIFICITY RULE (NON-NEGOTIABLE):
+# - Each proposed-change bullet MUST state BOTH:
+#   • what regulatory area is affected, AND
+#   • how that area is being changed, based on the document text or tables.
+# - Do NOT describe proposals at an abstract, intent-based, or heading-based level.
+
+# HARD PROHIBITIONS (STRICTLY ENFORCED):
+# - Do NOT use vague or placeholder phrases such as:
+#   “certain provisions”, “various changes”, “other measures”,
+#   “related aspects”, “market developments”, or “regulatory landscape”.
+# - Do NOT copy consultation questions or section titles as summary points.
+# - Do NOT frame proposals as questions.
+# - Do NOT explain why the change is proposed.
+# - Do NOT mention consultation timelines, dates, emails, links,
+#   clause numbers, or legal drafting language.
+
+# PUBLIC COMMENTS RULE (MANDATORY):
+# - The public comments bullet MUST be exactly:
+#   “SEBI is seeking public comments, views, or suggestions on the proposed changes.”
+# - Do NOT include, paraphrase, or list consultation questions.
+# - Do NOT include dates, deadlines, links, URLs, or submission instructions.
+
+# QUALITY BAR (MANDATORY SELF-CHECK):
+# - If a sentence could make the reader ask “what exactly is changing?”, it is INVALID
+#   and MUST be rewritten with concrete detail taken from the document or tables.
+
+
+# Text:
+# {text}
+
+# Final Summary (use ONLY black bullet points “•”):
+# """,
+#     input_variables=["text"]
+# )
 CONSULTATION_PAPER_PROMPT = PromptTemplate(
     template="""
 You are a regulatory analyst preparing a client-ready summary of a SEBI consultation paper.
@@ -279,7 +352,7 @@ Consultation papers propose concrete regulatory changes and seek public feedback
 The reader will NOT read the original document.
 
 ABSOLUTE GOAL:
-- After reading the summary, the reader must clearly understand EXACTLY what regulatory areas are proposed to be changed, without opening the document.
+- After reading the summary, the reader must clearly understand EXACTLY what regulatory areas are proposed to be changed and the objective of the consultation, without opening the document.
 
 CRITICAL READING INSTRUCTION (MANDATORY):
 - The document may describe proposed changes inside tables (for example, columns such as “Current Provision”, “Proposed Change”, “Rationale”).
@@ -291,14 +364,18 @@ STRICT FORMAT RULES (MANDATORY):
 - Output ONLY black bullet points “•”
 - Do NOT write any paragraph text
 - Do NOT use hyphens (-), sub-bullets, or nested points
-- Write EXACTLY 3 or 4 bullet points
+- Write EXACTLY 4 bullet points
 - Each bullet must be ONE complete sentence
 
 STRUCTURE (MANDATORY):
 - The FIRST bullet MUST start exactly with:
   “SEBI has issued this consultation paper proposing the following changes …”
-- The NEXT bullets must each describe ONE specific proposed regulatory change
-- The FINAL bullet MUST state that SEBI is seeking public comments, views, or suggestions
+- The SECOND bullet MUST clearly state the OBJECTIVE of the consultation paper,
+  explicitly describing what SEBI aims to achieve (for example, improving trading
+  processes at stock exchanges, strengthening compliance, enhancing transparency, etc.)
+- The THIRD bullet MUST describe ONE specific proposed regulatory change
+- The FOURTH (FINAL) bullet MUST state that SEBI is seeking public comments AND
+  MUST include the deadline for submitting comments, if mentioned in the document
 
 MANDATORY SENTENCE PATTERN FOR PROPOSED CHANGES (CRITICAL):
 - Every proposed-change bullet MUST follow this structure:
@@ -309,6 +386,12 @@ MANDATORY SENTENCE PATTERN FOR PROPOSED CHANGES (CRITICAL):
   operational and record-keeping requirements under Schedule VII,
   governance obligations, scope of applicability.
 - Bullets that do NOT clearly name the regulatory area are INVALID and must be rewritten.
+
+OBJECTIVE EXTRACTION RULE (MANDATORY):
+- The objective bullet MUST be derived from the document’s stated purpose,
+  background, or explanatory sections.
+- Do NOT restate headings such as “Objective of the Consultation Paper”.
+- Do NOT use vague intent statements; the objective must be concrete and specific.
 
 SPECIFICITY RULE (NON-NEGOTIABLE):
 - Each proposed-change bullet MUST state BOTH:
@@ -323,19 +406,19 @@ HARD PROHIBITIONS (STRICTLY ENFORCED):
 - Do NOT copy consultation questions or section titles as summary points.
 - Do NOT frame proposals as questions.
 - Do NOT explain why the change is proposed.
-- Do NOT mention consultation timelines, dates, emails, links,
-  clause numbers, or legal drafting language.
+- Do NOT include emails, URLs, submission instructions, clause numbers,
+  or legal drafting language.
 
-PUBLIC COMMENTS RULE (MANDATORY):
-- The public comments bullet MUST be exactly:
-  “SEBI is seeking public comments, views, or suggestions on the proposed changes.”
-- Do NOT include, paraphrase, or list consultation questions.
-- Do NOT include dates, deadlines, links, URLs, or submission instructions.
+PUBLIC COMMENTS & DEADLINE RULE (MANDATORY):
+- The final bullet MUST:
+  • state that SEBI is seeking public comments, views, or suggestions, AND
+  • explicitly mention the deadline for submitting comments if provided.
+- If the deadline is NOT mentioned in the document, state only that
+  SEBI is seeking public comments without inventing a date.
 
 QUALITY BAR (MANDATORY SELF-CHECK):
-- If a sentence could make the reader ask “what exactly is changing?”, it is INVALID
-  and MUST be rewritten with concrete detail taken from the document or tables.
-
+- If a sentence could make the reader ask “what exactly is changing or being achieved?”,
+  it is INVALID and MUST be rewritten with concrete detail taken from the document or tables.
 
 Text:
 {text}
@@ -383,6 +466,71 @@ Final Summary:
 )
 
 # ============================================================
+# NOTIFICATIONS SUMMARY PROMPT
+# ============================================================
+
+NOTIFICATIONS_PROMPT = PromptTemplate(
+    template="""
+You are a regulatory analyst preparing a short, client-ready summary of an IFSCA notification.
+
+SUB-DOMAIN: Notifications
+
+ABOUT:
+IFSCA notifications are official announcements that introduce new rules, amendments, designations,
+exemptions, or regulatory clarifications.
+
+The reader will NOT open the original notification.
+The summary must give a clear understanding of:
+• what the notification does,
+• why it was issued,
+• when it applies, and
+• who is impacted.
+
+MANDATORY STARTING RULE:
+- The summary MUST start exactly with:
+  “This notification dated <issuance date> notifies …”
+- If the exact issuance date is clearly available in the text, use it.
+- If not clearly available, write:
+  “This notification notifies …” (without a date).
+
+CONTENT RULES (STRICT):
+- Clearly state the key regulatory action taken (e.g., designation, amendment, inclusion, exemption, clarification).
+- Briefly explain the purpose or regulatory intent only if it helps understanding.
+- Explicitly mention:
+  • applicability (who or what is covered), and
+  • effective date (publication date or stated effective date), if mentioned.
+- Focus on regulatory impact and compliance relevance.
+- Summarise substance, NOT drafting mechanics.
+
+DETAILS TO IGNORE (MUST NOT APPEAR):
+- Internal circulation notes
+- Annexure references or page numbers
+- Signatures and sign-off blocks
+- Email IDs, phone numbers, URLs
+- File numbers, notification numbers, Gazette references
+- Irrelevant numerical references
+
+FORMAT RULES (MANDATORY):
+- Output ONLY black bullet points “•”
+- Write EXACTLY 2 or 3 bullet points
+- Each bullet must be ONE clear sentence
+- No headings, no numbering, no sub-bullets
+- No quotes
+
+STYLE:
+- Plain, professional, client-facing
+- No legal jargon
+- Concise and scannable
+
+Text:
+{text}
+
+Final Summary (use ONLY black bullet points “•”):
+""",
+    input_variables=["text"]
+)
+
+# ============================================================
 # Quality Check
 # ============================================================
 
@@ -408,6 +556,18 @@ VAGUE PHRASES INCLUDE (NON-EXHAUSTIVE):
 - streamlining processes
 - reviewing provisions
 - considering changes
+- details are available on the website
+- information can be accessed online
+- uploaded details found on the website
+- refer to the attached document
+- further details are provided below
+- further information is available
+
+ALSO REMOVE BULLETS THAT ONLY CONTAIN:
+- venue, location, or event details
+- protocol, inauguration, or ceremonial references
+- names or presence of officials without any regulatory decision
+- background or contextual information that does not affect the substance of the decision
 
 RULES:
 - Preserve the original bullet formatting.
@@ -817,6 +977,36 @@ def process_master_circular_pdf(row: pd.Series):
 
 # ============================================================
 
+def is_notification(subcategory: str) -> bool:
+    if not isinstance(subcategory, str):
+        return False
+    return subcategory.strip().lower() == "notifications"
+
+def process_notification_pdf(row: pd.Series):
+    pdf_path = Path(row["Path"])
+
+    try:
+        text = extract_pdf_text(pdf_path)
+
+        # Notifications are short → no regulation-style filtering
+        core_text = text[:8000]
+
+        summary = llm.invoke(
+            NOTIFICATIONS_PROMPT.format(text=core_text)
+        ).strip()
+
+        row["Summary"] = clean_summary_with_llm(summary)
+        row["EmbeddingText"] = core_text
+
+    except Exception as e:
+        logging.error(f"Failed → {pdf_path}: {e}")
+        row["Summary"] = "NA"
+        row["EmbeddingText"] = "NA"
+
+    return row
+
+# ============================================================
+
 def process_row_by_domain(row: pd.Series):
     sub = row["SubCategory"]
 
@@ -841,6 +1031,9 @@ def process_row_by_domain(row: pd.Series):
 
     elif sub_clean == "consultation paper":
         return process_consultation_paper_pdf(row)
+    
+    elif is_notification(sub_clean):
+        return process_notification_pdf(row)
 
     else:
         logging.info(f"Skipping SubCategory → {sub}")
