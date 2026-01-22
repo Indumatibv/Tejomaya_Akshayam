@@ -161,7 +161,7 @@ CONTENT RULES:
 - Explicitly mention what is NEW or DIFFERENT compared to earlier practice or requirements.
 - Include any key conditions, thresholds, timelines, applicability, or affected entities only if they matter for compliance.
 - Briefly include other important informational points mentioned in the circular if they help the reader understand obligations or impact.
-- Do NOT use vague phrases such as “other details are specified in the circular”; instead, state those details concisely.
+- Do NOT use vague phrases such as “other details are specified in the circular or website”; instead, state those details concisely.
 - Avoid background context, policy intent, or legal reasoning unless it directly affects what must be done.
 - Do NOT include circular numbers, file references, email IDs, internal committees, venues, or legal citations.
 
@@ -562,6 +562,11 @@ VAGUE PHRASES INCLUDE (NON-EXHAUSTIVE):
 - refer to the attached document
 - further details are provided below
 - further information is available
+- Circulars can be accessed 
+- Legal - > Circulars
+- Legal - &gt; Circulars
+- website under the link
+- www.sebi.gov.in
 
 ALSO REMOVE BULLETS THAT ONLY CONTAIN:
 - venue, location, or event details
@@ -1143,8 +1148,8 @@ def main(excel_file: str):
 # ============================================================
 
 if __name__ == "__main__":
-    excel = DATA_DIR / "weekly_sebi_downloads.xlsx"
+    excel = DATA_DIR / "Searching_agent_output.xlsx"
     if not excel.exists():
-        raise FileNotFoundError("weekly_sebi_downloads.xlsx not found")
+        raise FileNotFoundError("Searching_agent_output.xlsx not found")
 
     main(excel)

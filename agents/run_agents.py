@@ -22,7 +22,7 @@ PARSE_AGENT = str(BASE_DIR / "agents" / "parsing_agent.py")
 SEARCH_LOG = str(LOG_DIR / "searching_agent.log")
 PARSE_LOG = str(LOG_DIR / "parsing_agent.log")
 
-EXCEL_OUTPUT = BASE_DIR / "data" / "weekly_sebi_downloads.xlsx"
+EXCEL_OUTPUT = BASE_DIR / "data" / "Searching_agent_output.xlsx"
 
 
 def run_process(script_path, log_path):
