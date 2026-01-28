@@ -71,7 +71,7 @@ def normalize_title_for_compare(title: str) -> str:
 
 # Where PDFs should be stored (keep as-is: your Downloads path)
 if platform.system() == "Windows":
-    BASE_PATH = r"C:\Users\Admin\Downloads\Tejomaya_pdfs\Akshayam Data"
+    BASE_PATH = r"C:\Users\Admin\Desktop\Indu\Tejomaya\Tejomaya_pdfs\Akshayam Data"
 else:
     BASE_PATH = "/Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data"
 
