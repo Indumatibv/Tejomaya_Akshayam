@@ -1,56 +1,40 @@
-from playwright.sync_api import sync_playwright
-from bs4 import BeautifulSoup
-import json
-import time
+import asyncio
+from playwright.async_api import async_playwright
 
-URL = "https://www.mca.gov.in/content/mca/global/en/application-history.html"
+TARGET = "https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/notifications.html"
 
-def scrape_mca_page(url: str):
-    with sync_playwright() as p:
-        browser = p.chromium.launch(
-            headless=False,   # IMPORTANT: keep visible
-            args=["--start-maximized"]
+async def main():
+    async with async_playwright() as p:
+        browser = await p.chromium.launch_persistent_context(
+            user_data_dir="/tmp/mca-profile-2",
+            headless=False,
+            viewport={"width": 1920, "height": 1080},
+            timezone_id="Asia/Kolkata",
+            args=["--disable-blink-features=AutomationControlled"]
         )
 
-        context = browser.new_context(
-            locale="en-US",
-            user_agent=(
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/143.0.0.0 Safari/537.36"
+        page = await browser.new_page()
+        await page.goto(TARGET, wait_until="networkidle")
+        await page.wait_for_timeout(4000)
+
+        print("PAGE TITLE:", await page.title())
+
+        pdf_links = await page.query_selector_all(
+            'a[href*="getdocument"]'
+        )
+
+        print("TOTAL PDF LINKS FOUND:", len(pdf_links))
+        print("-" * 60)
+
+        for i, link in enumerate(pdf_links[:5], start=1):
+            container = await link.evaluate_handle(
+                "el => el.closest('tr, div, li')"
             )
-        )
+            text = await container.evaluate("el => el.innerText")
+            print(f"[{i}]")
+            print(text.strip())
+            print("-" * 60)
 
-        page = context.new_page()
+        await browser.close()
 
-        print("Opening MCA page...")
-        page.goto(url, wait_until="networkidle")
-
-        # Give MCA JS time
-        time.sleep(5)
-
-        print("Page title:", page.title())
-
-        html = page.content()
-        soup = BeautifulSoup(html, "html.parser")
-
-        blocks = soup.select("div.cmp-text")
-
-        paragraphs = []
-        for b in blocks:
-            text = b.get_text(" ", strip=True)
-            if text:
-                paragraphs.append(text)
-
-        browser.close()
-
-        return paragraphs
-
-
-if __name__ == "__main__":
-    content = scrape_mca_page(URL)
-
-    print(f"\nExtracted {len(content)} blocks\n")
-    for i, para in enumerate(content, 1):
-        print(f"[{i}] {para}")
-        print("-" * 90)
+asyncio.run(main())

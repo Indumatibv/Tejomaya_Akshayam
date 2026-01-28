@@ -1,3 +1,6 @@
+# conda activate tejomaya 
+# python -m agents.Parsing_agent
+
 #!/usr/bin/env python
 # agents/parsing_agent.py
 # ============================================================
@@ -27,7 +30,11 @@ import torch
 import warnings
 import time
 
-from langchain.llms import Ollama
+# from langchain.llms import Ollama
+from langchain_community.llms import Ollama
+
+#from langchain_ollama import OllamaLLM
+
 from langchain.prompts import PromptTemplate
 
 # ---------------------- Logging ----------------------
@@ -42,10 +49,19 @@ load_dotenv()
 
 # ---------------------- GPU Detection ----------------------
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-os.environ["OLLAMA_USE_GPU"] = "1" if device.type == "cuda" else "0"
+if device.type == "cuda":
+    os.environ["OLLAMA_USE_GPU"] = "1"
+    os.environ["OLLAMA_NUM_GPU_LAYERS"] = "35"
+    print(f"Using GPU: {torch.cuda.get_device_name(0)}")
+else:
+    os.environ["OLLAMA_USE_GPU"] = "0"  
+    print("Using CPU")  
 
-logging.info(f"Using device → {device}")
-
+ # 👇 ADD THIS FUNCTION HERE (after GPU detection block)
+# def print_device_usage(operation: str):
+#     device_name = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU"
+#     gpu_layers = os.environ.get("OLLAMA_NUM_GPU_LAYERS", "0")
+#     print(f"🔧 [{operation}] Using {device_name} (GPU layers: {gpu_layers})")
 # ---------------------- LLM ----------------------
 llm = Ollama(model="mistral:latest")
 
@@ -279,7 +295,7 @@ Final Summary:
 # The reader will NOT read the original document.
 
 # ABSOLUTE GOAL:
-# - After reading the summary, the reader must clearly understand EXACTLY what regulatory areas are proposed to be changed, without opening the document.
+# - After reading the summary, the reader must clearly understand EXACTLY what regulatory areas are proposed to be changed and the objective of the consultation paper, without opening the document.
 
 # CRITICAL READING INSTRUCTION (MANDATORY):
 # - The document may describe proposed changes inside tables (for example, columns such as “Current Provision”, “Proposed Change”, “Rationale”).
@@ -465,6 +481,7 @@ Final Summary:
     input_variables=["text"]
 )
 
+
 # ============================================================
 # NOTIFICATIONS SUMMARY PROMPT
 # ============================================================
@@ -534,6 +551,44 @@ Final Summary (use ONLY black bullet points “•”):
 # Quality Check
 # ============================================================
 
+# SUMMARY_CLEANER_PROMPT = PromptTemplate(
+#     template="""
+# You are reviewing a generated regulatory summary before final publication.
+
+# TASK:
+# - Remove any bullet points or sentences that are vague, generic, or non-informative.
+# - Keep ONLY bullets that state concrete regulatory actions, obligations, scope, or outcomes.
+# - Do NOT rewrite or invent new content.
+# - Do NOT add missing details.
+# - If a bullet contains vague phrases and no concrete regulatory substance, REMOVE it entirely.
+# - If a bullet is concrete and clear, KEEP it unchanged.
+
+# VAGUE PHRASES INCLUDE (NON-EXHAUSTIVE):
+# - certain provisions
+# - various changes
+# - other measures
+# - related aspects
+# - market developments
+# - regulatory landscape
+# - streamlining processes
+# - reviewing provisions
+# - considering changes
+
+# RULES:
+# - Preserve the original bullet formatting.
+# - Preserve the original order of remaining bullets.
+# - Output ONLY the cleaned summary.
+# - If all bullets are valid, return the summary unchanged.
+# - If all bullets are vague, return "NA".
+
+# Summary to review:
+# {summary}
+
+# Cleaned Summary:
+# """,
+#     input_variables=["summary"]
+# )
+
 SUMMARY_CLEANER_PROMPT = PromptTemplate(
     template="""
 You are reviewing a generated regulatory summary before final publication.
@@ -588,7 +643,6 @@ Cleaned Summary:
 """,
     input_variables=["summary"]
 )
-
 # ============================================================
 # PATHS
 # ============================================================
@@ -662,7 +716,7 @@ def extract_pdf_text(pdf_path: str) -> str:
         text = "\n".join(str(el) for el in raw if el).strip()
 
     return text
-
+    
 
 # ============================================================
 # REGULATIONS TEXT FILTERING
@@ -680,7 +734,7 @@ def extract_regulation_core(text: str) -> str:
         if not clean:
             continue
 
-        # 🔑 Start only at actual regulation body
+        #  Start only at actual regulation body
         if re.search(r'in exercise of the powers conferred', clean, re.IGNORECASE):
             capture = True
             continue
@@ -688,7 +742,7 @@ def extract_regulation_core(text: str) -> str:
         if not capture:
             continue
 
-        # ❌ Skip amendment history / compilation noise
+        #  Skip amendment history / compilation noise
         if re.search(
             r'(first|second|third|fourth|fifth|sixth|seventh|eighth)\s+amendment',
             clean,
@@ -699,11 +753,11 @@ def extract_regulation_core(text: str) -> str:
         if re.search(r'as amended upto|as amended up to', clean, re.IGNORECASE):
             continue
 
-        # ❌ Skip definition-only enumerations
+        #  Skip definition-only enumerations
         if re.match(r'^\([a-z]+\)', clean):
             continue
 
-        # ✅ Keep real regulatory substance
+        #  Keep real regulatory substance
         if len(clean) > 40:
             keep.append(clean)
 
@@ -736,37 +790,13 @@ def generate_regulation_summary(text: str) -> str:
 # EXCEL UPDATE
 # ============================================================
 
-# def update_excel(row: pd.Series):
-#     vertical = row["Verticals"]
-#     sub = row["SubCategory"]
-
-#     excel_path = WEEK_FOLDER / f"{vertical}.xlsx"
-
-#     if excel_path.exists():
-#         wb = load_workbook(excel_path)
-#     else:
-#         wb = Workbook()
-#         wb.remove(wb.active)
-
-#     if sub not in wb.sheetnames:
-#         ws = wb.create_sheet(title=sub)
-#         ws.append(list(row.index))
-#     else:
-#         ws = wb[sub]
-
-#     ws.append([row.get(c, "NA") for c in row.index])
-#     wb.save(excel_path)
-#     wb.close()
-
-#     logging.info(f"Updated Excel → {excel_path} [{sub}]")
-
 def update_excel(row: pd.Series):
     vertical = row["Verticals"]
     sub = row["SubCategory"]
 
     excel_path = WEEK_FOLDER / f"{vertical}.xlsx"
 
-    CREATED_EXCELS.add(excel_path.name)  # 🔑 TRACK OWNERSHIP
+    CREATED_EXCELS.add(excel_path.name)  #  TRACK OWNERSHIP
 
     if excel_path.exists():
         wb = load_workbook(excel_path)
@@ -816,14 +846,14 @@ def is_circular(subcategory: str) -> bool:
     # Normalize
     sub = subcategory.strip().lower()
 
-    # ❌ Explicitly exclude Master Circulars
+    #  Explicitly exclude Master Circulars
     if "master circular" in sub:
         return False
 
     # Normalize spacing around hyphens (e.g., "circular - bse" → "circular-bse")
     sub = re.sub(r'\s*-\s*', '-', sub)
 
-    # ✅ Allow only standard circular variants
+    #  Allow only standard circular variants
     return sub in {
         "circular",
         "circulars",
@@ -960,7 +990,7 @@ def process_master_circular_pdf(row: pd.Series):
     try:
         text = extract_pdf_text(pdf_path)
 
-        # 🔑 Only intro part, not full document
+        #  Only intro part, not full document
         core_text = extract_master_circular_core(text)
 
         summary = llm.invoke(
@@ -1021,7 +1051,7 @@ def process_row_by_domain(row: pd.Series):
 
     sub_clean = sub.strip().lower()
 
-    # ✅ Master Circular FIRST (important)
+    #  Master Circular FIRST (important)
     if is_master_circular(sub_clean):
         return process_master_circular_pdf(row)
 
@@ -1080,41 +1110,8 @@ def main(excel_file: str):
     logging.info(f"Completed in {time.time() - start:.2f}s")
     
     # -------------------------------------------------
-    # ⬇️⬇️⬇️ EXACT PLACE FOR MINIO UPLOAD ⬇️⬇️⬇️
+    # EXACT PLACE FOR MINIO UPLOAD 
     # -------------------------------------------------
-    # try:
-    #     minio = MinIOClient()
-
-    #     week_folder_name = WEEK_FOLDER.name
-    #     minio_prefix = f"weekly_outputs/{week_folder_name}"
-        
-    #     # 🔥 MATCH LOCAL BEHAVIOR
-    #     # minio.delete_prefix(minio_prefix)
-    #     minio.delete_week_excels(minio_prefix)
-
-    #     # ⬆️ Upload fresh week folder
-    #     # minio.upload_folder(
-    #     #     local_folder=str(WEEK_FOLDER),
-    #     #     prefix=minio_prefix
-    #     # )
-
-    #     # Upload ONLY Excel files created in this run
-    #     for excel_name in CREATED_EXCELS:
-    #         local_excel = WEEK_FOLDER / excel_name
-    #         object_path = f"{minio_prefix}/{excel_name}"
-
-    #         minio.upload_file(
-    #             local_path=str(local_excel),
-    #             object_path=object_path
-    #         )
-
-    #     logging.info(
-    #         f"Uploaded weekly folder to MinIO → "
-    #         f"bucket={minio.bucket}, prefix={minio_prefix}"
-    #     )
-
-    # except Exception as e:
-    #     logging.error(f"MinIO upload failed: {e}")
 
     try:
         minio = MinIOClient()
@@ -1122,10 +1119,10 @@ def main(excel_file: str):
         week_folder_name = WEEK_FOLDER.name
         minio_prefix = f"weekly_outputs/{week_folder_name}/"
 
-        # 🔥 HARD RESET week folder
+        #  HARD RESET week folder
         minio.delete_prefix(minio_prefix)
 
-        # 🔥 Upload ONLY Excel files created in THIS run
+        #  Upload ONLY Excel files created in THIS run
         for excel_name in CREATED_EXCELS:
             local_excel = WEEK_FOLDER / excel_name
             object_path = f"{minio_prefix}{excel_name}"  # ✅ NO DOUBLE SLASH
