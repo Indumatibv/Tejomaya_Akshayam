@@ -17,7 +17,7 @@ if sys.platform.startswith("win"):
 # =========================================================================
 
 import logging
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin, parse_qs, unquote, urlparse
 from crawl4ai import AsyncWebCrawler
 from bs4 import BeautifulSoup
 import aiohttp
@@ -32,10 +32,10 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import json
-import re
+
 import unicodedata
-import time
-from urllib.parse import parse_qs
+
+import hashlib
 
 # ---------------------- Logging ----------------------
 logging.basicConfig(
@@ -63,11 +63,23 @@ def normalize_title_for_compare(title: str) -> str:
     title = re.sub(r'\s+', ' ', title).strip()
     return title
 
+def safe_pdf_filename(title: str | None, pdf_url: str, max_base_len: int = 80) -> str:
+    """
+    Generates a filesystem-safe, collision-proof PDF filename.
+    """
+    if title:
+        base = sanitize_filename(title).replace(".pdf", "")
+    else:
+        base = os.path.basename(urlparse(pdf_url).path).replace(".pdf", "")
+
+    base = base[:max_base_len].rstrip("_")
+
+    # stable short hash (URL-based)
+    h = hashlib.sha1(pdf_url.encode("utf-8")).hexdigest()[:8]
+
+    return f"{base}_{h}.pdf"
+
 # -------- CONFIG --------
-# BASE_URL = "https://www.sebi.gov.in"
-# LISTING_URL = "https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=6&ssid=23&smid=0"
-# CATEGORY = "SEBI"
-# SUBFOLDER = "Press Release"
 
 # Where PDFs should be stored (keep as-is: your Downloads path)
 if platform.system() == "Windows":
@@ -166,6 +178,20 @@ def extract_detail_links_from_listing(html, base_url):
 
     return links
 
+def extract_sebi_pdf_from_iframe(iframe_src: str, page_url: str) -> str | None:
+    if not iframe_src:
+        return None
+
+    iframe_src = urljoin(page_url, iframe_src)
+    parsed = urlparse(iframe_src)
+    qs = parse_qs(parsed.query)
+
+    pdf = qs.get("file", [None])[0]
+    if not pdf:
+        return None
+
+    return unquote(pdf)
+
 def is_ignored_sebi_title(title: str) -> bool:
     """
     Returns True if SEBI title should be ignored based on business rules.
@@ -239,8 +265,25 @@ def get_week_range(weeks_back: int = 0):
 
 # -------- HELPERS --------
 
+# def is_last_amended_title(title: str) -> bool:
+#     return "last amended on" in title.lower()
+
 def is_last_amended_title(title: str) -> bool:
-    return "last amended on" in title.lower()
+    """
+    Ignore SEBI amendment-only titles.
+    Handles NBSPs, spacing, and punctuation variations.
+    """
+    if not title:
+        return False
+
+    # normalize unicode + spaces
+    t = unicodedata.normalize("NFKD", title).lower()
+    t = re.sub(r"\s+", " ", t)  # collapse all whitespace
+
+    return (
+        "last amended on" in t
+        or "amended as on" in t
+    )
 
 def sanitize_filename(title: str, max_length: int = 100) -> str:
     # 1) Normalize unicode -> removes emojis, accents, fancy characters
@@ -302,18 +345,38 @@ async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: s
         parsed = urlparse(pdf_url)
         qs = parse_qs(parsed.query)
 
-        filename = qs.get("fileName", [None])[0]
-        if not filename:
-            filename = sanitize_filename(title or "document")
+        # filename = qs.get("fileName", [None])[0]
+        # if not filename:
+        #     filename = sanitize_filename(title or "document")
 
-        if not filename.lower().endswith(".pdf"):
-            filename += ".pdf"
+        # filename = qs.get("fileName", [None])[0]
+
+        # if not filename:
+        #     if title:
+        #         filename = sanitize_filename(title)
+        #     else:
+        #         filename = os.path.basename(urlparse(pdf_url).path)
+
+        # if not filename.lower().endswith(".pdf"):
+        #     filename += ".pdf"
+
+        # if not filename.lower().endswith(".pdf"):
+        #     filename += ".pdf"
+
+
+        filename = qs.get("fileName", [None])[0]
+
+        if not filename:
+            filename = safe_pdf_filename(title, pdf_url)
 
         file_path = os.path.join(save_dir, filename)
 
         if os.path.exists(file_path):
-            logging.info("Skipping download (exists): %s", file_path)
-            return file_path
+            logging.warning("Overwriting existing file: %s", file_path)
+
+        # if os.path.exists(file_path):
+        #     logging.info("Skipping download (exists): %s", file_path)
+        #     return file_path
 
         headers = {
             "User-Agent": "Mozilla/5.0",
@@ -444,7 +507,9 @@ async def scrape_nse(task, week_start, week_end):
             BASE_PATH, task["category"], task["subfolder"], year, month_full
         )
 
-        filename = sanitize_filename(title)
+        # filename = sanitize_filename(title)
+        filename = safe_pdf_filename(title, pdf_url)
+
         file_path = os.path.join(save_dir, filename)
 
         success = await direct_nse_pdf_download(pdf_url, file_path)
@@ -540,7 +605,9 @@ async def scrape_bse(task, week_start, week_end):
         save_dir = ensure_year_month_structure(
             BASE_PATH, task["category"], task["subfolder"], year, month_full
         )
-        filename = sanitize_filename(title)
+        # filename = sanitize_filename(title)
+        filename = safe_pdf_filename(title, detail_link)
+
         final_path = os.path.join(save_dir, filename)
 
         # ---- CHECK FOR ATTACHMENT ----
@@ -722,24 +789,46 @@ async def scrape_sebi(task, week_start, week_end):
     )
 
     # ---- Detect PDF ----
+    # pdf_url = None
+    # iframe = soup_detail.select_one("iframe")
+    # pdf_btn = soup_detail.select_one("button#download")
+
+    # if iframe and "file=" in iframe.get("src", ""):
+    #     pdf_url = iframe["src"].split("file=")[-1]
+    #     if not pdf_url.startswith("http"):
+    #         pdf_url = urljoin(detail_url, pdf_url)
+
+    # elif pdf_btn:
+    #     pdf_url = detail_url.replace(".html", ".pdf")
+
     pdf_url = None
+
     iframe = soup_detail.select_one("iframe")
-    pdf_btn = soup_detail.select_one("button#download")
+    if iframe:
+        pdf_url = extract_sebi_pdf_from_iframe(
+            iframe.get("src"),
+            detail_url
+        )
 
-    if iframe and "file=" in iframe.get("src", ""):
-        pdf_url = iframe["src"].split("file=")[-1]
-        if not pdf_url.startswith("http"):
-            pdf_url = urljoin(detail_url, pdf_url)
+    # fallback: download button
+    if not pdf_url:
+        pdf_btn = soup_detail.select_one("button#download")
+        if pdf_btn:
+            pdf_url = detail_url.replace(".html", ".pdf")
 
-    elif pdf_btn:
-        pdf_url = detail_url.replace(".html", ".pdf")
 
     file_path = None
 
     # ---- Try direct PDF download ----
     if pdf_url:
         async with aiohttp.ClientSession() as session:
-            file_path = await download_pdf(session, pdf_url, save_path)
+            # file_path = await download_pdf(session, pdf_url, save_path)
+            file_path = await download_pdf(
+                session,
+                pdf_url,
+                save_path,
+                title=task["title"]
+            )
 
     # ---- Fallback -> printToPDF ----
     if not file_path:
@@ -757,7 +846,8 @@ async def scrape_sebi(task, week_start, week_end):
                 driver.execute_cdp_cmd("Page.printToPDF", {"printBackground": True})["data"]
             )
 
-            filename = sanitize_filename(task["title"])
+            # filename = sanitize_filename(task["title"])
+            filename = safe_pdf_filename(task["title"], detail_url)
             file_path = os.path.join(save_path, filename)
 
             with open(file_path, "wb") as f:
@@ -1058,10 +1148,6 @@ async def scrape_generic_link(task, week_start, week_end):
     if category == "SEBI":
         return await scrape_sebi(task, week_start, week_end)
 
-    # IFSCA
-    # if category == "IFSCA":
-    #     return await scrape_ifsca(task, week_start, week_end)
-
     if category == "IFSCA":
 
         # SPECIAL CASE: Public Consultation
@@ -1095,7 +1181,7 @@ async def scrape_generic_link(task, week_start, week_end):
 #---------------------------------------------------------------------
 
 async def main():
-    weeks_back = 0 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
+    weeks_back = 1 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
     week_start, week_end = get_week_range(weeks_back)
 
     tasks = load_link_tasks_from_excel()

@@ -5,6 +5,7 @@
 # =========================================================================
 import sys
 import asyncio
+from matplotlib.pyplot import title
 import nest_asyncio
 import platform
 import os
@@ -16,7 +17,7 @@ if sys.platform.startswith("win"):
 # =========================================================================
 
 import logging
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin, parse_qs, unquote, urlparse
 from crawl4ai import AsyncWebCrawler
 from bs4 import BeautifulSoup
 import aiohttp
@@ -31,29 +32,18 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import json
-import re
+
 import unicodedata
-import time
 
-import sys
-import io
-from urllib.parse import parse_qs
+import hashlib
 
-# Force UTF-8 encoding for stdout and stderr to handle special characters from libraries
-if sys.platform.startswith("win"):
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 # ---------------------- Logging ----------------------
-# logging.basicConfig(
-#     level=logging.INFO,
-#     format="%(asctime)s [%(levelname)s] %(message)s",
-#     handlers=[logging.StreamHandler()]
-# )
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[logging.StreamHandler(sys.stdout)]
+    handlers=[logging.StreamHandler()]
 )
+
 # ---- GLOBAL TITLE TRACKING FOR BSE vs NSE DEDUP ----
 BSE_TITLES_NORMALIZED = set()
 
@@ -73,11 +63,23 @@ def normalize_title_for_compare(title: str) -> str:
     title = re.sub(r'\s+', ' ', title).strip()
     return title
 
+def safe_pdf_filename(title: str | None, pdf_url: str, max_base_len: int = 80) -> str:
+    """
+    Generates a filesystem-safe, collision-proof PDF filename.
+    """
+    if title:
+        base = sanitize_filename(title).replace(".pdf", "")
+    else:
+        base = os.path.basename(urlparse(pdf_url).path).replace(".pdf", "")
+
+    base = base[:max_base_len].rstrip("_")
+
+    # stable short hash (URL-based)
+    h = hashlib.sha1(pdf_url.encode("utf-8")).hexdigest()[:8]
+
+    return f"{base}_{h}.pdf"
+
 # -------- CONFIG --------
-# BASE_URL = "https://www.sebi.gov.in"
-# LISTING_URL = "https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=6&ssid=23&smid=0"
-# CATEGORY = "SEBI"
-# SUBFOLDER = "Press Release"
 
 # Where PDFs should be stored (keep as-is: your Downloads path)
 if platform.system() == "Windows":
@@ -102,7 +104,7 @@ ALL_DOWNLOADED = []
 LINKS_EXCEL = DATA_DIR / "Links.xlsx"
 
 # Only process these sheet names (categories)
-PROCESS_SHEETS = ["SEBI","Listed Companies","IFSCA"]  # <-- modify based on your file
+PROCESS_SHEETS = ["SEBI", "Listed Companies", "IFSCA"]
 
 #---------------------------------------------------
 
@@ -176,6 +178,20 @@ def extract_detail_links_from_listing(html, base_url):
 
     return links
 
+def extract_sebi_pdf_from_iframe(iframe_src: str, page_url: str) -> str | None:
+    if not iframe_src:
+        return None
+
+    iframe_src = urljoin(page_url, iframe_src)
+    parsed = urlparse(iframe_src)
+    qs = parse_qs(parsed.query)
+
+    pdf = qs.get("file", [None])[0]
+    if not pdf:
+        return None
+
+    return unquote(pdf)
+
 def is_ignored_sebi_title(title: str) -> bool:
     """
     Returns True if SEBI title should be ignored based on business rules.
@@ -243,17 +259,32 @@ def get_week_range(weeks_back: int = 0):
     )
     if weeks_back == 0:
         target_sunday = today.replace(hour=23, minute=59, second=59, microsecond=999999)
-    logging.info("Target range (%d week(s) back): %s to %s", weeks_back, target_monday.date(), target_sunday.date())
+    logging.info("Target range (%d week(s) back): %s -> %s", weeks_back, target_monday.date(), target_sunday.date())
     return target_monday, target_sunday
 
 
 # -------- HELPERS --------
 
 def is_last_amended_title(title: str) -> bool:
-    return "last amended on" in title.lower()
+    """
+    Ignore SEBI amendment-only titles.
+    Handles NBSPs, spacing, and punctuation variations.
+    """
+    if not title:
+        return False
+
+    # normalize unicode + spaces
+    t = unicodedata.normalize("NFKD", title).lower()
+    t = re.sub(r"\s+", " ", t)  # collapse all whitespace
+
+    return (
+        "last amended on" in t
+        or "amended as on" in t
+    )
+
 
 def sanitize_filename(title: str, max_length: int = 100) -> str:
-    # 1) Normalize unicode - removes emojis, accents, fancy characters
+    # 1) Normalize unicode -> removes emojis, accents, fancy characters
     normalized = unicodedata.normalize("NFKD", title)
     ascii_text = normalized.encode("ascii", "ignore").decode()
 
@@ -286,44 +317,20 @@ def ensure_year_month_structure(base_folder: str, category: str, subfolder: str,
     os.makedirs(month_path, exist_ok=True)
     return month_path
 
-# async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_path: str) -> str | None:
-#     try:
-#         filename = os.path.basename(urlparse(pdf_url).path) or sanitize_filename("downloaded.pdf")
-#         file_path = os.path.join(save_path, filename)
-#         if os.path.exists(file_path):
-#             logging.info("Skipping download (exists): %s", file_path)
-#             return file_path
-
-#         async with session.get(pdf_url, timeout=30) as resp:
-#             if resp.status == 200:
-#                 content = await resp.read()
-#                 with open(file_path, "wb") as f:
-#                     f.write(content)
-#                 logging.info("Downloaded PDF: %s", file_path)
-#                 return file_path
-#             else:
-#                 logging.warning("Failed PDF download (%s) for %s", resp.status, pdf_url)
-#     except Exception as e:
-#         logging.exception("Error downloading PDF %s : %s", pdf_url, e)
-#     return None
-
 async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: str, title: str | None = None) -> str | None:
     try:
         parsed = urlparse(pdf_url)
         qs = parse_qs(parsed.query)
 
         filename = qs.get("fileName", [None])[0]
-        if not filename:
-            filename = sanitize_filename(title or "document")
 
-        if not filename.lower().endswith(".pdf"):
-            filename += ".pdf"
+        if not filename:
+            filename = safe_pdf_filename(title, pdf_url)
 
         file_path = os.path.join(save_dir, filename)
 
         if os.path.exists(file_path):
-            logging.info("Skipping download (exists): %s", file_path)
-            return file_path
+            logging.warning("Overwriting existing file: %s", file_path)
 
         headers = {
             "User-Agent": "Mozilla/5.0",
@@ -361,6 +368,7 @@ async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: s
     except Exception as e:
         logging.exception("Error downloading PDF %s : %s", pdf_url, e)
         return None
+
 #-----------------------------------------------------
 
 async def direct_nse_pdf_download(pdf_url: str, save_path: str):
@@ -386,8 +394,8 @@ async def direct_nse_pdf_download(pdf_url: str, save_path: str):
         return False
 
 async def scrape_nse(task, week_start, week_end):
-
     logging.info("NSE LISTED COMPANIES SCRAPER -> %s", task["url"])
+
     # 1) Crawl page using Crawl4AI
     async with AsyncWebCrawler() as crawler:
         result = await crawler.arun(url=task["url"])
@@ -410,7 +418,6 @@ async def scrape_nse(task, week_start, week_end):
             continue
 
         title = cols[0].get_text(strip=True)
-        
         normalized_title = normalize_title_for_compare(title)
 
         if normalized_title in BSE_TITLES_NORMALIZED:
@@ -454,7 +461,9 @@ async def scrape_nse(task, week_start, week_end):
             BASE_PATH, task["category"], task["subfolder"], year, month_full
         )
 
-        filename = sanitize_filename(title)
+        # filename = sanitize_filename(title)
+        filename = safe_pdf_filename(title, pdf_url)
+
         file_path = os.path.join(save_dir, filename)
 
         success = await direct_nse_pdf_download(pdf_url, file_path)
@@ -463,7 +472,7 @@ async def scrape_nse(task, week_start, week_end):
             logging.error("NSE direct PDF failed: %s", pdf_url)
             continue
 
-        logging.info("NSE PDF Saved - %s", file_path)
+        logging.info("NSE PDF Saved -> %s", file_path)
 
         # Record in final Excel
         ALL_DOWNLOADED.append({
@@ -478,11 +487,12 @@ async def scrape_nse(task, week_start, week_end):
             "Path": file_path
         })
 
-    logging.info("NSE LISTED COMPANIES - DONE")
+    logging.info("NSE LISTED COMPANIES -> DONE")
 
 
 async def scrape_bse(task, week_start, week_end):
-    logging.info("BSE LISTED COMPANIES SCRAPER - %s", task["url"])
+    logging.info("BSE LISTED COMPANIES SCRAPER -> %s", task["url"])
+
     # Configure Chrome with custom download folder
     chrome_opts = webdriver.ChromeOptions()
     prefs = {
@@ -549,14 +559,16 @@ async def scrape_bse(task, week_start, week_end):
         save_dir = ensure_year_month_structure(
             BASE_PATH, task["category"], task["subfolder"], year, month_full
         )
-        filename = sanitize_filename(title)
+        # filename = sanitize_filename(title)
+        filename = safe_pdf_filename(title, detail_link)
+
         final_path = os.path.join(save_dir, filename)
 
         # ---- CHECK FOR ATTACHMENT ----
         attach = detail_soup.select_one("td#tc52 a[href]")
         if attach:
             pdf_url = urljoin("https://www.bseindia.com", attach["href"])
-            logging.info("Attachment - %s", pdf_url)
+            logging.info("Attachment -> %s", pdf_url)
 
             # CLICK USING SELENIUM (IMPORTANT)
             try:
@@ -572,7 +584,7 @@ async def scrape_bse(task, week_start, week_end):
                 )[-1]
 
                 os.rename(downloaded_file, final_path)
-                logging.info("Downloaded via click - %s", final_path)
+                logging.info("Downloaded via click -> %s", final_path)
 
                 ALL_DOWNLOADED.append({
                     "Verticals": task["category"],
@@ -585,9 +597,7 @@ async def scrape_bse(task, week_start, week_end):
                     "File Name": filename,
                     "Path": final_path
                 })
-
                 BSE_TITLES_NORMALIZED.add(normalize_title_for_compare(title))
-
 
                 driver.get(task["url"])
                 time.sleep(1)
@@ -596,7 +606,7 @@ async def scrape_bse(task, week_start, week_end):
             except Exception as e:
                 logging.error("Selenium click download failed: %s", e)
 
-        # ---- NO ATTACHMENTS - printToPDF fallback ----
+        # ---- NO ATTACHMENTS -> printToPDF fallback ----
         logging.info("Using printToPDF fallback")
 
         try:
@@ -604,7 +614,7 @@ async def scrape_bse(task, week_start, week_end):
             with open(final_path, "wb") as f:
                 f.write(base64.b64decode(pdf_data["data"]))
 
-            logging.info("Saved printToPDF - %s", final_path)
+            logging.info("Saved printToPDF -> %s", final_path)
 
             ALL_DOWNLOADED.append({
                 "Verticals": task["category"],
@@ -618,7 +628,6 @@ async def scrape_bse(task, week_start, week_end):
                 "File Name": filename,
                 "Path": final_path
             })
-            
             BSE_TITLES_NORMALIZED.add(normalize_title_for_compare(title))
 
         except Exception as e:
@@ -628,7 +637,7 @@ async def scrape_bse(task, week_start, week_end):
         time.sleep(1)
 
     driver.quit()
-    logging.info("BSE LISTED COMPANIES - DONE")
+    logging.info("BSE LISTED COMPANIES -> DONE")
 
 
 async def scrape_sebi(task, week_start, week_end):
@@ -637,6 +646,7 @@ async def scrape_sebi(task, week_start, week_end):
     detail_url = task["url"]
 
     logging.info("SEBI Scraper -> [%s > %s]: %s", category, subfolder, detail_url)
+
     # ---- Crawl page ----
     async with AsyncWebCrawler() as crawler:
         try:
@@ -722,7 +732,7 @@ async def scrape_sebi(task, week_start, week_end):
     original_category = category
     if original_category == "SEBI":
         if detect_aif_category(task["title"]):
-            logging.info("AIF detected - storing under AIF")
+            logging.info("AIF detected -> storing under AIF")
             category = "AIF"
         else:
             category = "SEBI"
@@ -734,25 +744,35 @@ async def scrape_sebi(task, week_start, week_end):
 
     # ---- Detect PDF ----
     pdf_url = None
+
     iframe = soup_detail.select_one("iframe")
-    pdf_btn = soup_detail.select_one("button#download")
+    if iframe:
+        pdf_url = extract_sebi_pdf_from_iframe(
+            iframe.get("src"),
+            detail_url
+        )
 
-    if iframe and "file=" in iframe.get("src", ""):
-        pdf_url = iframe["src"].split("file=")[-1]
-        if not pdf_url.startswith("http"):
-            pdf_url = urljoin(detail_url, pdf_url)
+    # fallback: download button
+    if not pdf_url:
+        pdf_btn = soup_detail.select_one("button#download")
+        if pdf_btn:
+            pdf_url = detail_url.replace(".html", ".pdf")
 
-    elif pdf_btn:
-        pdf_url = detail_url.replace(".html", ".pdf")
 
     file_path = None
 
     # ---- Try direct PDF download ----
     if pdf_url:
         async with aiohttp.ClientSession() as session:
-            file_path = await download_pdf(session, pdf_url, save_path)
+            # file_path = await download_pdf(session, pdf_url, save_path)
+            file_path = await download_pdf(
+                session,
+                pdf_url,
+                save_path,
+                title=task["title"]
+            )
 
-    # ---- Fallback - printToPDF ----
+    # ---- Fallback -> printToPDF ----
     if not file_path:
         try:
             options = webdriver.ChromeOptions()
@@ -768,7 +788,8 @@ async def scrape_sebi(task, week_start, week_end):
                 driver.execute_cdp_cmd("Page.printToPDF", {"printBackground": True})["data"]
             )
 
-            filename = sanitize_filename(task["title"])
+            # filename = sanitize_filename(task["title"])
+            filename = safe_pdf_filename(task["title"], detail_url)
             file_path = os.path.join(save_path, filename)
 
             with open(file_path, "wb") as f:
@@ -798,13 +819,11 @@ async def scrape_sebi(task, week_start, week_end):
             "Path": os.path.abspath(file_path)
         })
 
-
 def is_ifsca_public_consultation(url: str) -> bool:
     """
     Detects IFSCA Public Consultation UI
     """
     return "ReportPublication/index" in url
-
 
 async def scrape_ifsca_public_consultation(task, week_start, week_end):
     logging.info("IFSCA PUBLIC CONSULTATION SCRAPER -> %s", task["url"])
@@ -931,7 +950,7 @@ async def scrape_ifsca_public_consultation(task, week_start, week_end):
         logging.info("IFSCA PUBLIC CONSULTATION -> DONE")
 
 async def scrape_ifsca(task, week_start, week_end):
-    logging.info(" IFSCA Scraper -> %s", task["url"])
+    logging.info("IFSCA Scraper -> %s", task["url"])
 
     chrome_opts = webdriver.ChromeOptions()
     chrome_opts.add_argument("--headless=new")
@@ -989,9 +1008,9 @@ async def scrape_ifsca(task, week_start, week_end):
 
                         title = title_td.get_text(strip=True)
 
-                        #  IFSCA title filter
+                        # IFSCA title filter
                         if is_ignored_ifsca_title(title):
-                            logging.info(" Skipping IFSCA (filtered title): %s", title)
+                            logging.info("Skipping IFSCA (filtered title): %s", title)
                             continue
 
                         pdf_url = urljoin(
@@ -1025,7 +1044,7 @@ async def scrape_ifsca(task, week_start, week_end):
                                 "File Name": os.path.basename(downloaded_path),
                                 "Path": os.path.abspath(downloaded_path),
                             })
-                            logging.info(" IFSCA downloaded: %s", title)
+                            logging.info("IFSCA downloaded: %s", title)
 
                     except Exception as e:
                         logging.warning("IFSCA row parse error: %s", e)
@@ -1057,7 +1076,7 @@ async def scrape_ifsca(task, week_start, week_end):
 
     finally:
         driver.quit()
-        logging.info(" IFSCA -> DONE")
+        logging.info("IFSCA -> DONE")
 
 
 async def scrape_generic_link(task, week_start, week_end):
@@ -1070,10 +1089,6 @@ async def scrape_generic_link(task, week_start, week_end):
     # SEBI website (current logic)
     if category == "SEBI":
         return await scrape_sebi(task, week_start, week_end)
-    
-    # IFSCA
-    # if category == "IFSCA":
-    #     return await scrape_ifsca(task, week_start, week_end)
 
     if category == "IFSCA":
 
@@ -1103,6 +1118,7 @@ async def scrape_generic_link(task, week_start, week_end):
         return
 
     logging.warning("Unknown category: %s", category)
+
 
 #---------------------------------------------------------------------
 

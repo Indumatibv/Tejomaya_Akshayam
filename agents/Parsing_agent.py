@@ -6,7 +6,7 @@
 # ============================================================
 # REGULATIONS-ONLY PARSING & SUMMARY (TEJOMAYA v1)
 # ============================================================
-#!/usr/bin/env python
+
 
 import sys
 from pathlib import Path
