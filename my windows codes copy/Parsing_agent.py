@@ -548,6 +548,131 @@ Final Summary (use ONLY black bullet points “•”):
 )
 
 # ============================================================
+# GUIDELINES SUMMARY PROMPT
+# ============================================================
+
+GUIDELINES_PROMPT = PromptTemplate(
+    template="""
+You are a regulatory analyst preparing a concise, client-ready summary of a regulatory GUIDELINES document.
+
+GUIDELINES provide detailed procedural instructions and best practices for implementing regulatory requirements.
+The reader will NOT open the original document.
+
+STARTING RULE (MANDATORY):
+- The FIRST bullet MUST start exactly with:
+  “These guidelines outline the framework for …”
+
+CONTENT REQUIREMENTS:
+- Clearly summarise:
+  • scope and applicability
+  • eligibility criteria or covered entities (if applicable)
+  • key compliance procedures or obligations
+  • reporting, documentation, or record-keeping requirements (if any)
+  • consequences or expectations relating to non-compliance, if mentioned
+- Explain the compliance rationale in simple business terms
+
+DETAILS TO IGNORE:
+- Historical amendments or prior versions
+- Clause numbers, legal citations, or definitions lists
+- Tables reproduced verbatim
+
+FORMAT RULES (STRICT — MUST BE FOLLOWED):
+- Output ONLY black bullet points using the symbol “•”
+- Do NOT use numbering (1., 2., 3.) or letters (a), (b), (c)
+- Do NOT use headings, labels, or colon-style prefixes (e.g., “Scope:”, “Eligibility:”)
+- Do NOT write any paragraph text before or after the bullets
+- Write 4 to 6 bullet points only
+- Each bullet must be ONE complete sentence
+
+TONE:
+- Plain, professional, client-facing
+- Written like a regulatory guidance note, not an academic outline
+
+Text:
+{text}
+
+Final Summary (use ONLY black bullet points “•”):
+""",
+    input_variables=["text"]
+)
+
+# ============================================================
+# PUBLIC CONSULTATION SUMMARY PROMPT
+# ============================================================
+
+PUBLIC_CONSULTATION_PROMPT = PromptTemplate(
+    template="""
+You are a regulatory analyst preparing a client-ready summary of a PUBLIC CONSULTATION document.
+
+These documents contain draft proposals released for stakeholder feedback
+and are NOT final regulations.
+
+MANDATORY STARTING RULE:
+- The FIRST bullet MUST start exactly with:
+  “Public comments are invited on the draft … and the following is proposed …”
+
+CONTENT RULES:
+- Summarise the MAIN proposed changes or draft measures in simple language
+- Briefly include relevant background context only if it helps understand the proposal
+- Mention the consultation period or deadline for comments IF stated
+- Mention key questions or areas where feedback is sought IF explicitly mentioned
+- Do NOT describe internal drafting history or reproduce tables verbatim
+
+FORMAT RULES (STRICT):
+- Output ONLY black bullet points “•”
+- Write 3 to 5 bullet points only
+- Each bullet must be ONE complete sentence
+- No headings, no numbering, no sub-bullets
+- No legal citations, clause numbers, or annexure references
+
+TONE:
+- Plain, professional, business-facing
+- Draft-stage language (proposed, suggested, under consideration)
+
+Text:
+{text}
+
+Final Summary (use ONLY black bullet points “•”):
+""",
+    input_variables=["text"]
+)
+
+# ============================================================
+# FAQS SUMMARY PROMPT
+# ============================================================
+
+FAQS_PROMPT = PromptTemplate(
+    template="""
+You are a regulatory analyst preparing a very brief client-ready summary of an FAQs document.
+
+FAQs address common compliance questions and do NOT introduce new regulatory obligations.
+
+STRICT RULES:
+- Do NOT summarise questions or answers
+- Do NOT describe compliance requirements
+- Do NOT interpret the regulation
+- Keep the summary high-level and informational only
+
+FORMAT RULES:
+- Output ONLY black bullet points “•”
+- Write EXACTLY 2 or 3 bullets
+- Each bullet must be ONE sentence
+
+MANDATORY STARTING RULE:
+- The FIRST bullet MUST start exactly with:
+  “The concerned authority issued FAQs on …”
+
+MANDATORY LINK RULE:
+- One bullet MUST include the public link to the FAQs document, if available in the text
+
+Text:
+{text}
+
+Final Summary:
+""",
+    input_variables=["text"]
+)
+# ============================================================
 # Quality Check
 # ============================================================
 
@@ -683,7 +808,7 @@ def get_week_folder():
 
 
 WEEK_FOLDER = get_week_folder()
-logging.info(f"Weekly folder → {WEEK_FOLDER}")
+logging.info(f"Weekly folder -> {WEEK_FOLDER}")
 
 # ============================================================
 
@@ -831,7 +956,7 @@ def process_regulation_pdf(row: pd.Series):
         row["EmbeddingText"] = embedding_text
 
     except Exception as e:
-        logging.error(f"Failed → {pdf_path}: {e}")
+        logging.error(f"Failed -> {pdf_path}: {e}")
         row["Summary"] = "NA"
         row["EmbeddingText"] = "NA"
 
@@ -850,7 +975,7 @@ def is_circular(subcategory: str) -> bool:
     if "master circular" in sub:
         return False
 
-    # Normalize spacing around hyphens (e.g., "circular - bse" → "circular-bse")
+    # Normalize spacing around hyphens (e.g., "circular - bse" -> "circular-bse")
     sub = re.sub(r'\s*-\s*', '-', sub)
 
     #  Allow only standard circular variants
@@ -882,7 +1007,7 @@ def process_circular_pdf(row: pd.Series):
         row["EmbeddingText"] = core_text
 
     except Exception as e:
-        logging.error(f"Failed → {pdf_path}: {e}")
+        logging.error(f"Failed -> {pdf_path}: {e}")
         row["Summary"] = "NA"
         row["EmbeddingText"] = "NA"
 
@@ -908,7 +1033,7 @@ def process_press_release_pdf(row: pd.Series):
         row["EmbeddingText"] = core_text
 
     except Exception as e:
-        logging.error(f"Failed → {pdf_path}: {e}")
+        logging.error(f"Failed -> {pdf_path}: {e}")
         row["Summary"] = "NA"
         row["EmbeddingText"] = "NA"
 
@@ -949,7 +1074,7 @@ def process_consultation_paper_pdf(row: pd.Series):
         row["EmbeddingText"] = core_text
 
     except Exception as e:
-        logging.error(f"Failed → {pdf_path}: {e}")
+        logging.error(f"Failed -> {pdf_path}: {e}")
         row["Summary"] = "NA"
         row["EmbeddingText"] = "NA"
 
@@ -1004,7 +1129,7 @@ def process_master_circular_pdf(row: pd.Series):
         row["EmbeddingText"] = core_text
 
     except Exception as e:
-        logging.error(f"Failed → {pdf_path}: {e}")
+        logging.error(f"Failed -> {pdf_path}: {e}")
         row["Summary"] = "NA"
         row["EmbeddingText"] = "NA"
 
@@ -1023,7 +1148,7 @@ def process_notification_pdf(row: pd.Series):
     try:
         text = extract_pdf_text(pdf_path)
 
-        # Notifications are short → no regulation-style filtering
+        # Notifications are short -> no regulation-style filtering
         core_text = text[:8000]
 
         summary = llm.invoke(
@@ -1034,7 +1159,128 @@ def process_notification_pdf(row: pd.Series):
         row["EmbeddingText"] = core_text
 
     except Exception as e:
-        logging.error(f"Failed → {pdf_path}: {e}")
+        logging.error(f"Failed -> {pdf_path}: {e}")
+        row["Summary"] = "NA"
+        row["EmbeddingText"] = "NA"
+
+    return row
+
+# ============================================================
+
+def extract_guidelines_core(text: str) -> str:
+    lines = text.splitlines()
+    keep = []
+
+    for line in lines:
+        clean = line.strip()
+        if not clean:
+            continue
+
+        # Skip TOC / Index / Definitions-heavy sections
+        if re.search(r'table of contents|index of abbreviations|definitions', clean, re.IGNORECASE):
+            continue
+
+        # Skip pure amendment notes
+        if re.search(r'vide circular|as amended|substituted for', clean, re.IGNORECASE):
+            continue
+
+        # Keep procedural substance
+        if len(clean) > 40:
+            keep.append(clean)
+
+        if len(keep) >= 2000:
+            break
+
+    return "\n".join(keep)
+
+def process_guidelines_pdf(row: pd.Series):
+    pdf_path = Path(row["Path"])
+
+    try:
+        text = extract_pdf_text(pdf_path)
+        core_text = extract_guidelines_core(text)[:12000]
+
+        summary = llm.invoke(
+            GUIDELINES_PROMPT.format(text=core_text)
+        ).strip()
+
+        # DO NOT run SUMMARY_CLEANER here
+        row["Summary"] = summary
+        row["EmbeddingText"] = core_text
+
+    except Exception as e:
+        logging.error(f"Failed -> {pdf_path}: {e}")
+        row["Summary"] = "NA"
+        row["EmbeddingText"] = "NA"
+
+    return row
+
+
+# ============================================================
+
+def process_public_consultation_pdf(row: pd.Series):
+    pdf_path = Path(row["Path"])
+
+    try:
+        text = extract_pdf_text(pdf_path)
+
+        # Draft consultations -> no heavy filtering
+        core_text = text[:12000]
+
+        summary = llm.invoke(
+            PUBLIC_CONSULTATION_PROMPT.format(text=core_text)
+        ).strip()
+
+        # ❌ DO NOT clean – drafts can sound tentative
+        row["Summary"] = summary
+        row["EmbeddingText"] = core_text
+
+    except Exception as e:
+        logging.error(f"Failed -> {pdf_path}: {e}")
+        row["Summary"] = "NA"
+        row["EmbeddingText"] = "NA"
+
+    return row
+
+# ============================================================
+
+def process_faq_pdf(row: pd.Series):
+    pdf_path = Path(row["Path"])
+
+    try:
+        text = extract_pdf_text(pdf_path)
+
+        # FAQs -> only title / intro area
+        core_text = text[:3000]
+
+        raw_summary = llm.invoke(
+            FAQS_PROMPT.format(text=core_text)
+        ).strip()
+
+        # 🔒 HARD FAQ SANITIZER
+        final_bullets = []
+        for line in raw_summary.splitlines():
+            line = line.strip()
+            if not line.startswith("•"):
+                continue
+
+            lower = line.lower()
+
+            # block Q&A leakage
+            if any(word in lower for word in [
+                "applicability", "apply", "designated", "principal",
+                "shall", "must", "eligible", "requirement"
+            ]):
+                continue
+
+            final_bullets.append(line)
+
+        # enforce strict FAQ length
+        row["Summary"] = "\n".join(final_bullets[:2]) if final_bullets else "NA"
+        row["EmbeddingText"] = core_text
+
+    except Exception as e:
+        logging.error(f"Failed -> {pdf_path}: {e}")
         row["Summary"] = "NA"
         row["EmbeddingText"] = "NA"
 
@@ -1070,8 +1316,17 @@ def process_row_by_domain(row: pd.Series):
     elif is_notification(sub_clean):
         return process_notification_pdf(row)
 
+    elif sub_clean == "guidelines":
+        return process_guidelines_pdf(row)
+
+    elif sub_clean == "public consultation":
+        return process_public_consultation_pdf(row)
+
+    elif sub_clean == "faqs":
+        return process_faq_pdf(row)
+
     else:
-        logging.info(f"Skipping SubCategory → {sub}")
+        logging.info(f"Skipping SubCategory -> {sub}")
         return None
 
 # ============================================================
@@ -1133,7 +1388,7 @@ def main(excel_file: str):
             )
 
         logging.info(
-            f"Uploaded weekly Excel files to MinIO → "
+            f"Uploaded weekly Excel files to MinIO -> "
             f"bucket={minio.bucket}, prefix={minio_prefix}"
         )
 

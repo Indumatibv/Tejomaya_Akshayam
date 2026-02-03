@@ -104,7 +104,12 @@ ALL_DOWNLOADED = []
 LINKS_EXCEL = DATA_DIR / "Links.xlsx"
 
 # Only process these sheet names (categories)
-PROCESS_SHEETS = ["SEBI", "Listed Companies", "IFSCA"]
+PROCESS_SHEETS = ["SEBI", "Listed Companies", "IFSCA", "IBBI"]
+
+# IBBI subdomains handled by IBBI v1 scraper
+IBBI_1_SCRAPE = [
+     "Notifications", "Circulars", "Regulations", "Acts", "Discussion Paper", "Guidelines" 
+]
 
 #---------------------------------------------------
 
@@ -124,8 +129,6 @@ def load_link_tasks_from_excel():
 
         df = pd.read_excel(LINKS_EXCEL, sheet_name=sheet)
 
-        # Expect first column = SUBFOLDER
-        # Second column = URL
         if df.shape[1] < 2:
             logging.warning("Invalid format in sheet: %s", sheet)
             continue
@@ -282,7 +285,6 @@ def is_last_amended_title(title: str) -> bool:
         or "amended as on" in t
     )
 
-
 def sanitize_filename(title: str, max_length: int = 100) -> str:
     # 1) Normalize unicode -> removes emojis, accents, fancy characters
     normalized = unicodedata.normalize("NFKD", title)
@@ -335,7 +337,7 @@ async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: s
         headers = {
             "User-Agent": "Mozilla/5.0",
             "Accept": "application/pdf",
-            "Referer": "https://ifsca.gov.in/",
+            "Referer": urlparse(pdf_url).scheme + "://" + urlparse(pdf_url).netloc,
         }
 
         async with session.get(pdf_url, headers=headers, timeout=60) as resp:
@@ -669,7 +671,7 @@ async def scrape_sebi(task, week_start, week_end):
     # ---- SKIP "Last amended on" regulations ----
     if is_last_amended_title(task["title"]):
         logging.info(
-            "⏭ Skipping regulation (Last amended on): %s",
+            " Skipping regulation (Last amended on): %s",
             task["title"]
         )
         return
@@ -764,7 +766,6 @@ async def scrape_sebi(task, week_start, week_end):
     # ---- Try direct PDF download ----
     if pdf_url:
         async with aiohttp.ClientSession() as session:
-            # file_path = await download_pdf(session, pdf_url, save_path)
             file_path = await download_pdf(
                 session,
                 pdf_url,
@@ -986,10 +987,16 @@ async def scrape_ifsca(task, week_start, week_end):
                 stop_pagination = False
 
                 for row in rows:
+                    is_discussion_paper = task["subfolder"] == "Discussion Paper"
+
                     try:
                         date_td = row.select_one('td[data-label="Date"]')
                         title_td = row.select_one('td[data-label="Title"]')
-                        download_a = row.select_one('td[data-label="Download"] a[href]')
+                        # download_a = row.select_one('td[data-label="Download"] a[href]')
+                        if is_discussion_paper:
+                            download_a = row.select_one('td[data-label="Discussion Paper"] a[href]')
+                        else:
+                            download_a = row.select_one('td[data-label="Download"] a[href]')
 
                         if not date_td or not title_td or not download_a:
                             continue
@@ -1078,6 +1085,251 @@ async def scrape_ifsca(task, week_start, week_end):
         driver.quit()
         logging.info("IFSCA -> DONE")
 
+#-----------------------------------------------------
+def is_ignored_ibbi_title(title: str) -> bool:
+    """
+    Returns True if IBBI title should be ignored.
+    Case-insensitive keyword match.
+    """
+    if not title:
+        return False
+
+    ignore_keywords = [
+        "approval of resolution plan",
+        "annual publication",
+        "conferences",
+        "quarterly newsletter",
+        "panel",
+        "appointments",
+        "invitation for expression of interest",
+        "quiz",
+        "provisional list",
+        "research study",
+        "reports",
+    ]
+
+    title_lower = title.lower()
+    return any(kw in title_lower for kw in ignore_keywords)
+
+
+async def scrape_ibbi_discussion_paper(task, week_start, week_end):
+    logging.info("IBBI DISCUSSION PAPER SCRAPER -> %s", task["url"])
+
+    async with AsyncWebCrawler() as crawler:
+        result = await crawler.arun(url=task["url"])
+
+    soup = BeautifulSoup(result.html, "html.parser")
+
+    # IBBI Discussion Paper tables often use 't-row' class or standard tr
+    # We select all rows and filter them dynamically
+    rows = soup.find_all("tr")
+
+    if not rows:
+        logging.warning("No IBBI Discussion Paper rows found")
+        return
+
+    async with aiohttp.ClientSession() as session:
+        for row in rows:
+            # IBBI uses <th> for data cells in some tables and <td> in others
+            cells = row.find_all(["td", "th"])
+            
+            # Basic validation: need at least Date, Title, and Link columns
+            if len(cells) < 3:
+                continue
+
+            # ---- CLEANING & HEADER SKIP ----
+            # Get text from first cell to check if it's the header "Date"
+            raw_date_cell = cells[0].get_text(" ", strip=True)
+            if "date" in raw_date_cell.lower() or not raw_date_cell:
+                continue
+
+            # ---- DATE PARSING ----
+            # Normalize ordinal dates: 19th -> 19
+            raw_date = re.sub(r'(\d+)(st|nd|rd|th)', r'\1', raw_date_cell)
+
+            parsed = None
+            for fmt in ("%d %B, %Y", "%d %b, %Y", "%Y-%m-%d"):
+                try:
+                    parsed = datetime.strptime(raw_date, fmt)
+                    break
+                except ValueError:
+                    pass
+
+            if not parsed:
+                logging.debug("Could not parse date: %s", raw_date)
+                continue
+
+            dt = parsed
+
+            # Date Range Filter
+            if not (week_start <= dt <= week_end):
+                continue
+
+            # ---- TITLE ----
+            # Usually in the second cell (index 1)
+            title = unicodedata.normalize(
+                "NFKD",
+                cells[1].get_text(" ", strip=True)
+            )
+
+            # ---- PDF URL EXTRACTION ----
+            # Discussion papers often have the link in the 3rd or 4th cell
+            download_a = row.select_one("a[onclick*='newwindow1']")
+            if not download_a:
+                continue
+
+            onclick = download_a.get("onclick", "")
+            # Regex handles both single quotes and double quotes in the JS function
+            m = re.search(r"newwindow1\(['\"]([^'\"]+\.pdf)['\"]\)", onclick)
+            if not m:
+                continue
+
+            pdf_url = m.group(1)
+            if pdf_url.startswith("/"):
+                pdf_url = urljoin(task["url"], pdf_url)
+
+            # ---- DIRECTORY & DOWNLOAD ----
+            year = str(dt.year)
+            month_full = dt.strftime("%B")
+
+            save_dir = ensure_year_month_structure(
+                BASE_PATH,
+                task["category"],
+                task["subfolder"],
+                year,
+                month_full
+            )
+
+            downloaded_path = await download_pdf(
+                session,
+                pdf_url,
+                save_dir,
+                title
+            )
+
+            if downloaded_path:
+                ALL_DOWNLOADED.append({
+                    "Verticals": task["category"],
+                    "SubCategory": task["subfolder"],
+                    "Year": year,
+                    "Month": month_full,
+                    "IssueDate": dt.strftime("%Y-%m-%d"),
+                    "Title": title,
+                    "PDF_URL": pdf_url,
+                    "File Name": os.path.basename(downloaded_path),
+                    "Path": os.path.abspath(downloaded_path),
+                })
+
+                logging.info("IBBI Discussion Paper downloaded: %s", title)
+
+async def scrape_ibbi_1(task, week_start, week_end):
+    logging.info("IBBI CIRCULARS SCRAPER -> %s", task["url"])
+
+    async with AsyncWebCrawler() as crawler:
+        result = await crawler.arun(url=task["url"])
+
+    soup = BeautifulSoup(result.html, "html.parser")
+
+    # Discussion Paper is NOT a row-based listing
+    if task["subfolder"] == "Discussion Paper":
+        return await scrape_ibbi_discussion_paper(task, week_start, week_end)
+
+    # All other IBBI sections
+    rows = soup.select("table tbody tr")
+
+    if not rows:
+        logging.warning("No IBBI rows found for subfolder: %s", task["subfolder"])
+        return
+
+    async with aiohttp.ClientSession() as session:
+
+        for row in rows:
+            tds = row.find_all("td")
+            if len(tds) < 3:
+                continue
+
+            # ---- DATE ----
+
+            raw_date = tds[1].get_text(" ", strip=True)
+
+            # normalize ordinal dates: 19th -> 19, 21st -> 21, etc
+            raw_date = re.sub(r'(\d+)(st|nd|rd|th)', r'\1', raw_date)
+
+            parsed = None
+            for fmt in ("%d %b, %Y", "%d %B, %Y"):
+                try:
+                    parsed = datetime.strptime(raw_date, fmt)
+                    break
+                except ValueError:
+                    pass
+
+            if not parsed:
+                continue
+
+            dt = parsed
+
+            if not (week_start <= dt <= week_end):
+                continue
+
+            # ---- TITLE ----
+            title_td = tds[2]
+            title = unicodedata.normalize(
+                "NFKD",
+                title_td.get_text(" ", strip=True)
+            )
+
+            if is_ignored_ibbi_title(title):
+                logging.info("Skipping IBBI (filtered title): %s", title)
+                continue
+
+            # ---- PDF URL (onclick anywhere in row) ----
+            download_a = row.select_one("a[onclick]")
+            if not download_a:
+                continue
+
+            onclick = download_a.get("onclick", "")
+            m = re.search(r"newwindow1\('([^']+\.pdf)'\)", onclick)
+            if not m:
+                continue
+
+            pdf_url = m.group(1)
+            if pdf_url.startswith("/"):
+                pdf_url = urljoin(task["url"], pdf_url)
+
+            year = str(dt.year)
+            month_full = dt.strftime("%B")
+
+            save_dir = ensure_year_month_structure(
+                BASE_PATH,
+                task["category"],
+                task["subfolder"],
+                year,
+                month_full
+            )
+
+            downloaded_path = await download_pdf(
+                session,
+                pdf_url,
+                save_dir,
+                title
+            )
+
+            if downloaded_path:
+                ALL_DOWNLOADED.append({
+                    "Verticals": task["category"],
+                    "SubCategory": task["subfolder"],
+                    "Year": year,
+                    "Month": month_full,
+                    "IssueDate": dt.strftime("%Y-%m-%d"),
+                    "Title": title,
+                    "PDF_URL": pdf_url,
+                    "File Name": os.path.basename(downloaded_path),
+                    "Path": os.path.abspath(downloaded_path),
+                })
+
+                logging.info("IBBI downloaded: %s", title)
+
+#-----------------------------------------------------
 
 async def scrape_generic_link(task, week_start, week_end):
     category = task["category"]
@@ -1099,10 +1351,6 @@ async def scrape_generic_link(task, week_start, week_end):
         # DEFAULT: Notifications / Circulars / Others
         return await scrape_ifsca(task, week_start, week_end)
 
-    # # COMPANIES ACT (MCA logic)
-    # if category == "Companies Act":
-    #     return await scrape_mca(task, week_start, week_end)
-
     # LISTED COMPANIES (NSE/BSE logic)
     if category == "Listed Companies":
         
@@ -1117,13 +1365,20 @@ async def scrape_generic_link(task, week_start, week_end):
         logging.warning("No scraper defined for subfolder: %s", subfolder)
         return
 
-    logging.warning("Unknown category: %s", category)
+    if category == "IBBI":
 
+        if subfolder in IBBI_1_SCRAPE:
+            return await scrape_ibbi_1(task, week_start, week_end)
+
+        logging.warning("No IBBI scraper mapped for subfolder: %s", subfolder)
+        return
+
+    logging.warning("Unknown category: %s", category)
 
 #---------------------------------------------------------------------
 
 async def main():
-    weeks_back = 0 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
+    weeks_back = 25 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
     week_start, week_end = get_week_range(weeks_back)
 
     tasks = load_link_tasks_from_excel()
