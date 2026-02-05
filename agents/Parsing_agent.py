@@ -673,6 +673,52 @@ Final Summary:
     input_variables=["text"]
 )
 
+
+# ============================================================
+# INFORMAL GUIDANCE SUMMARY PROMPT
+# ============================================================
+
+INFORMAL_GUIDANCE_PROMPT = PromptTemplate(
+    template="""
+You are a regulatory analyst preparing a very brief, client-ready summary of a SEBI Informal Guidance letter.
+
+ABOUT:
+Informal Guidance letters contain SEBI’s interpretation or clarification provided in response to
+entity-specific queries raised by a company or its officials.
+These letters are not general regulations and apply only to the facts presented.
+
+CONTENT RULES (STRICT):
+- Summarise ONLY:
+  • the core issue or transaction on which clarification was sought, and
+  • SEBI’s main interpretation or view in response.
+- Do NOT list multiple queries or sub-queries separately.
+- Do NOT quote regulations, clause numbers, or definitions.
+- Do NOT reproduce background facts in detail.
+- Ignore confidentiality, disclaimers, and non-applicability statements.
+
+FORMAT RULES (MANDATORY):
+- Output ONLY black bullet points “•”
+- Write EXACTLY 2 bullet points
+- Each bullet must be ONE sentence
+- No headings, no numbering, no sub-bullets
+
+MANDATORY STARTING RULE:
+- The FIRST bullet MUST start exactly with:
+  “Informal guidance issued by SEBI in the matter of …”
+
+STYLE:
+- Extremely concise
+- Business-friendly
+- Interpretative, not descriptive
+
+Text:
+{text}
+
+Final Summary (use ONLY black bullet points “•”):
+""",
+    input_variables=["text"]
+)
+
 # ============================================================
 # Quality Check
 # ============================================================
@@ -769,6 +815,7 @@ Cleaned Summary:
 """,
     input_variables=["summary"]
 )
+
 # ============================================================
 # PATHS
 # ============================================================
@@ -1310,6 +1357,32 @@ def process_faq_pdf(row: pd.Series):
 
 # ============================================================
 
+def process_informal_guidance_pdf(row: pd.Series):
+    pdf_path = Path(row["Path"])
+
+    try:
+        text = extract_pdf_text(pdf_path)
+
+        # Informal Guidance letters are short; no heavy filtering
+        core_text = text[:8000]
+
+        summary = llm.invoke(
+            INFORMAL_GUIDANCE_PROMPT.format(text=core_text)
+        ).strip()
+
+        # Clean lightly, but DO NOT over-prune
+        row["Summary"] = clean_summary_with_llm(summary)
+        row["EmbeddingText"] = core_text
+
+    except Exception as e:
+        logging.error(f"Failed -> {pdf_path}: {e}")
+        row["Summary"] = "NA"
+        row["EmbeddingText"] = "NA"
+
+    return row
+
+# ============================================================
+
 def process_row_by_domain(row: pd.Series):
     sub = row["SubCategory"]
 
@@ -1328,6 +1401,9 @@ def process_row_by_domain(row: pd.Series):
 
     elif is_circular(sub_clean):
         return process_circular_pdf(row)
+
+    elif sub_clean == "informal guidance":
+        return process_informal_guidance_pdf(row)
 
     elif "press release" in sub_clean:
         return process_press_release_pdf(row)

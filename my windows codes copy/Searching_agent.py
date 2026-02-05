@@ -104,7 +104,7 @@ ALL_DOWNLOADED = []
 LINKS_EXCEL = DATA_DIR / "Links.xlsx"
 
 # Only process these sheet names (categories)
-PROCESS_SHEETS = ["SEBI", "Listed Companies", "IFSCA", "IBBI"]
+PROCESS_SHEETS = ["SEBI", "Listed Companies", "IFSCA", "IBBI", "RBI"]
 
 # IBBI subdomains handled by IBBI v1 scraper
 IBBI_1_SCRAPE = [
@@ -129,6 +129,8 @@ def load_link_tasks_from_excel():
 
         df = pd.read_excel(LINKS_EXCEL, sheet_name=sheet)
 
+        # Expect first column = SUBFOLDER
+        # Second column = URL
         if df.shape[1] < 2:
             logging.warning("Invalid format in sheet: %s", sheet)
             continue
@@ -319,6 +321,27 @@ def ensure_year_month_structure(base_folder: str, category: str, subfolder: str,
     os.makedirs(month_path, exist_ok=True)
     return month_path
 
+async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_path: str) -> str | None:
+    try:
+        filename = os.path.basename(urlparse(pdf_url).path) or sanitize_filename("downloaded.pdf")
+        file_path = os.path.join(save_path, filename)
+        if os.path.exists(file_path):
+            logging.info("Skipping download (exists): %s", file_path)
+            return file_path
+
+        async with session.get(pdf_url, timeout=30) as resp:
+            if resp.status == 200:
+                content = await resp.read()
+                with open(file_path, "wb") as f:
+                    f.write(content)
+                logging.info("Downloaded PDF: %s", file_path)
+                return file_path
+            else:
+                logging.warning("Failed PDF download (%s) for %s", resp.status, pdf_url)
+    except Exception as e:
+        logging.exception("Error downloading PDF %s : %s", pdf_url, e)
+    return None
+
 async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: str, title: str | None = None) -> str | None:
     try:
         parsed = urlparse(pdf_url)
@@ -335,10 +358,19 @@ async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: s
             logging.warning("Overwriting existing file: %s", file_path)
 
         headers = {
-            "User-Agent": "Mozilla/5.0",
-            "Accept": "application/pdf",
-            "Referer": urlparse(pdf_url).scheme + "://" + urlparse(pdf_url).netloc,
+            "User-Agent": (
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/121.0.0.0 Safari/537.36"
+            ),
+            "Accept": "application/pdf,application/octet-stream,*/*",
         }
+
+        # ---- RBI REFERER FIX ----
+        if "rbidocs.rbi.org.in" in parsed.netloc:
+            headers["Referer"] = "https://www.rbi.org.in/"
+        else:
+            headers["Referer"] = f"{parsed.scheme}://{parsed.netloc}"
 
         async with session.get(pdf_url, headers=headers, timeout=60) as resp:
             if resp.status != 200:
@@ -641,6 +673,86 @@ async def scrape_bse(task, week_start, week_end):
     driver.quit()
     logging.info("BSE LISTED COMPANIES -> DONE")
 
+async def scrape_sebi_informal_guidance(task, week_start, week_end):
+    logging.info("SEBI INFORMAL GUIDANCE SCRAPER -> %s", task["url"])
+
+    async with AsyncWebCrawler() as crawler:
+        result = await crawler.arun(url=task["url"])
+    
+    soup = BeautifulSoup(result.html, "html.parser")
+    # 1. Get all rows from the listing table
+    rows = soup.find_all("tr", class_=["odd", "even"])
+
+    async with aiohttp.ClientSession() as session:
+        for row in rows:
+            # Extract Date from the first <td>
+            date_td = row.find("td")
+            if not date_td: continue
+            
+            date_text = date_td.get_text(strip=True)
+            try:
+                dt = datetime.strptime(date_text, "%b %d, %Y")
+            except ValueError: continue
+
+            # --- WEEK RANGE FILTER ---
+            if dt < week_start: break  # SEBI is usually chronological
+            if dt > week_end: continue
+
+            # 2. Get Title and Detail Page Link
+            link_tag = row.select_one("a.points")
+            if not link_tag: continue
+            
+            detail_url = urljoin("https://www.sebi.gov.in", link_tag["href"])
+            title = link_tag.get("title") or link_tag.get_text(strip=True)
+            title = unicodedata.normalize("NFKD", title)
+
+            # --- IGNORE LOGIC ---
+            if is_ignored_sebi_title(title):
+                logging.info("Skipping (Ignored Keyword): %s", title)
+                continue
+
+            # 3. OPEN DETAIL PAGE to find the actual PDF
+            try:
+                async with session.get(detail_url, timeout=30) as resp:
+                    if resp.status != 200: continue
+                    detail_html = await resp.text()
+                
+                detail_soup = BeautifulSoup(detail_html, "html.parser")
+                
+                # Look for the specific link text you mentioned
+                pdf_link_tag = detail_soup.find("a", string=re.compile("Informal Guidance Letter by SEBI", re.I))
+                
+                if pdf_link_tag and pdf_link_tag.get("href"):
+                    pdf_url = urljoin(detail_url, pdf_link_tag["href"])
+                else:
+                    # Fallback to your existing iframe helper if the specific text isn't found
+                    iframe = detail_soup.select_one("iframe")
+                    pdf_url = extract_sebi_pdf_from_iframe(iframe.get("src"), detail_url) if iframe else None
+
+                if not pdf_url:
+                    logging.warning("No PDF link found for: %s", title)
+                    continue
+
+                # 4. DOWNLOAD AND RECORD
+                year, month_full = str(dt.year), dt.strftime("%B")
+                save_dir = ensure_year_month_structure(BASE_PATH, task["category"], task["subfolder"], year, month_full)
+                
+                downloaded_path = await download_pdf(session, pdf_url, save_dir, title)
+
+                if downloaded_path:
+                    ALL_DOWNLOADED.append({
+                        "Verticals": task["category"],
+                        "SubCategory": task["subfolder"],
+                        "Year": year,
+                        "Month": month_full,
+                        "IssueDate": dt.strftime("%Y-%m-%d"),
+                        "Title": title,
+                        "PDF_URL": pdf_url,
+                        "File Name": os.path.basename(downloaded_path),
+                        "Path": os.path.abspath(downloaded_path)
+                    })
+            except Exception as e:
+                logging.error("Error processing %s: %s", detail_url, e)
 
 async def scrape_sebi(task, week_start, week_end):
     category = task["category"]
@@ -671,7 +783,7 @@ async def scrape_sebi(task, week_start, week_end):
     # ---- SKIP "Last amended on" regulations ----
     if is_last_amended_title(task["title"]):
         logging.info(
-            " Skipping regulation (Last amended on): %s",
+            "⏭ Skipping regulation (Last amended on): %s",
             task["title"]
         )
         return
@@ -766,6 +878,7 @@ async def scrape_sebi(task, week_start, week_end):
     # ---- Try direct PDF download ----
     if pdf_url:
         async with aiohttp.ClientSession() as session:
+            # file_path = await download_pdf(session, pdf_url, save_path)
             file_path = await download_pdf(
                 session,
                 pdf_url,
@@ -1085,6 +1198,120 @@ async def scrape_ifsca(task, week_start, week_end):
         driver.quit()
         logging.info("IFSCA -> DONE")
 
+# -----------------------------------------------------
+def is_ignored_rbi_title(title: str) -> bool:
+    """
+    Returns True if RBI notification title should be skipped.
+    Case-insensitive keyword match with normalization.
+    """
+    if not title:
+        return False
+
+    t = unicodedata.normalize("NFKD", title).lower()
+    t = re.sub(r"\s+", " ", t)
+
+    ignore_keywords = [
+        "auction",
+        "auction results",
+        "money market operations conversion",
+        "money market",
+        "redemption",
+        "state government securities",
+        "monetary penalty turnover data",
+        "monetary penalty"
+    ]
+
+    return any(kw in t for kw in ignore_keywords)
+async def scrape_rbi(task, week_start, week_end):
+    logging.info("RBI SCRAPER -> %s", task["url"])
+
+    # 1. Use Crawl4AI to get the HTML (Keep this as is)
+    async with AsyncWebCrawler() as crawler:
+        result = await crawler.arun(url=task["url"])
+
+    soup = BeautifulSoup(result.html, "html.parser")
+    rows = soup.select("table tr")
+
+    if not rows:
+        logging.warning("No RBI rows found")
+        return
+
+    current_dt = None
+    
+    # Use a persistent session for the whole RBI task
+    connector = aiohttp.TCPConnector(ssl=False) # Helps with some Mac SSL handshake issues
+    async with aiohttp.ClientSession(connector=connector) as session:
+        # First, hit the main page to establish a session/cookie
+
+        async with session.get("https://www.rbi.org.in/Scripts/NotificationUser.aspx"):
+            pass
+
+        for row in rows:
+            # -------- DATE HEADER --------
+
+            date_h2 = row.select_one("h2.dop_header")
+            if date_h2:
+                text = date_h2.get_text(strip=True)
+
+                # Try parsing as RBI date
+                try:
+                    parsed_dt = datetime.strptime(text, "%b %d, %Y")
+                    current_dt = parsed_dt
+                except ValueError:
+                    # This is a section heading like:
+                    # "Banker and Debt Manager to Government"
+                    # Do NOT reset current_dt
+                    pass
+
+                continue
+
+            if not current_dt:
+                continue
+
+            # -------- WEEK FILTER --------
+            if current_dt < week_start:
+                continue
+            if current_dt > week_end:
+                continue
+
+            # -------- TITLE & PDF LINK --------
+            title_a = row.select_one("a.link2")
+            pdf_a = row.select_one("a[href*='rbidocs.rbi.org.in']")
+            
+            if not title_a or not pdf_a:
+                continue
+
+            title = unicodedata.normalize("NFKD", title_a.get_text(strip=True))
+            
+            if is_ignored_rbi_title(title):
+                logging.info("Skipping RBI (filtered title): %s", title)
+                continue
+
+            pdf_url = pdf_a["href"]
+            year = str(current_dt.year)
+            month_full = current_dt.strftime("%B")
+
+            save_dir = ensure_year_month_structure(
+                BASE_PATH, task["category"], task["subfolder"], year, month_full
+            )
+
+            # Use the specialized download logic
+            downloaded_path = await download_pdf(session, pdf_url, save_dir, title)
+
+            if downloaded_path:
+                ALL_DOWNLOADED.append({
+                    "Verticals": task["category"],
+                    "SubCategory": task["subfolder"],
+                    "Year": year,
+                    "Month": month_full,
+                    "IssueDate": current_dt.strftime("%Y-%m-%d"),
+                    "Title": title,
+                    "PDF_URL": pdf_url,
+                    "File Name": os.path.basename(downloaded_path),
+                    "Path": os.path.abspath(downloaded_path)
+                })
+                logging.info("RBI Successfully downloaded: %s", title)
+
 #-----------------------------------------------------
 def is_ignored_ibbi_title(title: str) -> bool:
     """
@@ -1110,7 +1337,6 @@ def is_ignored_ibbi_title(title: str) -> bool:
 
     title_lower = title.lower()
     return any(kw in title_lower for kw in ignore_keywords)
-
 
 async def scrape_ibbi_discussion_paper(task, week_start, week_end):
     logging.info("IBBI DISCUSSION PAPER SCRAPER -> %s", task["url"])
@@ -1339,8 +1565,17 @@ async def scrape_generic_link(task, week_start, week_end):
     logging.info("Processing [%s > %s] => %s", category, subfolder, url)
 
     # SEBI website (current logic)
+
     if category == "SEBI":
-        return await scrape_sebi(task, week_start, week_end)
+        # Check if this specific link is for Informal Guidance
+        if "Informal Guidance" in subfolder:
+            return await scrape_sebi_informal_guidance(task, week_start, week_end)
+        else:
+            # Fallback to your existing SEBI scraper for other subfolders
+            return await scrape_sebi(task, week_start, week_end)
+
+    # if category == "SEBI":
+    #     return await scrape_sebi(task, week_start, week_end)
 
     if category == "IFSCA":
 
@@ -1373,12 +1608,15 @@ async def scrape_generic_link(task, week_start, week_end):
         logging.warning("No IBBI scraper mapped for subfolder: %s", subfolder)
         return
 
+    if category == "RBI":
+        return await scrape_rbi(task, week_start, week_end)
+
     logging.warning("Unknown category: %s", category)
 
 #---------------------------------------------------------------------
 
 async def main():
-    weeks_back = 25 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
+    weeks_back = 0 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
     week_start, week_end = get_week_range(weeks_back)
 
     tasks = load_link_tasks_from_excel()
