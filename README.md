@@ -34,3 +34,18 @@ uvicorn api.main:app --reload
 
 Scheduler for auto triggers
 python scheduler/scheduler.py
+
+## Required system dependency (OCR)
+
+Tejomaya requires Tesseract OCR for scanned PDFs (for example Informal Guidance).
+
+### macOS
+brew install tesseract
+
+### Windows
+Download and install from:
+https://github.com/UB-Mannheim/tesseract/wiki  
+(Select “Add to PATH” during installation)
+
+### Verify (all systems)
+tesseract --version
