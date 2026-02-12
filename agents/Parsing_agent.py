@@ -130,9 +130,10 @@ STRUCTURE (MANDATORY):
 CONTENT RULES (GENERIC):
 - Focus on changes that materially affect:
   • who is covered or brought into scope, or
-  • what conditions, qualifications, certifications, limits or thresholds apply, or
+  • what conditions, qualifications, certifications, limits, thresholds, minimum corpus requirements, fees or timelines apply, or
   • what information, processes, disclosures or infrastructure are now required, or
   • how compliance, governance or investor protection will work in practice.
+- Where the amendment specifies any numerical limit, validity period, time limit, corpus size, percentage fee, experience requirement or transitional deadline, you MUST clearly state the exact figure in simple words.
 - Each bullet must describe the real-world outcome or impact, not the drafting mechanics
 - At least ONE bullet must clearly state the impact or benefit for the public, investors or other relevant stakeholders
 - Ignore minor editorial or housekeeping changes (like word substitutions, formatting, removal of fax numbers) unless they meaningfully change compliance or process
@@ -931,10 +932,10 @@ def extract_regulation_core(text: str) -> str:
             continue
 
         #  Keep real regulatory substance
-        if len(clean) > 40:
+        if len(clean) > 10:
             keep.append(clean)
 
-        if len(keep) >= 2500:
+        if len(keep) >= 4000:
             break
 
     return "\n".join(keep)
