@@ -104,7 +104,7 @@ ALL_DOWNLOADED = []
 LINKS_EXCEL = DATA_DIR / "Links.xlsx"
 
 # Only process these sheet names (categories)
-PROCESS_SHEETS = ["SEBI", "Listed Companies", "IFSCA", "IBBI", "RBI"]
+PROCESS_SHEETS = ["SEBI", "Listed Companies", "IFSCA", "RBI", "IBBI"]
 
 # IBBI subdomains handled by IBBI v1 scraper
 IBBI_1_SCRAPE = [
@@ -486,7 +486,7 @@ async def scrape_nse(task, week_start, week_end):
 
         if normalized_title in BSE_TITLES_NORMALIZED:
             logging.info(
-                "⏭ Skipping NSE circular (already downloaded from BSE): %s",
+                "Skipping NSE circular (already downloaded from BSE): %s",
                 title
             )
             continue
@@ -813,7 +813,7 @@ async def scrape_sebi(task, week_start, week_end):
     # ---- SKIP "Last amended on" regulations ----
     if is_last_amended_title(task["title"]):
         logging.info(
-            "⏭ Skipping regulation (Last amended on): %s",
+            "Skipping regulation (Last amended on): %s",
             task["title"]
         )
         return
@@ -821,7 +821,7 @@ async def scrape_sebi(task, week_start, week_end):
     # ---- SKIP non-relevant SEBI PDFs based on title ----
     if category == "SEBI" and is_ignored_sebi_title(task["title"]):
         logging.info(
-            "⏭ Skipping SEBI document based on ignore list: %s",
+            "Skipping SEBI document based on ignore list: %s",
             task["title"]
         )
         return
@@ -887,17 +887,6 @@ async def scrape_sebi(task, week_start, week_end):
     )
 
     # ---- Detect PDF ----
-    # pdf_url = None
-    # iframe = soup_detail.select_one("iframe")
-    # pdf_btn = soup_detail.select_one("button#download")
-
-    # if iframe and "file=" in iframe.get("src", ""):
-    #     pdf_url = iframe["src"].split("file=")[-1]
-    #     if not pdf_url.startswith("http"):
-    #         pdf_url = urljoin(detail_url, pdf_url)
-
-    # elif pdf_btn:
-    #     pdf_url = detail_url.replace(".html", ".pdf")
 
     pdf_url = None
 
@@ -1039,7 +1028,7 @@ async def scrape_ifsca_public_consultation(task, week_start, week_end):
 
                         # GLOBAL IFSCA TITLE FILTER
                         if is_ignored_ifsca_title(title):
-                            logging.info("⏭ Skipping IFSCA PC (filtered title): %s", title)
+                            logging.info("Skipping IFSCA PC (filtered title): %s", title)
                             continue
 
                         pdf_url = urljoin("https://ifsca.gov.in", download_a["href"])
