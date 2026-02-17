@@ -613,6 +613,7 @@ Final Summary (use ONLY black bullet points “•”):
 # ============================================================
 # MASTER DIRECTIONS SUMMARY PROMPT
 # ===========================================================
+
 MASTER_DIRECTION_PROMPT = PromptTemplate(
     template="""
 You are a regulatory analyst preparing a short, client-ready summary of a Master Direction issued by a financial regulator.
@@ -652,6 +653,50 @@ Final Summary:
     input_variables=["text", "title"]
 )
 
+# ============================================================
+# RULES SUMMARY PROMPT
+# ===========================================================
+
+RULES_PROMPT = PromptTemplate(
+    template="""
+You are a regulatory analyst preparing a short, client-ready summary of Rules notified under a parent Act.
+
+ABOUT:
+Rules are subordinate legislation issued by the Central Government or a regulator to operationalise provisions of a parent Act.
+
+MANDATORY STARTING RULE:
+- The summary MUST start exactly with:
+  “The rules as notified state …”
+
+CONTENT REQUIREMENTS:
+- Clearly mention:
+  • the name/topic of the Rules
+  • whether they supersede earlier rules (if applicable)
+  • the effective date (if mentioned)
+  • the key procedural or compliance changes introduced
+  • important timelines, monetary thresholds, or fees (if materially relevant)
+- Focus on what is NEW or practically relevant for regulated entities.
+
+DO NOT:
+- Mention section numbers, clause numbers, or detailed drafting structure
+- Describe annexures or forms in detail
+- Reproduce definitions
+- Discuss penal provisions in depth
+- Provide an exhaustive breakdown
+
+FORMAT RULES:
+- Write a single short paragraph
+- 4 to 6 sentences only
+- Plain, business-facing language
+- No bullet points
+
+Text:
+{text}
+
+Final Summary:
+""",
+    input_variables=["text"]
+)
 
 # ============================================================
 # Quality Check
@@ -1284,6 +1329,29 @@ def process_master_direction_pdf(row: pd.Series):
 
 # ============================================================
 
+def process_rules_pdf(row: pd.Series):
+    pdf_path = Path(row["Path"])
+
+    try:
+        text = extract_pdf_text(pdf_path)
+        core_text = text[:10000]
+
+        summary = llm.invoke(
+            RULES_PROMPT.format(text=core_text)
+        ).strip()
+
+        row["Summary"] = summary
+        row["EmbeddingText"] = core_text
+
+    except Exception as e:
+        logging.error(f"Failed -> {pdf_path}: {e}")
+        row["Summary"] = "NA"
+        row["EmbeddingText"] = "NA"
+
+    return row
+
+# ============================================================
+
 def process_row_by_domain(row: pd.Series):
     sub = row["SubCategory"]
 
@@ -1299,6 +1367,9 @@ def process_row_by_domain(row: pd.Series):
 
     elif sub_clean == "master directions":
         return process_master_direction_pdf(row)
+
+    elif sub_clean == "rules":
+        return process_rules_pdf(row)
 
     elif sub_clean == "regulations":
         return process_regulation_pdf(row)
