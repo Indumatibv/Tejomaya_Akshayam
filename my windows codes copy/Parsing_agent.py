@@ -56,7 +56,7 @@ else:
     os.environ["OLLAMA_USE_GPU"] = "0"  
     print("Using CPU")  
 
- # 👇 ADD THIS FUNCTION HERE (after GPU detection block)
+# 👇 ADD THIS FUNCTION HERE (after GPU detection block)
 # def print_device_usage(operation: str):
 #     device_name = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU"
 #     gpu_layers = os.environ.get("OLLAMA_NUM_GPU_LAYERS", "0")
@@ -67,13 +67,27 @@ llm = Ollama(model="mistral:latest")
 # ============================================================
 CREATED_EXCELS = set()
 
+def resolve_authority(vertical: str) -> str:
+    if not isinstance(vertical, str):
+        return "The concerned authority"
+
+    v = vertical.strip().lower()
+
+    # Only override these to SEBI
+    if v in {"aif", "listed companies"}:
+        return "SEBI"
+
+    # Otherwise use vertical as authority directly
+    return vertical.strip().upper()
+
+
 # ============================================================
 # REGULATIONS SUMMARY PROMPT (FINAL, AUTHORITATIVE)
 # ============================================================
 
 REGULATIONS_PROMPT = PromptTemplate(
     template="""
-You are a senior regulatory analyst preparing a concise, client-ready summary of a SEBI regulation document
+You are a senior regulatory analyst preparing a concise, client-ready summary of a {authority} regulation document
 for business stakeholders and compliance teams.
 
 This document sets out an entire regulatory framework with detailed legal provisions.
@@ -100,21 +114,22 @@ STYLE AND LENGTH:
 
 STARTING RULE (MANDATORY):
 - The first sentence MUST start with:
-  “This SEBI regulation sets out the regulatory framework for …”
+  “This {authority} regulation sets out the regulatory framework for …”
 
 Text:
 {text}
 
 Final Summary (entire answer MUST be inside double quotes):
 """,
-    input_variables=["text"]
+    input_variables=["text", "authority"]
+
 )
 
 # ============================================================
 
 AMENDMENT_REGULATIONS_PROMPT = PromptTemplate(
     template="""
-You are a senior regulatory analyst preparing a client-ready summary of a SEBI amendment to existing regulations.
+You are a senior regulatory analyst preparing a client-ready summary of a {authority} amendment to existing regulations.
 
 The reader is a business or compliance professional who will NOT read the original document.
 The summary must clearly explain in simple language what has changed and why it matters in practice.
@@ -122,7 +137,7 @@ The summary must clearly explain in simple language what has changed and why it 
 STRUCTURE (MANDATORY):
 - Output ONLY bullet points (no paragraph introduction)
 - Use ONLY black bullet points “•”
-- The FIRST bullet MUST start with: “SEBI has amended or added a regulation to …”
+- The FIRST bullet MUST start with: “{authority} has amended or added a regulation to …”
 - The FIRST bullet must be ONE sentence that gives a high-level overview of the main changes
 - ALL remaining bullets must each describe ONE important new or amended provision and its practical effect
 - Do NOT use nested bullets or sub-points; every change must be its own “•” bullet
@@ -159,17 +174,18 @@ Text:
 
 Final Summary (use ONLY black bullet points “•”):
 """,
-    input_variables=["text"]
+    input_variables=["text", "authority"]
 )
 
 # ============================================================
 # CIRCULARS SUMMARY PROMPT
 # ============================================================
+
 CIRCULARS_PROMPT = PromptTemplate(
     template="""
-You are a regulatory analyst writing a short, client-ready summary of a SEBI circular.
+You are a regulatory analyst writing a short, client-ready summary of a {authority} circular.
 
-SEBI circulars provide clarifications, implementation guidance, amendments, or new requirements.
+{authority} circulars provide clarifications, implementation guidance, amendments, or new requirements.
 The reader will NOT open the original circular, so the summary must clearly explain what has changed and what the reader needs to know in practice.
 
 CONTENT RULES:
@@ -190,10 +206,10 @@ FORMAT RULES:
 
 STARTING RULE (MANDATORY):
 - The FIRST bullet MUST start with one of the following (choose what fits best):
-  “SEBI has issued this circular and introduced …”
-  “SEBI has issued this circular and clarified …”
-  “SEBI has issued this circular and amended …”
-  “SEBI has issued this circular and changed …”
+  “{authority} has issued this circular and introduced …”
+  “{authority} has issued this circular and clarified …”
+  “{authority} has issued this circular and amended …”
+  “{authority} has issued this circular and changed …”
 
 TONE:
 - Plain, client-facing language.
@@ -205,45 +221,8 @@ Text:
 
 Final Summary:
 """,
-    input_variables=["text"]
+    input_variables=["text", "authority"]
 )
-
-# CIRCULARS_PROMPT = PromptTemplate(
-#     template="""
-# You are a regulatory analyst writing a short, client-ready summary of a SEBI circular.
-
-# SEBI circulars provide clarifications, implementation guidance, or changes to existing requirements.
-# The reader will NOT open the original circular, so the summary must tell them clearly what has changed and what they need to know in practice.
-
-# CONTENT RULES:
-# - Clearly state the main clarification, change, or requirement introduced by the circular in simple language.
-# - Mention any key conditions, thresholds, timelines, or applicability (for example, which entities or transactions are covered) only if they are important for compliance.
-# - Briefly mention other important informational points instead of using vague phrases like “other details are specified in the circular”.
-# - Avoid technical or legal jargon and avoid background or policy rationale unless it directly affects what must be done.
-# - Do NOT include circular numbers, SEBI file numbers, internal processes, committee names, venue details, or long legal citations.
-
-# FORMAT RULES:
-# - Output ONLY bullet points (no paragraphs or headings).
-# - Use ONLY black bullet points “•”.
-# - Write 2 to 4 bullet points in total.
-# - Each bullet must be ONE clear, concise sentence.
-# - Do NOT use numbering (1., 2., 3.) or sub-bullets.
-
-# STARTING RULE (MANDATORY):
-# - The FIRST bullet MUST start with:
-#   “SEBI has issued this circular and …”
-
-# TONE:
-# - Plain language and client-facing.
-# - Crisp, direct, and easy to understand for non-legal readers.
-
-# Text:
-# {text}
-
-# Final Summary:
-# """,
-#     input_variables=["text"]
-# )
 
 # ============================================================
 # PRESS RELEASES SUMMARY PROMPT
@@ -251,7 +230,7 @@ Final Summary:
 
 PRESS_RELEASE_PROMPT = PromptTemplate(
     template="""
-You are preparing a short, client-ready summary of a SEBI press release.
+You are preparing a short, client-ready summary of a {authority} press release.
 
 SUB-DOMAIN: Press Releases
 
@@ -262,7 +241,7 @@ Summarise ONLY the primary outcomes that the reader must know.
 STRICT RULES:
 - Output ONLY bullet points
 - Use ONLY black bullet points “•”
-- Write ONLY what SEBI has decided, clarified, approved, warned, or stated
+- Write ONLY what {authority} has decided, clarified, approved, warned, or stated
 - Do NOT include background, explanations, names, dates, venues, links, or references to media reports
 - If there are multiple key outcomes, write 2–3 bullets (no more)
 
@@ -280,90 +259,16 @@ Text:
 
 Final Summary:
 """,
-    input_variables=["text"]
+    input_variables=["text", "authority"]
 )
 
 # ============================================================
 # CONSULTATION PAPERS SUMMARY PROMPT
 # ============================================================
 
-# CONSULTATION_PAPER_PROMPT = PromptTemplate(
-#     template="""
-# You are a regulatory analyst preparing a client-ready summary of a SEBI consultation paper.
-
-# Consultation papers propose concrete regulatory changes and seek public feedback.
-# The reader will NOT read the original document.
-
-# ABSOLUTE GOAL:
-# - After reading the summary, the reader must clearly understand EXACTLY what regulatory areas are proposed to be changed and the objective of the consultation paper, without opening the document.
-
-# CRITICAL READING INSTRUCTION (MANDATORY):
-# - The document may describe proposed changes inside tables (for example, columns such as “Current Provision”, “Proposed Change”, “Rationale”).
-# - You MUST read and interpret these tables.
-# - You MUST summarise the substance of the proposed changes shown in tables.
-# - Do NOT repeat section headings such as “certain provisions”; always expand them using the actual table content.
-
-# STRICT FORMAT RULES (MANDATORY):
-# - Output ONLY black bullet points “•”
-# - Do NOT write any paragraph text
-# - Do NOT use hyphens (-), sub-bullets, or nested points
-# - Write EXACTLY 3 or 4 bullet points
-# - Each bullet must be ONE complete sentence
-
-# STRUCTURE (MANDATORY):
-# - The FIRST bullet MUST start exactly with:
-#   “SEBI has issued this consultation paper proposing the following changes …”
-# - The NEXT bullets must each describe ONE specific proposed regulatory change
-# - The FINAL bullet MUST state that SEBI is seeking public comments, views, or suggestions
-
-# MANDATORY SENTENCE PATTERN FOR PROPOSED CHANGES (CRITICAL):
-# - Every proposed-change bullet MUST follow this structure:
-#   “Proposing changes to <specific regulatory area> to <specific nature of the change>.”
-# - The <specific regulatory area> MUST be explicitly named, such as:
-#   issuance of securities, registration and transfer of securities,
-#   disclosure requirements, post-issue compliance,
-#   operational and record-keeping requirements under Schedule VII,
-#   governance obligations, scope of applicability.
-# - Bullets that do NOT clearly name the regulatory area are INVALID and must be rewritten.
-
-# SPECIFICITY RULE (NON-NEGOTIABLE):
-# - Each proposed-change bullet MUST state BOTH:
-#   • what regulatory area is affected, AND
-#   • how that area is being changed, based on the document text or tables.
-# - Do NOT describe proposals at an abstract, intent-based, or heading-based level.
-
-# HARD PROHIBITIONS (STRICTLY ENFORCED):
-# - Do NOT use vague or placeholder phrases such as:
-#   “certain provisions”, “various changes”, “other measures”,
-#   “related aspects”, “market developments”, or “regulatory landscape”.
-# - Do NOT copy consultation questions or section titles as summary points.
-# - Do NOT frame proposals as questions.
-# - Do NOT explain why the change is proposed.
-# - Do NOT mention consultation timelines, dates, emails, links,
-#   clause numbers, or legal drafting language.
-
-# PUBLIC COMMENTS RULE (MANDATORY):
-# - The public comments bullet MUST be exactly:
-#   “SEBI is seeking public comments, views, or suggestions on the proposed changes.”
-# - Do NOT include, paraphrase, or list consultation questions.
-# - Do NOT include dates, deadlines, links, URLs, or submission instructions.
-
-# QUALITY BAR (MANDATORY SELF-CHECK):
-# - If a sentence could make the reader ask “what exactly is changing?”, it is INVALID
-#   and MUST be rewritten with concrete detail taken from the document or tables.
-
-
-# Text:
-# {text}
-
-# Final Summary (use ONLY black bullet points “•”):
-# """,
-#     input_variables=["text"]
-# )
-
 CONSULTATION_PAPER_PROMPT = PromptTemplate(
     template="""
-You are a regulatory analyst preparing a client-ready summary of a SEBI consultation paper.
+You are a regulatory analyst preparing a client-ready summary of a {authority} consultation paper.
 
 Consultation papers propose concrete regulatory changes and seek public feedback.
 The reader will NOT read the original document.
@@ -386,12 +291,12 @@ STRICT FORMAT RULES (MANDATORY):
 
 STRUCTURE (MANDATORY):
 - The FIRST bullet MUST start exactly with:
-  “SEBI has issued this consultation paper proposing the following changes …”
+  “{authority} has issued this consultation paper proposing the following changes …”
 - The SECOND bullet MUST clearly state the OBJECTIVE of the consultation paper,
-  explicitly describing what SEBI aims to achieve (for example, improving trading
+  explicitly describing what {authority} aims to achieve (for example, improving trading
   processes at stock exchanges, strengthening compliance, enhancing transparency, etc.)
 - The THIRD bullet MUST describe ONE specific proposed regulatory change
-- The FOURTH (FINAL) bullet MUST state that SEBI is seeking public comments AND
+- The FOURTH (FINAL) bullet MUST state that {authority} is seeking public comments AND
   MUST include the deadline for submitting comments, if mentioned in the document
 
 MANDATORY SENTENCE PATTERN FOR PROPOSED CHANGES (CRITICAL):
@@ -428,10 +333,10 @@ HARD PROHIBITIONS (STRICTLY ENFORCED):
 
 PUBLIC COMMENTS & DEADLINE RULE (MANDATORY):
 - The final bullet MUST:
-  • state that SEBI is seeking public comments, views, or suggestions, AND
+  • state that {authority} is seeking public comments, views, or suggestions, AND
   • explicitly mention the deadline for submitting comments if provided.
 - If the deadline is NOT mentioned in the document, state only that
-  SEBI is seeking public comments without inventing a date.
+  {authority} is seeking public comments without inventing a date.
 
 QUALITY BAR (MANDATORY SELF-CHECK):
 - If a sentence could make the reader ask “what exactly is changing or being achieved?”,
@@ -442,7 +347,7 @@ Text:
 
 Final Summary (use ONLY black bullet points “•”):
 """,
-    input_variables=["text"]
+    input_variables=["text", "authority"]
 )
 
 # ============================================================
@@ -451,7 +356,7 @@ Final Summary (use ONLY black bullet points “•”):
 
 MASTER_CIRCULAR_PROMPT = PromptTemplate(
     template="""
-You are a regulatory analyst preparing a short, client-ready summary of a SEBI Master Circular.
+You are a regulatory analyst preparing a short, client-ready summary of a {authority} Master Circular.
 
 Master Circulars consolidate all existing circulars and directions on a topic into a single updated reference document.
 
@@ -462,7 +367,7 @@ FORMAT RULES (MANDATORY):
 - No sub-bullets, numbering, links, or references
 
 CONTENT RULES:
-- State that SEBI has issued a Master Circular
+- State that {authority} has issued a Master Circular
 - Clearly mention the topic it covers
 - Mention that it consolidates and supersedes earlier circulars where specified
 - Emphasize that it is issued for ease of reference and is to be followed going forward
@@ -472,14 +377,14 @@ CONTENT RULES:
 
 STARTING RULE (MANDATORY):
 - The FIRST bullet MUST start exactly with:
-  “SEBI has issued a master circular for …”
+  “{authority} has issued a master circular for …”
 
 Text:
 {text}
 
 Final Summary:
 """,
-    input_variables=["text"]
+    input_variables=["text", "authority"]
 )
 
 
@@ -489,12 +394,12 @@ Final Summary:
 
 NOTIFICATIONS_PROMPT = PromptTemplate(
     template="""
-You are a regulatory analyst preparing a short, client-ready summary of an IFSCA notification.
+You are a regulatory analyst preparing a short, client-ready summary of an {authority} notification.
 
 SUB-DOMAIN: Notifications
 
 ABOUT:
-IFSCA notifications are official announcements that introduce new rules, amendments, designations,
+{authority} notifications are official announcements that introduce new rules, amendments, designations,
 exemptions, or regulatory clarifications.
 
 The reader will NOT open the original notification.
@@ -545,7 +450,7 @@ Text:
 
 Final Summary (use ONLY black bullet points “•”):
 """,
-    input_variables=["text"]
+    input_variables=["text", "authority"]
 )
 
 # ============================================================
@@ -681,17 +586,17 @@ Final Summary:
 
 INFORMAL_GUIDANCE_PROMPT = PromptTemplate(
     template="""
-You are a regulatory analyst preparing a very brief, client-ready summary of a SEBI Informal Guidance letter.
+You are a regulatory analyst preparing a very brief, client-ready summary of a {authority} Informal Guidance letter.
 
 ABOUT:
-Informal Guidance letters contain SEBI’s interpretation or clarification provided in response to
+Informal Guidance letters contain {authority}’s interpretation or clarification provided in response to
 entity-specific queries raised by a company or its officials.
 These letters are not general regulations and apply only to the facts presented.
 
 CONTENT RULES (STRICT):
 - Summarise ONLY:
   • the core issue or transaction on which clarification was sought, and
-  • SEBI’s main interpretation or view in response.
+  • {authority}’s main interpretation or view in response.
 - Do NOT list multiple queries or sub-queries separately.
 - Do NOT quote regulations, clause numbers, or definitions.
 - Do NOT reproduce background facts in detail.
@@ -705,7 +610,7 @@ FORMAT RULES (MANDATORY):
 
 MANDATORY STARTING RULE:
 - The FIRST bullet MUST start exactly with:
-  “Informal guidance issued by SEBI in the matter of …”
+  “Informal guidance issued by {authority} in the matter of …”
 
 STYLE:
 - Extremely concise
@@ -717,50 +622,100 @@ Text:
 
 Final Summary (use ONLY black bullet points “•”):
 """,
+    input_variables=["text", "authority"]
+)
+
+# ============================================================
+# MASTER DIRECTIONS SUMMARY PROMPT
+# ===========================================================
+
+MASTER_DIRECTION_PROMPT = PromptTemplate(
+    template="""
+You are a regulatory analyst preparing a short, client-ready summary of a Master Direction issued by a financial regulator.
+
+ABOUT:
+Master Directions consolidate and compile all instructions, operational requirements, and compliance standards on a specific regulatory topic into one comprehensive framework.
+
+FORMAT RULES (STRICT):
+- Write a single short paragraph (NOT bullet points)
+- 4 to 6 sentences only
+- Plain, professional, business-facing language
+- Do NOT mention annexures, chapters, clause numbers, or internal structure
+- Do NOT describe tables or reporting formats in detail
+
+MANDATORY STARTING RULE:
+- The summary MUST start exactly with:
+  “The {authority} consolidates …”
+- Do NOT use any alternative wording.
+
+CONTENT REQUIREMENTS:
+- Clearly state what regulatory area the Master Direction covers
+- Mention who it applies to (e.g., banks, NBFCs, financial institutions, credit information companies, etc.)
+- Highlight the major regulatory themes such as:
+  reporting framework,
+  governance standards,
+  operational compliance,
+  customer protection,
+  grievance redressal,
+  supervisory oversight.
+- Briefly convey the regulatory objective or intent.
+
+Text:
+{text}
+
+Final Summary:
+""",
+    input_variables=["text", "authority"]
+)
+
+# ============================================================
+# RULES SUMMARY PROMPT
+# ===========================================================
+
+RULES_PROMPT = PromptTemplate(
+    template="""
+You are a regulatory analyst preparing a short, client-ready summary of Rules notified under a parent Act.
+
+ABOUT:
+Rules are subordinate legislation issued by the Central Government or a regulator to operationalise provisions of a parent Act.
+
+MANDATORY STARTING RULE:
+- The summary MUST start exactly with:
+  “The rules as notified state …”
+
+CONTENT REQUIREMENTS:
+- Clearly mention:
+  • the name/topic of the Rules
+  • whether they supersede earlier rules (if applicable)
+  • the effective date (if mentioned)
+  • the key procedural or compliance changes introduced
+  • important timelines, monetary thresholds, or fees (if materially relevant)
+- Focus on what is NEW or practically relevant for regulated entities.
+
+DO NOT:
+- Mention section numbers, clause numbers, or detailed drafting structure
+- Describe annexures or forms in detail
+- Reproduce definitions
+- Discuss penal provisions in depth
+- Provide an exhaustive breakdown
+
+FORMAT RULES:
+- Write a single short paragraph
+- 4 to 6 sentences only
+- Plain, business-facing language
+- No bullet points
+
+Text:
+{text}
+
+Final Summary:
+""",
     input_variables=["text"]
 )
 
 # ============================================================
 # Quality Check
 # ============================================================
-
-# SUMMARY_CLEANER_PROMPT = PromptTemplate(
-#     template="""
-# You are reviewing a generated regulatory summary before final publication.
-
-# TASK:
-# - Remove any bullet points or sentences that are vague, generic, or non-informative.
-# - Keep ONLY bullets that state concrete regulatory actions, obligations, scope, or outcomes.
-# - Do NOT rewrite or invent new content.
-# - Do NOT add missing details.
-# - If a bullet contains vague phrases and no concrete regulatory substance, REMOVE it entirely.
-# - If a bullet is concrete and clear, KEEP it unchanged.
-
-# VAGUE PHRASES INCLUDE (NON-EXHAUSTIVE):
-# - certain provisions
-# - various changes
-# - other measures
-# - related aspects
-# - market developments
-# - regulatory landscape
-# - streamlining processes
-# - reviewing provisions
-# - considering changes
-
-# RULES:
-# - Preserve the original bullet formatting.
-# - Preserve the original order of remaining bullets.
-# - Output ONLY the cleaned summary.
-# - If all bullets are valid, return the summary unchanged.
-# - If all bullets are vague, return "NA".
-
-# Summary to review:
-# {summary}
-
-# Cleaned Summary:
-# """,
-#     input_variables=["summary"]
-# )
 
 SUMMARY_CLEANER_PROMPT = PromptTemplate(
     template="""
@@ -795,6 +750,7 @@ VAGUE PHRASES INCLUDE (NON-EXHAUSTIVE):
 - Legal - &gt; Circulars
 - website under the link
 - www.sebi.gov.in
+- www.ifsca.gov.in
 
 ALSO REMOVE BULLETS THAT ONLY CONTAIN:
 - venue, location, or event details
@@ -864,6 +820,9 @@ logging.info(f"Weekly folder -> {WEEK_FOLDER}")
 def clean_summary_with_llm(summary: str) -> str:
     if not summary or summary.strip() == "NA":
         return summary
+
+    # # HARD remove URLs first (deterministic)
+    # summary = re.sub(r'https?://\S+|www\.\S+', '', summary)
 
     cleaned = llm.invoke(
         SUMMARY_CLEANER_PROMPT.format(summary=summary)
@@ -945,7 +904,9 @@ def extract_regulation_core(text: str) -> str:
 # SUMMARY GENERATION (NO CHUNKS)
 # ============================================================
 
-def generate_regulation_summary(text: str) -> str:
+# def generate_regulation_summary(text: str) -> str:
+def generate_regulation_summary(text: str, authority: str):
+
     core_text = extract_regulation_core(text)
     core_text = core_text[:12000]
 
@@ -954,8 +915,15 @@ def generate_regulation_summary(text: str) -> str:
     else:
         prompt = REGULATIONS_PROMPT
 
+    # summary = llm.invoke(
+    #     prompt.format(text=core_text)
+    # ).strip()
+
     summary = llm.invoke(
-        prompt.format(text=core_text)
+        prompt.format(
+            text=core_text,
+            authority=authority
+        )
     ).strip()
 
     return summary or "NA", core_text
@@ -997,7 +965,10 @@ def process_regulation_pdf(row: pd.Series):
 
     try:
         text = extract_pdf_text(pdf_path)
-        summary, embedding_text = generate_regulation_summary(text)
+        # summary, embedding_text = generate_regulation_summary(text)
+
+        authority = resolve_authority(row["Verticals"])
+        summary, embedding_text = generate_regulation_summary(text, authority)
 
         # row["Summary"] = summary
         row["Summary"] = clean_summary_with_llm(summary)
@@ -1044,8 +1015,17 @@ def process_circular_pdf(row: pd.Series):
         # Circulars do NOT need regulation-style filtering
         core_text = text[:12000]
 
+        # summary = llm.invoke(
+        #     CIRCULARS_PROMPT.format(text=core_text)
+        # ).strip()
+
+        authority = resolve_authority(row["Verticals"])
+
         summary = llm.invoke(
-            CIRCULARS_PROMPT.format(text=core_text)
+            CIRCULARS_PROMPT.format(
+                text=core_text,
+                authority=authority
+            )
         ).strip()
 
         summary = summary.strip().strip('"')
@@ -1072,8 +1052,10 @@ def process_press_release_pdf(row: pd.Series):
         text = re.sub(r'\s+', ' ', text).strip()
         core_text = text[:4000]
 
+        authority = resolve_authority(row["Verticals"])
+
         summary = llm.invoke(
-            PRESS_RELEASE_PROMPT.format(text=core_text)
+            PRESS_RELEASE_PROMPT.format(text=core_text, authority=authority)
         ).strip()
 
         # row["Summary"] = summary or "NA"
@@ -1113,8 +1095,10 @@ def process_consultation_paper_pdf(row: pd.Series):
         # No regulation-style filtering required
         core_text = text[:12000]
 
+        authority = resolve_authority(row["Verticals"])
+
         summary = llm.invoke(
-            CONSULTATION_PAPER_PROMPT.format(text=core_text)
+            CONSULTATION_PAPER_PROMPT.format(text=core_text, authority=authority)
         ).strip()
 
         # row["Summary"] = summary or "NA"
@@ -1147,7 +1131,8 @@ def extract_master_circular_core(text: str) -> str:
         if not clean:
             continue
 
-        if re.search(r'table of contents|contents|index', clean, re.IGNORECASE):
+        if re.search(r'table of contents|contents|index|arrangement|abbreviations', clean, re.IGNORECASE):
+        # if re.search(r'table of contents|contents|index', clean, re.IGNORECASE):
             break
 
         if len(clean) > 30:
@@ -1167,8 +1152,10 @@ def process_master_circular_pdf(row: pd.Series):
         #  Only intro part, not full document
         core_text = extract_master_circular_core(text)
 
+        authority = resolve_authority(row["Verticals"])
+
         summary = llm.invoke(
-            MASTER_CIRCULAR_PROMPT.format(text=core_text)
+            MASTER_CIRCULAR_PROMPT.format(text=core_text, authority=authority)
         ).strip()
         summary = re.sub(r'https?://\S+', '', summary)
 
@@ -1200,8 +1187,10 @@ def process_notification_pdf(row: pd.Series):
         # Notifications are short -> no regulation-style filtering
         core_text = text[:8000]
 
+        authority = resolve_authority(row["Verticals"])
+
         summary = llm.invoke(
-            NOTIFICATIONS_PROMPT.format(text=core_text)
+            NOTIFICATIONS_PROMPT.format(text=core_text, authority=authority)
         ).strip()
 
         row["Summary"] = clean_summary_with_llm(summary)
@@ -1291,29 +1280,6 @@ def process_public_consultation_pdf(row: pd.Series):
 
 # ============================================================
 
-# def process_faq_pdf(row: pd.Series):
-#     pdf_path = Path(row["Path"])
-
-#     try:
-#         text = extract_pdf_text(pdf_path)
-
-#         # Only intro page is enough
-#         core_text = text[:3000]
-
-#         summary = llm.invoke(
-#             FAQS_PROMPT.format(text=core_text)
-#         ).strip()
-
-#         row["Summary"] = summary
-#         row["EmbeddingText"] = core_text
-
-#     except Exception as e:
-#         logging.error(f"Failed -> {pdf_path}: {e}")
-#         row["Summary"] = "NA"
-#         row["EmbeddingText"] = "NA"
-
-#     return row
-
 def process_faq_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
 
@@ -1367,12 +1333,65 @@ def process_informal_guidance_pdf(row: pd.Series):
         # Informal Guidance letters are short; no heavy filtering
         core_text = text[:8000]
 
+        authority = resolve_authority(row["Verticals"])
+
         summary = llm.invoke(
-            INFORMAL_GUIDANCE_PROMPT.format(text=core_text)
+            INFORMAL_GUIDANCE_PROMPT.format(text=core_text, authority=authority)
         ).strip()
 
         # Clean lightly, but DO NOT over-prune
         row["Summary"] = clean_summary_with_llm(summary)
+        row["EmbeddingText"] = core_text
+
+    except Exception as e:
+        logging.error(f"Failed -> {pdf_path}: {e}")
+        row["Summary"] = "NA"
+        row["EmbeddingText"] = "NA"
+
+    return row
+
+# ============================================================
+
+def process_master_direction_pdf(row: pd.Series):
+    pdf_path = Path(row["Path"])
+
+    try:
+        text = extract_pdf_text(pdf_path)
+
+        core_text = extract_master_circular_core(text)[:6000]
+
+        authority = resolve_authority(row["Verticals"])
+        summary = llm.invoke(
+            MASTER_DIRECTION_PROMPT.format(
+                text=core_text,
+                authority=authority
+            )
+        ).strip()
+
+        row["Summary"] = clean_summary_with_llm(summary)
+        row["EmbeddingText"] = core_text
+
+    except Exception as e:
+        logging.error(f"Failed -> {pdf_path}: {e}")
+        row["Summary"] = "NA"
+        row["EmbeddingText"] = "NA"
+
+    return row
+
+# ============================================================
+
+def process_rules_pdf(row: pd.Series):
+    pdf_path = Path(row["Path"])
+
+    try:
+        text = extract_pdf_text(pdf_path)
+        core_text = text[:10000]
+
+        summary = llm.invoke(
+            RULES_PROMPT.format(text=core_text)
+        ).strip()
+
+        row["Summary"] = summary
         row["EmbeddingText"] = core_text
 
     except Exception as e:
@@ -1396,6 +1415,12 @@ def process_row_by_domain(row: pd.Series):
     #  Master Circular FIRST (important)
     if is_master_circular(sub_clean):
         return process_master_circular_pdf(row)
+
+    elif sub_clean == "master directions":
+        return process_master_direction_pdf(row)
+
+    elif sub_clean == "rules":
+        return process_rules_pdf(row)
 
     elif sub_clean == "regulations":
         return process_regulation_pdf(row)
