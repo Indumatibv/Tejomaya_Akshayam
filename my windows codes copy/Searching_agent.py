@@ -104,7 +104,7 @@ ALL_DOWNLOADED = []
 LINKS_EXCEL = DATA_DIR / "Links.xlsx"
 
 # Only process these sheet names (categories)
-PROCESS_SHEETS = ["SEBI", "Listed Companies", "IFSCA", "RBI", "IBBI"]
+PROCESS_SHEETS = ["SEBI", "Listed Companies", "IFSCA", "RBI", "IBBI", "ICAI"]
 
 # IBBI subdomains handled by IBBI v1 scraper
 IBBI_1_SCRAPE = [
@@ -321,49 +321,11 @@ def ensure_year_month_structure(base_folder: str, category: str, subfolder: str,
     os.makedirs(month_path, exist_ok=True)
     return month_path
 
-async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_path: str) -> str | None:
-    try:
-        filename = os.path.basename(urlparse(pdf_url).path) or sanitize_filename("downloaded.pdf")
-        file_path = os.path.join(save_path, filename)
-        if os.path.exists(file_path):
-            logging.info("Skipping download (exists): %s", file_path)
-            return file_path
-
-        async with session.get(pdf_url, timeout=30) as resp:
-            if resp.status == 200:
-                content = await resp.read()
-                with open(file_path, "wb") as f:
-                    f.write(content)
-                logging.info("Downloaded PDF: %s", file_path)
-                return file_path
-            else:
-                logging.warning("Failed PDF download (%s) for %s", resp.status, pdf_url)
-    except Exception as e:
-        logging.exception("Error downloading PDF %s : %s", pdf_url, e)
-    return None
 
 async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: str, title: str | None = None) -> str | None:
     try:
         parsed = urlparse(pdf_url)
         qs = parse_qs(parsed.query)
-
-        # filename = qs.get("fileName", [None])[0]
-        # if not filename:
-        #     filename = sanitize_filename(title or "document")
-
-        # filename = qs.get("fileName", [None])[0]
-
-        # if not filename:
-        #     if title:
-        #         filename = sanitize_filename(title)
-        #     else:
-        #         filename = os.path.basename(urlparse(pdf_url).path)
-
-        # if not filename.lower().endswith(".pdf"):
-        #     filename += ".pdf"
-
-        # if not filename.lower().endswith(".pdf"):
-        #     filename += ".pdf"
 
 
         filename = qs.get("fileName", [None])[0]
@@ -375,17 +337,6 @@ async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: s
 
         if os.path.exists(file_path):
             logging.warning("Overwriting existing file: %s", file_path)
-
-        # headers = {
-        #     "User-Agent": "Mozilla/5.0",
-        #     "Accept": "application/pdf",
-        #     "Referer": "https://ifsca.gov.in/",
-        # }
-        # headers = {
-        #     "User-Agent": "Mozilla/5.0",
-        #     "Accept": "application/pdf",
-        #     "Referer": urlparse(pdf_url).scheme + "://" + urlparse(pdf_url).netloc,
-        # }
 
         headers = {
             "User-Agent": (
@@ -1280,14 +1231,6 @@ async def scrape_rbi(task, week_start, week_end):
 
         for row in rows:
             # -------- DATE HEADER --------
-            # date_h2 = row.select_one("h2.dop_header")
-            # if date_h2:
-            #     try:
-            #         # RBI Date format: "Feb 03, 2026"
-            #         current_dt = datetime.strptime(date_h2.get_text(strip=True), "%b %d, %Y")
-            #     except Exception:
-            #         current_dt = None
-            #     continue
 
             date_h2 = row.select_one("h2.dop_header")
             if date_h2:
@@ -1353,6 +1296,110 @@ async def scrape_rbi(task, week_start, week_end):
                 logging.info("RBI Successfully downloaded: %s", title)
 
 #-----------------------------------------------------
+def is_ignored_icai_title(title: str) -> bool:
+    """
+    Returns True if ICAI title should be skipped.
+    Case-insensitive keyword match.
+    """
+    if not title:
+        return False
+
+    ignore_keywords = [
+        "test",
+        "results",
+        "commencement of batch",
+        "courses",
+        "exams",
+        "fees",
+        "books",
+        "exam",
+        "result",
+        "course",
+        "book"
+    ]
+    
+    t = title.lower()
+    return any(kw in t for kw in ignore_keywords)
+
+async def scrape_icai(task, week_start, week_end):
+    logging.info("ICAI SCRAPER -> %s", task["url"])
+
+    async with AsyncWebCrawler() as crawler:
+        result = await crawler.arun(url=task["url"])
+
+    soup = BeautifulSoup(result.html, "html.parser")
+
+    items = soup.select("li.list-group-item a[href]")
+
+    if not items:
+        logging.warning("No ICAI items found")
+        return
+
+    async with aiohttp.ClientSession() as session:
+        for a in items:
+
+            full_text = a.get_text(strip=True)
+            # pdf_url = a["href"]
+            pdf_url = urljoin(task["url"], a["href"])
+            # --- Extract Date from (...) ---
+            date_match = re.search(r"\((\d{2}-\d{2}-\d{4})\)", full_text)
+            if not date_match:
+                continue
+
+            try:
+                dt = datetime.strptime(date_match.group(1), "%d-%m-%Y")
+            except Exception:
+                continue
+
+            # --- Week Filter ---
+            if not (week_start <= dt <= week_end):
+                continue
+
+            # --- Remove date from title ---
+            # title = re.sub(r"\(\d{2}-\d{2}-\d{4}\)", "", full_text).strip()
+            title = re.sub(r"\(\d{2}-\d{2}-\d{4}\)", "", full_text)
+            title = re.sub(r"\s+", " ", title).strip()
+            title = unicodedata.normalize("NFKD", title)
+            # --- Ignore filter ---
+            if is_ignored_icai_title(title):
+                logging.info("Skipping ICAI (filtered title): %s", title)
+                continue
+
+            year = str(dt.year)
+            month_full = dt.strftime("%B")
+
+            save_dir = ensure_year_month_structure(
+                BASE_PATH,
+                task["category"],
+                task["subfolder"],
+                year,
+                month_full
+            )
+
+            downloaded_path = await download_pdf(
+                session,
+                pdf_url,
+                save_dir,
+                title
+            )
+
+            if downloaded_path:
+                ALL_DOWNLOADED.append({
+                    "Verticals": task["category"],
+                    "SubCategory": task["subfolder"],
+                    "Year": year,
+                    "Month": month_full,
+                    "IssueDate": dt.strftime("%Y-%m-%d"),
+                    "Title": title,
+                    "PDF_URL": pdf_url,
+                    "File Name": os.path.basename(downloaded_path),
+                    "Path": os.path.abspath(downloaded_path),
+                })
+
+                logging.info("ICAI downloaded: %s", title)
+
+
+#-----------------------------------------------------
 def is_ignored_ibbi_title(title: str) -> bool:
     """
     Returns True if IBBI title should be ignored.
@@ -1378,99 +1425,6 @@ def is_ignored_ibbi_title(title: str) -> bool:
     title_lower = title.lower()
     return any(kw in title_lower for kw in ignore_keywords)
 
-# async def scrape_ibbi_discussion_paper(task, week_start, week_end):
-#     logging.info("IBBI DISCUSSION PAPER SCRAPER -> %s", task["url"])
-
-#     async with AsyncWebCrawler() as crawler:
-#         result = await crawler.arun(url=task["url"])
-
-#     soup = BeautifulSoup(result.html, "html.parser")
-
-#     # IBBI Discussion Papers are DIRECTLY in the table (no detail pages)
-#     rows = soup.select("table tbody tr")
-
-#     if not rows:
-#         logging.warning("No IBBI Discussion Paper rows found")
-#         return
-
-#     async with aiohttp.ClientSession() as session:
-#         for row in rows:
-#             tds = row.find_all("td")
-#             if len(tds) < 3:
-#                 continue
-
-#             # ---- DATE ----
-#             raw_date = tds[1].get_text(" ", strip=True)
-#             raw_date = re.sub(r'(\d+)(st|nd|rd|th)', r'\1', raw_date)
-
-#             parsed = None
-#             for fmt in ("%d %B, %Y", "%d %b, %Y"):
-#                 try:
-#                     parsed = datetime.strptime(raw_date, fmt)
-#                     break
-#                 except ValueError:
-#                     pass
-
-#             if not parsed:
-#                 continue
-
-#             dt = parsed
-
-#             if not (week_start <= dt <= week_end):
-#                 continue
-
-#             # ---- TITLE ----
-#             title = unicodedata.normalize(
-#                 "NFKD",
-#                 tds[2].get_text(" ", strip=True)
-#             )
-
-#             # ---- PDF URL (onclick=newwindow1) ----
-#             download_a = row.select_one("a[onclick*='newwindow1']")
-#             if not download_a:
-#                 continue
-
-#             onclick = download_a.get("onclick", "")
-#             m = re.search(r"newwindow1\(['\"]([^'\"]+\.pdf)['\"]\)", onclick)
-#             if not m:
-#                 continue
-
-#             pdf_url = m.group(1)
-#             if pdf_url.startswith("/"):
-#                 pdf_url = urljoin(task["url"], pdf_url)
-
-#             year = str(dt.year)
-#             month_full = dt.strftime("%B")
-
-#             save_dir = ensure_year_month_structure(
-#                 BASE_PATH,
-#                 task["category"],
-#                 task["subfolder"],
-#                 year,
-#                 month_full
-#             )
-
-#             downloaded_path = await download_pdf(
-#                 session,
-#                 pdf_url,
-#                 save_dir,
-#                 title
-#             )
-
-#             if downloaded_path:
-#                 ALL_DOWNLOADED.append({
-#                     "Verticals": task["category"],
-#                     "SubCategory": task["subfolder"],
-#                     "Year": year,
-#                     "Month": month_full,
-#                     "IssueDate": dt.strftime("%Y-%m-%d"),
-#                     "Title": title,
-#                     "PDF_URL": pdf_url,
-#                     "File Name": os.path.basename(downloaded_path),
-#                     "Path": os.path.abspath(downloaded_path),
-#                 })
-
-#                 logging.info("IBBI Discussion Paper downloaded: %s", title)
 
 async def scrape_ibbi_discussion_paper(task, week_start, week_end):
     logging.info("IBBI DISCUSSION PAPER SCRAPER -> %s", task["url"])
@@ -1588,24 +1542,7 @@ async def scrape_ibbi_1(task, week_start, week_end):
     async with AsyncWebCrawler() as crawler:
         result = await crawler.arun(url=task["url"])
 
-    # soup = BeautifulSoup(result.html, "html.parser")
-    # rows = soup.select("table tbody tr")
-
-    # if not rows:
-    #     logging.warning("No IBBI rows found")
-    #     return
-
     soup = BeautifulSoup(result.html, "html.parser")
-
-    # if task["subfolder"] == "Discussion Paper":
-    #     # Discussion Paper pages do NOT use table/tbody consistently
-    #     rows = soup.select("tr")
-    # else:
-    #     rows = soup.select("table tbody tr")
-
-    # if not rows:
-    #     logging.warning("No IBBI rows found for subfolder: %s", task["subfolder"])
-    #     return
 
     # Discussion Paper is NOT a row-based listing
     if task["subfolder"] == "Discussion Paper":
@@ -1626,13 +1563,6 @@ async def scrape_ibbi_1(task, week_start, week_end):
                 continue
 
             # ---- DATE ----
-            # try:
-            #     dt = datetime.strptime(
-            #         tds[1].get_text(strip=True),
-            #         "%d %b, %Y"
-            #     )
-            # except Exception:
-            #     continue
 
             raw_date = tds[1].get_text(" ", strip=True)
 
@@ -1732,9 +1662,6 @@ async def scrape_generic_link(task, week_start, week_end):
             # Fallback to your existing SEBI scraper for other subfolders
             return await scrape_sebi(task, week_start, week_end)
 
-    # if category == "SEBI":
-    #     return await scrape_sebi(task, week_start, week_end)
-
     if category == "IFSCA":
 
         # SPECIAL CASE: Public Consultation
@@ -1769,12 +1696,15 @@ async def scrape_generic_link(task, week_start, week_end):
     if category == "RBI":
         return await scrape_rbi(task, week_start, week_end)
 
+    if category == "ICAI":
+        return await scrape_icai(task, week_start, week_end)
+    
     logging.warning("Unknown category: %s", category)
 
 #---------------------------------------------------------------------
 
 async def main():
-    weeks_back = 13 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
+    weeks_back = 1 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
     week_start, week_end = get_week_range(weeks_back)
 
     tasks = load_link_tasks_from_excel()

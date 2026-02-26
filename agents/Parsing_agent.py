@@ -714,6 +714,88 @@ Final Summary:
 )
 
 # ============================================================
+# ANNOUNCEMENTS SUMMARY PROMPT
+# ============================================================
+
+ANNOUNCEMENTS_PROMPT = PromptTemplate(
+    template="""
+You are preparing a short client-ready summary of an Announcement issued by {authority}.
+
+SUB-DOMAIN: Announcements
+
+ABOUT:
+Announcements include guidance, clarifications, accounting standards releases, regulatory updates, or policy communications.
+
+STRICT EXCLUSION RULE:
+- If the document relates to examinations, empanelment, courses, fees, results, books, publications or convocation,
+  return exactly: NA
+
+CONTENT RULES:
+- Summarise only substantive regulatory or professional guidance.
+- Clearly state what has been introduced, clarified, or released.
+- Ignore operational, administrative or exam logistics information.
+
+FORMAT RULES:
+- Write a single short paragraph.
+- 3 to 5 sentences.
+- Plain, professional language.
+- No bullet points.
+
+MANDATORY START:
+- The summary MUST start exactly with:
+  “The {authority} issued …”
+
+Text:
+{text}
+
+Final Summary:
+""",
+    input_variables=["text", "authority"]
+)
+
+# ===========================================================
+# DISCUSSION PAPERS SUMMARY PROMPT
+# ===========================================================
+
+DISCUSSION_PAPER_PROMPT = PromptTemplate(
+    template="""
+You are a regulatory analyst preparing a concise, client-ready summary of a Discussion Paper.
+
+SUB-DOMAIN: Discussion Paper
+
+ABOUT:
+Discussion Papers contain draft regulatory proposals issued for stakeholder consultation.
+They propose amendments or new regulatory measures but do NOT constitute final regulations.
+
+MANDATORY STARTING RULE:
+- The summary MUST start exactly with:
+  “The discussion paper proposes the following …”
+
+CONTENT REQUIREMENTS:
+- Clearly summarise the key proposed amendments or regulatory changes.
+- Mention the regulatory areas affected.
+- Briefly include relevant background context only if necessary to understand the proposals.
+- Clearly state that public comments are being sought.
+- Explicitly mention the deadline for submission of comments, if stated.
+
+FORMAT RULES (STRICT):
+- Write a single short paragraph.
+- 4 to 6 sentences only.
+- Plain, professional, business-facing language.
+- No bullet points.
+- No headings.
+- Do NOT quote draft regulation text.
+- Do NOT mention internal page references or website submission steps.
+
+Text:
+{text}
+
+Final Summary:
+""",
+    input_variables=["text"]
+)
+
+# ============================================================
 # Quality Check
 # ============================================================
 
@@ -1402,6 +1484,83 @@ def process_rules_pdf(row: pd.Series):
     return row
 
 # ============================================================
+def is_icai_exam_related(text: str, title: str = "") -> bool:
+    combined = f"{title} {text}".lower()
+
+    exam_keywords = [
+        "examination",
+        "exam",
+        "foundation",
+        "intermediate",
+        "final",
+        "empanelment",
+        "observer",
+        "question paper",
+        "examination centre",
+        "honorarium",
+        "cooling off period"
+    ]
+
+    return any(word in combined for word in exam_keywords)
+
+def process_announcement_pdf(row: pd.Series):
+    pdf_path = Path(row["Path"])
+
+    try:
+        text = extract_pdf_text(pdf_path)
+        core_text = text[:10000]
+
+        authority = resolve_authority(row["Verticals"])
+
+        # 🔴 HARD EXAM FILTER
+        if is_icai_exam_related(core_text, row.get("Title", "")):
+            row["Summary"] = "NA"
+            row["EmbeddingText"] = "NA"
+            return row
+
+        summary = llm.invoke(
+            ANNOUNCEMENTS_PROMPT.format(
+                text=core_text,
+                authority=authority
+            )
+        ).strip()
+
+        row["Summary"] = summary or "NA"
+        row["EmbeddingText"] = core_text
+
+    except Exception as e:
+        logging.error(f"Failed -> {pdf_path}: {e}")
+        row["Summary"] = "NA"
+        row["EmbeddingText"] = "NA"
+
+    return row
+
+# ============================================================
+
+def process_discussion_paper_pdf(row: pd.Series):
+    pdf_path = Path(row["Path"])
+
+    try:
+        text = extract_pdf_text(pdf_path)
+
+        # Discussion papers can be long – limit to meaningful portion
+        core_text = text[:15000]
+
+        summary = llm.invoke(
+            DISCUSSION_PAPER_PROMPT.format(text=core_text)
+        ).strip()
+
+        row["Summary"] = summary
+        row["EmbeddingText"] = core_text
+
+    except Exception as e:
+        logging.error(f"Failed -> {pdf_path}: {e}")
+        row["Summary"] = "NA"
+        row["EmbeddingText"] = "NA"
+
+    return row
+
+# ============================================================
 
 def process_row_by_domain(row: pd.Series):
     sub = row["SubCategory"]
@@ -1448,6 +1607,12 @@ def process_row_by_domain(row: pd.Series):
 
     elif sub_clean == "faqs":
         return process_faq_pdf(row)
+
+    elif sub_clean == "announcements":
+        return process_announcement_pdf(row)
+    
+    elif sub_clean == "discussion paper":
+        return process_discussion_paper_pdf(row)
 
     else:
         logging.info(f"Skipping SubCategory -> {sub}")
