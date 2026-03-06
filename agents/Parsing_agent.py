@@ -520,7 +520,7 @@ MANDATORY STARTING RULE:
 CONTENT RULES:
 - Summarise the MAIN proposed changes or draft measures in simple language
 - Briefly include relevant background context only if it helps understand the proposal
-- Mention the consultation period or deadline for comments IF stated
+- The summary MUST include the deadline for submitting comments if it is mentioned in the document.
 - Mention key questions or areas where feedback is sought IF explicitly mentioned
 - Do NOT describe internal drafting history or reproduce tables verbatim
 
@@ -530,6 +530,13 @@ FORMAT RULES (STRICT):
 - Each bullet must be ONE complete sentence
 - No headings, no numbering, no sub-bullets
 - No legal citations, clause numbers, or annexure references
+
+STRUCTURE RULES (MANDATORY):
+- The FIRST bullet MUST start exactly with:
+  “Public comments are invited on the draft … and the following is proposed …”
+- One bullet MUST clearly state that public comments are being invited.
+- The FINAL bullet MUST explicitly state the deadline for submitting comments, if the document provides one.
+- If the document does NOT specify a deadline, state only that public comments are being invited without inventing a date.
 
 TONE:
 - Plain, professional, business-facing

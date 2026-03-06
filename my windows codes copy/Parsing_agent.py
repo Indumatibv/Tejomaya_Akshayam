@@ -520,7 +520,7 @@ MANDATORY STARTING RULE:
 CONTENT RULES:
 - Summarise the MAIN proposed changes or draft measures in simple language
 - Briefly include relevant background context only if it helps understand the proposal
-- Mention the consultation period or deadline for comments IF stated
+- The summary MUST include the deadline for submitting comments if it is mentioned in the document.
 - Mention key questions or areas where feedback is sought IF explicitly mentioned
 - Do NOT describe internal drafting history or reproduce tables verbatim
 
@@ -530,6 +530,13 @@ FORMAT RULES (STRICT):
 - Each bullet must be ONE complete sentence
 - No headings, no numbering, no sub-bullets
 - No legal citations, clause numbers, or annexure references
+
+STRUCTURE RULES (MANDATORY):
+- The FIRST bullet MUST start exactly with:
+  “Public comments are invited on the draft … and the following is proposed …”
+- One bullet MUST clearly state that public comments are being invited.
+- The FINAL bullet MUST explicitly state the deadline for submitting comments, if the document provides one.
+- If the document does NOT specify a deadline, state only that public comments are being invited without inventing a date.
 
 TONE:
 - Plain, professional, business-facing
@@ -997,6 +1004,10 @@ def generate_regulation_summary(text: str, authority: str):
     else:
         prompt = REGULATIONS_PROMPT
 
+    # summary = llm.invoke(
+    #     prompt.format(text=core_text)
+    # ).strip()
+
     summary = llm.invoke(
         prompt.format(
             text=core_text,
@@ -1092,6 +1103,10 @@ def process_circular_pdf(row: pd.Series):
 
         # Circulars do NOT need regulation-style filtering
         core_text = text[:12000]
+
+        # summary = llm.invoke(
+        #     CIRCULARS_PROMPT.format(text=core_text)
+        # ).strip()
 
         authority = resolve_authority(row["Verticals"])
 
@@ -1367,7 +1382,7 @@ def process_faq_pdf(row: pd.Series):
             FAQS_PROMPT.format(text=core_text)
         ).strip()
 
-        # HARD FAQ SANITIZER
+        # 🔒 HARD FAQ SANITIZER
         final_bullets = []
         for line in raw_summary.splitlines():
             line = line.strip()
@@ -1504,7 +1519,7 @@ def process_announcement_pdf(row: pd.Series):
 
         authority = resolve_authority(row["Verticals"])
 
-        # HARD EXAM FILTER
+        # 🔴 HARD EXAM FILTER
         if is_icai_exam_related(core_text, row.get("Title", "")):
             row["Summary"] = "NA"
             row["EmbeddingText"] = "NA"
