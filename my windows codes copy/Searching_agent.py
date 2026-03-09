@@ -10,6 +10,8 @@ import nest_asyncio
 import platform
 import os
 from pathlib import Path
+
+from selenium.common import TimeoutException
 # Apply Windows-specific event loop fix (must run before other asyncio use)
 if sys.platform.startswith("win"):
     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
@@ -321,11 +323,49 @@ def ensure_year_month_structure(base_folder: str, category: str, subfolder: str,
     os.makedirs(month_path, exist_ok=True)
     return month_path
 
+# async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_path: str) -> str | None:
+#     try:
+#         filename = os.path.basename(urlparse(pdf_url).path) or sanitize_filename("downloaded.pdf")
+#         file_path = os.path.join(save_path, filename)
+#         if os.path.exists(file_path):
+#             logging.info("Skipping download (exists): %s", file_path)
+#             return file_path
+
+#         async with session.get(pdf_url, timeout=30) as resp:
+#             if resp.status == 200:
+#                 content = await resp.read()
+#                 with open(file_path, "wb") as f:
+#                     f.write(content)
+#                 logging.info("Downloaded PDF: %s", file_path)
+#                 return file_path
+#             else:
+#                 logging.warning("Failed PDF download (%s) for %s", resp.status, pdf_url)
+#     except Exception as e:
+#         logging.exception("Error downloading PDF %s : %s", pdf_url, e)
+#     return None
 
 async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: str, title: str | None = None) -> str | None:
     try:
         parsed = urlparse(pdf_url)
         qs = parse_qs(parsed.query)
+
+        # filename = qs.get("fileName", [None])[0]
+        # if not filename:
+        #     filename = sanitize_filename(title or "document")
+
+        # filename = qs.get("fileName", [None])[0]
+
+        # if not filename:
+        #     if title:
+        #         filename = sanitize_filename(title)
+        #     else:
+        #         filename = os.path.basename(urlparse(pdf_url).path)
+
+        # if not filename.lower().endswith(".pdf"):
+        #     filename += ".pdf"
+
+        # if not filename.lower().endswith(".pdf"):
+        #     filename += ".pdf"
 
 
         filename = qs.get("fileName", [None])[0]
@@ -337,6 +377,17 @@ async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: s
 
         if os.path.exists(file_path):
             logging.warning("Overwriting existing file: %s", file_path)
+
+        # headers = {
+        #     "User-Agent": "Mozilla/5.0",
+        #     "Accept": "application/pdf",
+        #     "Referer": "https://ifsca.gov.in/",
+        # }
+        # headers = {
+        #     "User-Agent": "Mozilla/5.0",
+        #     "Accept": "application/pdf",
+        #     "Referer": urlparse(pdf_url).scheme + "://" + urlparse(pdf_url).netloc,
+        # }
 
         headers = {
             "User-Agent": (
@@ -505,13 +556,161 @@ async def scrape_nse(task, week_start, week_end):
     logging.info("NSE LISTED COMPANIES -> DONE")
 
 
+# async def scrape_bse(task, week_start, week_end):
+#     logging.info("BSE LISTED COMPANIES SCRAPER -> %s", task["url"])
+
+#     # Configure Chrome with custom download folder
+#     chrome_opts = webdriver.ChromeOptions()
+#     prefs = {
+#         "download.default_directory": BASE_PATH,     # PDF auto saved here
+#         "download.prompt_for_download": False,
+#         "plugins.always_open_pdf_externally": True
+#     }
+#     chrome_opts.add_experimental_option("prefs", prefs)
+#     chrome_opts.add_argument("--headless=new")
+#     chrome_opts.add_argument("--disable-gpu")
+#     chrome_opts.add_argument("--no-sandbox")
+#     chrome_opts.add_argument("--window-size=1920,1080")
+
+#     driver = webdriver.Chrome(options=chrome_opts)
+
+#     # Load listing page
+#     driver.get(task["url"])
+#     time.sleep(3)
+        
+#     soup = BeautifulSoup(driver.page_source, "html.parser")
+#     rows = soup.select("tr.ng-scope")
+
+#     if not rows:
+#         logging.error("No BSE rows found after JS load")
+#         driver.quit()
+#         return
+
+#     logging.info("Processing TOP 10 BSE Circulars")
+#     top_10 = rows[:10]
+
+#     for row in top_10:
+#         cols = row.find_all("td")
+#         if len(cols) < 2:
+#             continue
+
+#         title_elem = cols[0].find("a", href=True)
+#         if not title_elem:
+#             continue
+
+#         title = title_elem.get_text(strip=True)
+#         detail_link = urljoin("https://www.bseindia.com", title_elem["href"])
+
+#         # Parse Issue Date
+#         date_text = cols[1].get_text(strip=True)
+#         try:
+#             dt = datetime.strptime(date_text, "%B %d, %Y")
+#         except:
+#             logging.warning("Cannot parse date: %s", date_text)
+#             continue
+
+#         if not (week_start <= dt <= week_end):
+#             logging.info("Skipping (outside week): %s", dt.date())
+#             continue
+
+#         logging.info("Opening detail page: %s", detail_link)
+#         driver.get(detail_link)
+#         time.sleep(2)
+
+#         detail_soup = BeautifulSoup(driver.page_source, "html.parser")
+
+#         year = str(dt.year)
+#         month_full = dt.strftime("%B")
+
+#         save_dir = ensure_year_month_structure(
+#             BASE_PATH, task["category"], task["subfolder"], year, month_full
+#         )
+#         # filename = sanitize_filename(title)
+#         filename = safe_pdf_filename(title, detail_link)
+
+#         final_path = os.path.join(save_dir, filename)
+
+#         # ---- CHECK FOR ATTACHMENT ----
+#         attach = detail_soup.select_one("td#tc52 a[href]")
+#         if attach:
+#             pdf_url = urljoin("https://www.bseindia.com", attach["href"])
+#             logging.info("Attachment -> %s", pdf_url)
+
+#             # CLICK USING SELENIUM (IMPORTANT)
+#             try:
+#                 link = driver.find_element("css selector", "td#tc52 a")
+#                 link.click()
+#                 time.sleep(3)   # allow browser to download
+
+#                 # Now move the latest downloaded file into final_path
+#                 dl_folder = BASE_PATH
+#                 downloaded_file = sorted(
+#                     [os.path.join(dl_folder, f) for f in os.listdir(dl_folder)],
+#                     key=os.path.getmtime
+#                 )[-1]
+
+#                 os.rename(downloaded_file, final_path)
+#                 logging.info("Downloaded via click -> %s", final_path)
+
+#                 ALL_DOWNLOADED.append({
+#                     "Verticals": task["category"],
+#                     "SubCategory": task["subfolder"],
+#                     "Year": year,
+#                     "Month": month_full,
+#                     "IssueDate": dt.strftime("%Y-%m-%d"),
+#                     "Title": title,
+#                     "PDF_URL": pdf_url,
+#                     "File Name": filename,
+#                     "Path": final_path
+#                 })
+#                 BSE_TITLES_NORMALIZED.add(normalize_title_for_compare(title))
+
+#                 driver.get(task["url"])
+#                 time.sleep(1)
+#                 continue
+
+#             except Exception as e:
+#                 logging.error("Selenium click download failed: %s", e)
+
+#         # ---- NO ATTACHMENTS -> printToPDF fallback ----
+#         logging.info("Using printToPDF fallback")
+
+#         try:
+#             pdf_data = driver.execute_cdp_cmd("Page.printToPDF", {"printBackground": True})
+#             with open(final_path, "wb") as f:
+#                 f.write(base64.b64decode(pdf_data["data"]))
+
+#             logging.info("Saved printToPDF -> %s", final_path)
+
+#             ALL_DOWNLOADED.append({
+#                 "Verticals": task["category"],
+#                 "SubCategory": task["subfolder"],
+#                 "Year": year,
+#                 "Month": month_full,
+#                 "IssueDate": dt.strftime("%Y-%m-%d"),
+#                 "Title": title,
+#                 # "PDF_URL": "PrintToPDF",
+#                 "PDF_URL": detail_link,   # use detail page when no direct attachment
+#                 "File Name": filename,
+#                 "Path": final_path
+#             })
+#             BSE_TITLES_NORMALIZED.add(normalize_title_for_compare(title))
+
+#         except Exception as e:
+#             logging.error("printToPDF failed: %s", e)
+
+#         driver.get(task["url"])
+#         time.sleep(1)
+
+#     driver.quit()
+#     logging.info("BSE LISTED COMPANIES -> DONE")
+
 async def scrape_bse(task, week_start, week_end):
     logging.info("BSE LISTED COMPANIES SCRAPER -> %s", task["url"])
 
-    # Configure Chrome with custom download folder
     chrome_opts = webdriver.ChromeOptions()
     prefs = {
-        "download.default_directory": BASE_PATH,     # PDF auto saved here
+        "download.default_directory": BASE_PATH,
         "download.prompt_for_download": False,
         "plugins.always_open_pdf_externally": True
     }
@@ -520,139 +719,123 @@ async def scrape_bse(task, week_start, week_end):
     chrome_opts.add_argument("--disable-gpu")
     chrome_opts.add_argument("--no-sandbox")
     chrome_opts.add_argument("--window-size=1920,1080")
+    # Adding a real User-Agent helps bypass basic bot detection
+    chrome_opts.add_argument("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
 
     driver = webdriver.Chrome(options=chrome_opts)
 
-    # Load listing page
-    driver.get(task["url"])
-    time.sleep(3)
-
-    soup = BeautifulSoup(driver.page_source, "html.parser")
-    rows = soup.select("tr.ng-scope")
-
-    if not rows:
-        logging.error("No BSE rows found after JS load")
-        driver.quit()
-        return
-
-    logging.info("Processing TOP 10 BSE Circulars")
-    top_10 = rows[:10]
-
-    for row in top_10:
-        cols = row.find_all("td")
-        if len(cols) < 2:
-            continue
-
-        title_elem = cols[0].find("a", href=True)
-        if not title_elem:
-            continue
-
-        title = title_elem.get_text(strip=True)
-        detail_link = urljoin("https://www.bseindia.com", title_elem["href"])
-
-        # Parse Issue Date
-        date_text = cols[1].get_text(strip=True)
+    try:
+        driver.get(task["url"])
+        
+        # 1. Wait for Angular to render the rows
         try:
-            dt = datetime.strptime(date_text, "%B %d, %Y")
-        except:
-            logging.warning("Cannot parse date: %s", date_text)
-            continue
+            WebDriverWait(driver, 30).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "tr[ng-repeat]"))
+            )
+            # Short sleep to ensure the Angular 'Data' object is fully bound to the DOM
+            time.sleep(2) 
+        except TimeoutException:
+            logging.error("Timed out waiting for BSE rows to appear.")
+            return
 
-        if not (week_start <= dt <= week_end):
-            logging.info("Skipping (outside week): %s", dt.date())
-            continue
+        soup = BeautifulSoup(driver.page_source, "html.parser")
+        rows = soup.select("tr[ng-repeat]")
 
-        logging.info("Opening detail page: %s", detail_link)
-        driver.get(detail_link)
-        time.sleep(2)
+        if not rows:
+            logging.error("No BSE rows found after JS load.")
+            return
 
-        detail_soup = BeautifulSoup(driver.page_source, "html.parser")
+        logging.info("Processing TOP 10 BSE Circulars")
+        top_10 = rows[:10]
 
-        year = str(dt.year)
-        month_full = dt.strftime("%B")
+        for row in top_10:
+            cols = row.find_all("td")
+            if len(cols) < 2: continue
 
-        save_dir = ensure_year_month_structure(
-            BASE_PATH, task["category"], task["subfolder"], year, month_full
-        )
-        # filename = sanitize_filename(title)
-        filename = safe_pdf_filename(title, detail_link)
+            title_elem = cols[0].find("a", href=True)
+            if not title_elem: continue
 
-        final_path = os.path.join(save_dir, filename)
+            title = title_elem.get_text(strip=True)
+            detail_link = urljoin("https://www.bseindia.com", title_elem["href"])
 
-        # ---- CHECK FOR ATTACHMENT ----
-        attach = detail_soup.select_one("td#tc52 a[href]")
-        if attach:
-            pdf_url = urljoin("https://www.bseindia.com", attach["href"])
-            logging.info("Attachment -> %s", pdf_url)
-
-            # CLICK USING SELENIUM (IMPORTANT)
+            # Parse Issue Date
+            date_text = cols[1].get_text(strip=True)
             try:
-                link = driver.find_element("css selector", "td#tc52 a")
-                link.click()
-                time.sleep(3)   # allow browser to download
+                dt = datetime.strptime(date_text, "%B %d, %Y")
+            except Exception:
+                logging.warning("Cannot parse date: %s", date_text)
+                continue
 
-                # Now move the latest downloaded file into final_path
-                dl_folder = BASE_PATH
-                downloaded_file = sorted(
-                    [os.path.join(dl_folder, f) for f in os.listdir(dl_folder)],
-                    key=os.path.getmtime
-                )[-1]
+            if not (week_start <= dt <= week_end):
+                logging.info("Skipping (outside week): %s", dt.date())
+                continue
 
-                os.rename(downloaded_file, final_path)
-                logging.info("Downloaded via click -> %s", final_path)
+            # Navigate to detail page
+            logging.info("Opening detail page: %s", detail_link)
+            driver.get(detail_link)
+            time.sleep(2)
 
+            detail_soup = BeautifulSoup(driver.page_source, "html.parser")
+            year, month_full = str(dt.year), dt.strftime("%B")
+            
+            save_dir = ensure_year_month_structure(
+                BASE_PATH, task["category"], task["subfolder"], year, month_full
+            )
+            filename = safe_pdf_filename(title, detail_link)
+            final_path = os.path.join(save_dir, filename)
+
+            # ---- CHECK FOR ATTACHMENT ----
+            attach = detail_soup.select_one("td#tc52 a[href]")
+            download_success = False
+
+            if attach:
+                pdf_url = urljoin("https://www.bseindia.com", attach["href"])
+                try:
+                    # Target the actual link via Selenium to trigger the 'pref' download
+                    link = WebDriverWait(driver, 10).until(
+                        EC.element_to_be_clickable((By.CSS_SELECTOR, "td#tc52 a"))
+                    )
+                    link.click()
+                    time.sleep(4) # Wait for file to land
+
+                    # Find most recent file in download folder
+                    files = [os.path.join(BASE_PATH, f) for f in os.listdir(BASE_PATH) 
+                             if os.path.isfile(os.path.join(BASE_PATH, f))]
+                    if files:
+                        downloaded_file = max(files, key=os.path.getmtime)
+                        os.rename(downloaded_file, final_path)
+                        logging.info("Downloaded via click -> %s", final_path)
+                        download_success = True
+                except Exception as e:
+                    logging.error("Selenium click download failed: %s", e)
+
+            # ---- FALLBACK: PRINT TO PDF ----
+            if not download_success:
+                logging.info("Using printToPDF fallback for: %s", title)
+                try:
+                    pdf_data = driver.execute_cdp_cmd("Page.printToPDF", {"printBackground": True})
+                    with open(final_path, "wb") as f:
+                        f.write(base64.b64decode(pdf_data["data"]))
+                    download_success = True
+                except Exception as e:
+                    logging.error("printToPDF failed: %s", e)
+
+            if download_success:
                 ALL_DOWNLOADED.append({
-                    "Verticals": task["category"],
-                    "SubCategory": task["subfolder"],
-                    "Year": year,
-                    "Month": month_full,
-                    "IssueDate": dt.strftime("%Y-%m-%d"),
-                    "Title": title,
-                    "PDF_URL": pdf_url,
-                    "File Name": filename,
-                    "Path": final_path
+                    "Verticals": task["category"], "SubCategory": task["subfolder"],
+                    "Year": year, "Month": month_full, "IssueDate": dt.strftime("%Y-%m-%d"),
+                    "Title": title, "PDF_URL": detail_link, "File Name": filename, "Path": final_path
                 })
                 BSE_TITLES_NORMALIZED.add(normalize_title_for_compare(title))
 
-                driver.get(task["url"])
-                time.sleep(1)
-                continue
+            # Return to main list for next iteration
+            driver.get(task["url"])
+            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "tr[ng-repeat]")))
 
-            except Exception as e:
-                logging.error("Selenium click download failed: %s", e)
+    finally:
+        driver.quit()
+        logging.info("BSE LISTED COMPANIES -> DONE")
 
-        # ---- NO ATTACHMENTS -> printToPDF fallback ----
-        logging.info("Using printToPDF fallback")
-
-        try:
-            pdf_data = driver.execute_cdp_cmd("Page.printToPDF", {"printBackground": True})
-            with open(final_path, "wb") as f:
-                f.write(base64.b64decode(pdf_data["data"]))
-
-            logging.info("Saved printToPDF -> %s", final_path)
-
-            ALL_DOWNLOADED.append({
-                "Verticals": task["category"],
-                "SubCategory": task["subfolder"],
-                "Year": year,
-                "Month": month_full,
-                "IssueDate": dt.strftime("%Y-%m-%d"),
-                "Title": title,
-                # "PDF_URL": "PrintToPDF",
-                "PDF_URL": detail_link,   # use detail page when no direct attachment
-                "File Name": filename,
-                "Path": final_path
-            })
-            BSE_TITLES_NORMALIZED.add(normalize_title_for_compare(title))
-
-        except Exception as e:
-            logging.error("printToPDF failed: %s", e)
-
-        driver.get(task["url"])
-        time.sleep(1)
-
-    driver.quit()
-    logging.info("BSE LISTED COMPANIES -> DONE")
 
 async def scrape_sebi_informal_guidance(task, week_start, week_end):
     logging.info("SEBI INFORMAL GUIDANCE SCRAPER -> %s", task["url"])
@@ -1231,6 +1414,14 @@ async def scrape_rbi(task, week_start, week_end):
 
         for row in rows:
             # -------- DATE HEADER --------
+            # date_h2 = row.select_one("h2.dop_header")
+            # if date_h2:
+            #     try:
+            #         # RBI Date format: "Feb 03, 2026"
+            #         current_dt = datetime.strptime(date_h2.get_text(strip=True), "%b %d, %Y")
+            #     except Exception:
+            #         current_dt = None
+            #     continue
 
             date_h2 = row.select_one("h2.dop_header")
             if date_h2:
@@ -1317,7 +1508,7 @@ def is_ignored_icai_title(title: str) -> bool:
         "course",
         "book"
     ]
-    
+
     t = title.lower()
     return any(kw in t for kw in ignore_keywords)
 
@@ -1425,6 +1616,99 @@ def is_ignored_ibbi_title(title: str) -> bool:
     title_lower = title.lower()
     return any(kw in title_lower for kw in ignore_keywords)
 
+# async def scrape_ibbi_discussion_paper(task, week_start, week_end):
+#     logging.info("IBBI DISCUSSION PAPER SCRAPER -> %s", task["url"])
+
+#     async with AsyncWebCrawler() as crawler:
+#         result = await crawler.arun(url=task["url"])
+
+#     soup = BeautifulSoup(result.html, "html.parser")
+
+#     # IBBI Discussion Papers are DIRECTLY in the table (no detail pages)
+#     rows = soup.select("table tbody tr")
+
+#     if not rows:
+#         logging.warning("No IBBI Discussion Paper rows found")
+#         return
+
+#     async with aiohttp.ClientSession() as session:
+#         for row in rows:
+#             tds = row.find_all("td")
+#             if len(tds) < 3:
+#                 continue
+
+#             # ---- DATE ----
+#             raw_date = tds[1].get_text(" ", strip=True)
+#             raw_date = re.sub(r'(\d+)(st|nd|rd|th)', r'\1', raw_date)
+
+#             parsed = None
+#             for fmt in ("%d %B, %Y", "%d %b, %Y"):
+#                 try:
+#                     parsed = datetime.strptime(raw_date, fmt)
+#                     break
+#                 except ValueError:
+#                     pass
+
+#             if not parsed:
+#                 continue
+
+#             dt = parsed
+
+#             if not (week_start <= dt <= week_end):
+#                 continue
+
+#             # ---- TITLE ----
+#             title = unicodedata.normalize(
+#                 "NFKD",
+#                 tds[2].get_text(" ", strip=True)
+#             )
+
+#             # ---- PDF URL (onclick=newwindow1) ----
+#             download_a = row.select_one("a[onclick*='newwindow1']")
+#             if not download_a:
+#                 continue
+
+#             onclick = download_a.get("onclick", "")
+#             m = re.search(r"newwindow1\(['\"]([^'\"]+\.pdf)['\"]\)", onclick)
+#             if not m:
+#                 continue
+
+#             pdf_url = m.group(1)
+#             if pdf_url.startswith("/"):
+#                 pdf_url = urljoin(task["url"], pdf_url)
+
+#             year = str(dt.year)
+#             month_full = dt.strftime("%B")
+
+#             save_dir = ensure_year_month_structure(
+#                 BASE_PATH,
+#                 task["category"],
+#                 task["subfolder"],
+#                 year,
+#                 month_full
+#             )
+
+#             downloaded_path = await download_pdf(
+#                 session,
+#                 pdf_url,
+#                 save_dir,
+#                 title
+#             )
+
+#             if downloaded_path:
+#                 ALL_DOWNLOADED.append({
+#                     "Verticals": task["category"],
+#                     "SubCategory": task["subfolder"],
+#                     "Year": year,
+#                     "Month": month_full,
+#                     "IssueDate": dt.strftime("%Y-%m-%d"),
+#                     "Title": title,
+#                     "PDF_URL": pdf_url,
+#                     "File Name": os.path.basename(downloaded_path),
+#                     "Path": os.path.abspath(downloaded_path),
+#                 })
+
+#                 logging.info("IBBI Discussion Paper downloaded: %s", title)
 
 async def scrape_ibbi_discussion_paper(task, week_start, week_end):
     logging.info("IBBI DISCUSSION PAPER SCRAPER -> %s", task["url"])
@@ -1542,7 +1826,24 @@ async def scrape_ibbi_1(task, week_start, week_end):
     async with AsyncWebCrawler() as crawler:
         result = await crawler.arun(url=task["url"])
 
+    # soup = BeautifulSoup(result.html, "html.parser")
+    # rows = soup.select("table tbody tr")
+
+    # if not rows:
+    #     logging.warning("No IBBI rows found")
+    #     return
+
     soup = BeautifulSoup(result.html, "html.parser")
+
+    # if task["subfolder"] == "Discussion Paper":
+    #     # Discussion Paper pages do NOT use table/tbody consistently
+    #     rows = soup.select("tr")
+    # else:
+    #     rows = soup.select("table tbody tr")
+
+    # if not rows:
+    #     logging.warning("No IBBI rows found for subfolder: %s", task["subfolder"])
+    #     return
 
     # Discussion Paper is NOT a row-based listing
     if task["subfolder"] == "Discussion Paper":
@@ -1563,6 +1864,13 @@ async def scrape_ibbi_1(task, week_start, week_end):
                 continue
 
             # ---- DATE ----
+            # try:
+            #     dt = datetime.strptime(
+            #         tds[1].get_text(strip=True),
+            #         "%d %b, %Y"
+            #     )
+            # except Exception:
+            #     continue
 
             raw_date = tds[1].get_text(" ", strip=True)
 
@@ -1661,6 +1969,9 @@ async def scrape_generic_link(task, week_start, week_end):
         else:
             # Fallback to your existing SEBI scraper for other subfolders
             return await scrape_sebi(task, week_start, week_end)
+
+    # if category == "SEBI":
+    #     return await scrape_sebi(task, week_start, week_end)
 
     if category == "IFSCA":
 

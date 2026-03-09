@@ -10,6 +10,8 @@ import nest_asyncio
 import platform
 import os
 from pathlib import Path
+
+from selenium.common import TimeoutException
 # Apply Windows-specific event loop fix (must run before other asyncio use)
 if sys.platform.startswith("win"):
     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
@@ -554,13 +556,161 @@ async def scrape_nse(task, week_start, week_end):
     logging.info("NSE LISTED COMPANIES -> DONE")
 
 
+# async def scrape_bse(task, week_start, week_end):
+#     logging.info("BSE LISTED COMPANIES SCRAPER -> %s", task["url"])
+
+#     # Configure Chrome with custom download folder
+#     chrome_opts = webdriver.ChromeOptions()
+#     prefs = {
+#         "download.default_directory": BASE_PATH,     # PDF auto saved here
+#         "download.prompt_for_download": False,
+#         "plugins.always_open_pdf_externally": True
+#     }
+#     chrome_opts.add_experimental_option("prefs", prefs)
+#     chrome_opts.add_argument("--headless=new")
+#     chrome_opts.add_argument("--disable-gpu")
+#     chrome_opts.add_argument("--no-sandbox")
+#     chrome_opts.add_argument("--window-size=1920,1080")
+
+#     driver = webdriver.Chrome(options=chrome_opts)
+
+#     # Load listing page
+#     driver.get(task["url"])
+#     time.sleep(3)
+        
+#     soup = BeautifulSoup(driver.page_source, "html.parser")
+#     rows = soup.select("tr.ng-scope")
+
+#     if not rows:
+#         logging.error("No BSE rows found after JS load")
+#         driver.quit()
+#         return
+
+#     logging.info("Processing TOP 10 BSE Circulars")
+#     top_10 = rows[:10]
+
+#     for row in top_10:
+#         cols = row.find_all("td")
+#         if len(cols) < 2:
+#             continue
+
+#         title_elem = cols[0].find("a", href=True)
+#         if not title_elem:
+#             continue
+
+#         title = title_elem.get_text(strip=True)
+#         detail_link = urljoin("https://www.bseindia.com", title_elem["href"])
+
+#         # Parse Issue Date
+#         date_text = cols[1].get_text(strip=True)
+#         try:
+#             dt = datetime.strptime(date_text, "%B %d, %Y")
+#         except:
+#             logging.warning("Cannot parse date: %s", date_text)
+#             continue
+
+#         if not (week_start <= dt <= week_end):
+#             logging.info("Skipping (outside week): %s", dt.date())
+#             continue
+
+#         logging.info("Opening detail page: %s", detail_link)
+#         driver.get(detail_link)
+#         time.sleep(2)
+
+#         detail_soup = BeautifulSoup(driver.page_source, "html.parser")
+
+#         year = str(dt.year)
+#         month_full = dt.strftime("%B")
+
+#         save_dir = ensure_year_month_structure(
+#             BASE_PATH, task["category"], task["subfolder"], year, month_full
+#         )
+#         # filename = sanitize_filename(title)
+#         filename = safe_pdf_filename(title, detail_link)
+
+#         final_path = os.path.join(save_dir, filename)
+
+#         # ---- CHECK FOR ATTACHMENT ----
+#         attach = detail_soup.select_one("td#tc52 a[href]")
+#         if attach:
+#             pdf_url = urljoin("https://www.bseindia.com", attach["href"])
+#             logging.info("Attachment -> %s", pdf_url)
+
+#             # CLICK USING SELENIUM (IMPORTANT)
+#             try:
+#                 link = driver.find_element("css selector", "td#tc52 a")
+#                 link.click()
+#                 time.sleep(3)   # allow browser to download
+
+#                 # Now move the latest downloaded file into final_path
+#                 dl_folder = BASE_PATH
+#                 downloaded_file = sorted(
+#                     [os.path.join(dl_folder, f) for f in os.listdir(dl_folder)],
+#                     key=os.path.getmtime
+#                 )[-1]
+
+#                 os.rename(downloaded_file, final_path)
+#                 logging.info("Downloaded via click -> %s", final_path)
+
+#                 ALL_DOWNLOADED.append({
+#                     "Verticals": task["category"],
+#                     "SubCategory": task["subfolder"],
+#                     "Year": year,
+#                     "Month": month_full,
+#                     "IssueDate": dt.strftime("%Y-%m-%d"),
+#                     "Title": title,
+#                     "PDF_URL": pdf_url,
+#                     "File Name": filename,
+#                     "Path": final_path
+#                 })
+#                 BSE_TITLES_NORMALIZED.add(normalize_title_for_compare(title))
+
+#                 driver.get(task["url"])
+#                 time.sleep(1)
+#                 continue
+
+#             except Exception as e:
+#                 logging.error("Selenium click download failed: %s", e)
+
+#         # ---- NO ATTACHMENTS -> printToPDF fallback ----
+#         logging.info("Using printToPDF fallback")
+
+#         try:
+#             pdf_data = driver.execute_cdp_cmd("Page.printToPDF", {"printBackground": True})
+#             with open(final_path, "wb") as f:
+#                 f.write(base64.b64decode(pdf_data["data"]))
+
+#             logging.info("Saved printToPDF -> %s", final_path)
+
+#             ALL_DOWNLOADED.append({
+#                 "Verticals": task["category"],
+#                 "SubCategory": task["subfolder"],
+#                 "Year": year,
+#                 "Month": month_full,
+#                 "IssueDate": dt.strftime("%Y-%m-%d"),
+#                 "Title": title,
+#                 # "PDF_URL": "PrintToPDF",
+#                 "PDF_URL": detail_link,   # use detail page when no direct attachment
+#                 "File Name": filename,
+#                 "Path": final_path
+#             })
+#             BSE_TITLES_NORMALIZED.add(normalize_title_for_compare(title))
+
+#         except Exception as e:
+#             logging.error("printToPDF failed: %s", e)
+
+#         driver.get(task["url"])
+#         time.sleep(1)
+
+#     driver.quit()
+#     logging.info("BSE LISTED COMPANIES -> DONE")
+
 async def scrape_bse(task, week_start, week_end):
     logging.info("BSE LISTED COMPANIES SCRAPER -> %s", task["url"])
 
-    # Configure Chrome with custom download folder
     chrome_opts = webdriver.ChromeOptions()
     prefs = {
-        "download.default_directory": BASE_PATH,     # PDF auto saved here
+        "download.default_directory": BASE_PATH,
         "download.prompt_for_download": False,
         "plugins.always_open_pdf_externally": True
     }
@@ -569,139 +719,123 @@ async def scrape_bse(task, week_start, week_end):
     chrome_opts.add_argument("--disable-gpu")
     chrome_opts.add_argument("--no-sandbox")
     chrome_opts.add_argument("--window-size=1920,1080")
+    # Adding a real User-Agent helps bypass basic bot detection
+    chrome_opts.add_argument("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
 
     driver = webdriver.Chrome(options=chrome_opts)
 
-    # Load listing page
-    driver.get(task["url"])
-    time.sleep(3)
-
-    soup = BeautifulSoup(driver.page_source, "html.parser")
-    rows = soup.select("tr.ng-scope")
-
-    if not rows:
-        logging.error("No BSE rows found after JS load")
-        driver.quit()
-        return
-
-    logging.info("Processing TOP 10 BSE Circulars")
-    top_10 = rows[:10]
-
-    for row in top_10:
-        cols = row.find_all("td")
-        if len(cols) < 2:
-            continue
-
-        title_elem = cols[0].find("a", href=True)
-        if not title_elem:
-            continue
-
-        title = title_elem.get_text(strip=True)
-        detail_link = urljoin("https://www.bseindia.com", title_elem["href"])
-
-        # Parse Issue Date
-        date_text = cols[1].get_text(strip=True)
+    try:
+        driver.get(task["url"])
+        
+        # 1. Wait for Angular to render the rows
         try:
-            dt = datetime.strptime(date_text, "%B %d, %Y")
-        except:
-            logging.warning("Cannot parse date: %s", date_text)
-            continue
+            WebDriverWait(driver, 30).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "tr[ng-repeat]"))
+            )
+            # Short sleep to ensure the Angular 'Data' object is fully bound to the DOM
+            time.sleep(2) 
+        except TimeoutException:
+            logging.error("Timed out waiting for BSE rows to appear.")
+            return
 
-        if not (week_start <= dt <= week_end):
-            logging.info("Skipping (outside week): %s", dt.date())
-            continue
+        soup = BeautifulSoup(driver.page_source, "html.parser")
+        rows = soup.select("tr[ng-repeat]")
 
-        logging.info("Opening detail page: %s", detail_link)
-        driver.get(detail_link)
-        time.sleep(2)
+        if not rows:
+            logging.error("No BSE rows found after JS load.")
+            return
 
-        detail_soup = BeautifulSoup(driver.page_source, "html.parser")
+        logging.info("Processing TOP 10 BSE Circulars")
+        top_10 = rows[:10]
 
-        year = str(dt.year)
-        month_full = dt.strftime("%B")
+        for row in top_10:
+            cols = row.find_all("td")
+            if len(cols) < 2: continue
 
-        save_dir = ensure_year_month_structure(
-            BASE_PATH, task["category"], task["subfolder"], year, month_full
-        )
-        # filename = sanitize_filename(title)
-        filename = safe_pdf_filename(title, detail_link)
+            title_elem = cols[0].find("a", href=True)
+            if not title_elem: continue
 
-        final_path = os.path.join(save_dir, filename)
+            title = title_elem.get_text(strip=True)
+            detail_link = urljoin("https://www.bseindia.com", title_elem["href"])
 
-        # ---- CHECK FOR ATTACHMENT ----
-        attach = detail_soup.select_one("td#tc52 a[href]")
-        if attach:
-            pdf_url = urljoin("https://www.bseindia.com", attach["href"])
-            logging.info("Attachment -> %s", pdf_url)
-
-            # CLICK USING SELENIUM (IMPORTANT)
+            # Parse Issue Date
+            date_text = cols[1].get_text(strip=True)
             try:
-                link = driver.find_element("css selector", "td#tc52 a")
-                link.click()
-                time.sleep(3)   # allow browser to download
+                dt = datetime.strptime(date_text, "%B %d, %Y")
+            except Exception:
+                logging.warning("Cannot parse date: %s", date_text)
+                continue
 
-                # Now move the latest downloaded file into final_path
-                dl_folder = BASE_PATH
-                downloaded_file = sorted(
-                    [os.path.join(dl_folder, f) for f in os.listdir(dl_folder)],
-                    key=os.path.getmtime
-                )[-1]
+            if not (week_start <= dt <= week_end):
+                logging.info("Skipping (outside week): %s", dt.date())
+                continue
 
-                os.rename(downloaded_file, final_path)
-                logging.info("Downloaded via click -> %s", final_path)
+            # Navigate to detail page
+            logging.info("Opening detail page: %s", detail_link)
+            driver.get(detail_link)
+            time.sleep(2)
 
+            detail_soup = BeautifulSoup(driver.page_source, "html.parser")
+            year, month_full = str(dt.year), dt.strftime("%B")
+            
+            save_dir = ensure_year_month_structure(
+                BASE_PATH, task["category"], task["subfolder"], year, month_full
+            )
+            filename = safe_pdf_filename(title, detail_link)
+            final_path = os.path.join(save_dir, filename)
+
+            # ---- CHECK FOR ATTACHMENT ----
+            attach = detail_soup.select_one("td#tc52 a[href]")
+            download_success = False
+
+            if attach:
+                pdf_url = urljoin("https://www.bseindia.com", attach["href"])
+                try:
+                    # Target the actual link via Selenium to trigger the 'pref' download
+                    link = WebDriverWait(driver, 10).until(
+                        EC.element_to_be_clickable((By.CSS_SELECTOR, "td#tc52 a"))
+                    )
+                    link.click()
+                    time.sleep(4) # Wait for file to land
+
+                    # Find most recent file in download folder
+                    files = [os.path.join(BASE_PATH, f) for f in os.listdir(BASE_PATH) 
+                             if os.path.isfile(os.path.join(BASE_PATH, f))]
+                    if files:
+                        downloaded_file = max(files, key=os.path.getmtime)
+                        os.rename(downloaded_file, final_path)
+                        logging.info("Downloaded via click -> %s", final_path)
+                        download_success = True
+                except Exception as e:
+                    logging.error("Selenium click download failed: %s", e)
+
+            # ---- FALLBACK: PRINT TO PDF ----
+            if not download_success:
+                logging.info("Using printToPDF fallback for: %s", title)
+                try:
+                    pdf_data = driver.execute_cdp_cmd("Page.printToPDF", {"printBackground": True})
+                    with open(final_path, "wb") as f:
+                        f.write(base64.b64decode(pdf_data["data"]))
+                    download_success = True
+                except Exception as e:
+                    logging.error("printToPDF failed: %s", e)
+
+            if download_success:
                 ALL_DOWNLOADED.append({
-                    "Verticals": task["category"],
-                    "SubCategory": task["subfolder"],
-                    "Year": year,
-                    "Month": month_full,
-                    "IssueDate": dt.strftime("%Y-%m-%d"),
-                    "Title": title,
-                    "PDF_URL": pdf_url,
-                    "File Name": filename,
-                    "Path": final_path
+                    "Verticals": task["category"], "SubCategory": task["subfolder"],
+                    "Year": year, "Month": month_full, "IssueDate": dt.strftime("%Y-%m-%d"),
+                    "Title": title, "PDF_URL": detail_link, "File Name": filename, "Path": final_path
                 })
                 BSE_TITLES_NORMALIZED.add(normalize_title_for_compare(title))
 
-                driver.get(task["url"])
-                time.sleep(1)
-                continue
+            # Return to main list for next iteration
+            driver.get(task["url"])
+            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "tr[ng-repeat]")))
 
-            except Exception as e:
-                logging.error("Selenium click download failed: %s", e)
+    finally:
+        driver.quit()
+        logging.info("BSE LISTED COMPANIES -> DONE")
 
-        # ---- NO ATTACHMENTS -> printToPDF fallback ----
-        logging.info("Using printToPDF fallback")
-
-        try:
-            pdf_data = driver.execute_cdp_cmd("Page.printToPDF", {"printBackground": True})
-            with open(final_path, "wb") as f:
-                f.write(base64.b64decode(pdf_data["data"]))
-
-            logging.info("Saved printToPDF -> %s", final_path)
-
-            ALL_DOWNLOADED.append({
-                "Verticals": task["category"],
-                "SubCategory": task["subfolder"],
-                "Year": year,
-                "Month": month_full,
-                "IssueDate": dt.strftime("%Y-%m-%d"),
-                "Title": title,
-                # "PDF_URL": "PrintToPDF",
-                "PDF_URL": detail_link,   # use detail page when no direct attachment
-                "File Name": filename,
-                "Path": final_path
-            })
-            BSE_TITLES_NORMALIZED.add(normalize_title_for_compare(title))
-
-        except Exception as e:
-            logging.error("printToPDF failed: %s", e)
-
-        driver.get(task["url"])
-        time.sleep(1)
-
-    driver.quit()
-    logging.info("BSE LISTED COMPANIES -> DONE")
 
 async def scrape_sebi_informal_guidance(task, week_start, week_end):
     logging.info("SEBI INFORMAL GUIDANCE SCRAPER -> %s", task["url"])
