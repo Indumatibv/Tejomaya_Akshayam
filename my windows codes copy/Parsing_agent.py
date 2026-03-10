@@ -535,7 +535,7 @@ STRUCTURE RULES (MANDATORY):
 - The FIRST bullet MUST start exactly with:
   “Public comments are invited on the draft … and the following is proposed …”
 - One bullet MUST clearly state that public comments are being invited.
-- The FINAL bullet MUST explicitly state the deadline for submitting comments, if the document provides one.
+- Include the deadline for submitting comments if mentioned in the document.
 - If the document does NOT specify a deadline, state only that public comments are being invited without inventing a date.
 
 TONE:
@@ -549,6 +549,7 @@ Final Summary (use ONLY black bullet points “•”):
 """,
     input_variables=["text"]
 )
+
 
 # ============================================================
 # FAQS SUMMARY PROMPT
@@ -1343,20 +1344,138 @@ def process_guidelines_pdf(row: pd.Series):
     return row
 
 # ============================================================
+
+def extract_comment_deadline(text: str):
+
+    patterns = [
+        r'latest\s+by\s+([A-Za-z]+\s+\d{1,2},?\s+\d{4})',
+        r'latest\s+by\s+(\d{1,2}\s+[A-Za-z]+\s+\d{4})',
+        r'on\s+or\s+before\s+([A-Za-z]+\s+\d{1,2},?\s+\d{4})',
+        r'till\s+([A-Za-z]+\s+\d{1,2},?\s+\d{4})',
+        r'by\s+([A-Za-z]+\s+\d{1,2},?\s+\d{4})'
+    ]
+
+    for pattern in patterns:
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            return match.group(1)
+
+    return None
+
+# def extract_public_consultation_core(text):
+
+#     text = text[:20000]
+
+#     split = re.split(
+#         r'draft\s+(regulation|regulations|framework|circular|guidelines)',
+#         text,
+#         flags=re.IGNORECASE
+#     )
+
+#     core = split[0]
+
+#     return core[:12000]
+
+# def extract_public_consultation_core(text: str):
+
+#     head = text[:12000]   # consultation intro
+#     tail = text[-5000:]   # comment section + deadline
+
+#     return head + "\n" + tail
+
+def extract_public_consultation_core(text: str):
+
+    match = re.search(
+        r'(proposed\s+(ifs?ca)?.{0,40}(regulation|framework)|draft\s+(ifs?ca)?.{0,40}(regulation|framework)|salient\s+features)',
+        text,
+        re.IGNORECASE
+    )
+
+    if match:
+        start = match.start()
+    else:
+        start = 0
+
+    core = text[start:start + 12000]
+
+    # Remove annexure / draft circular section
+    core = re.split(
+        r'annexure\s*-?\s*i|annexure\s+1|draft\s+circular',
+        core,
+        flags=re.IGNORECASE
+    )[0]
+    
+    comment_match = re.search(
+        r'(public\s+comments|comments\s+may\s+be\s+submitted)',
+        text,
+        re.IGNORECASE
+    )
+
+    if comment_match:
+        tail = text[comment_match.start():comment_match.start() + 4000]
+        core = core + "\n" + tail
+
+    return core
+
+# def process_public_consultation_pdf(row: pd.Series):
+#     pdf_path = Path(row["Path"])
+
+#     try:
+#         text = extract_pdf_text(pdf_path)
+
+#         # Draft consultations -> no heavy filtering
+#         # core_text = text[:12000]
+#         core_text = extract_public_consultation_core(text)
+#         deadline = extract_comment_deadline(text)
+#         summary = llm.invoke(
+#             PUBLIC_CONSULTATION_PROMPT.format(text=core_text)
+#         ).strip()
+
+#         if deadline and "deadline" not in summary.lower():
+#             summary += f"\n• Public comments may be submitted until {deadline}."
+
+#         # ❌ DO NOT clean – drafts can sound tentative
+#         row["Summary"] = summary
+#         row["EmbeddingText"] = core_text
+
+#     except Exception as e:
+#         logging.error(f"Failed -> {pdf_path}: {e}")
+#         row["Summary"] = "NA"
+#         row["EmbeddingText"] = "NA"
+
+#     return row
+
 def process_public_consultation_pdf(row: pd.Series):
+
     pdf_path = Path(row["Path"])
 
     try:
         text = extract_pdf_text(pdf_path)
 
-        # Draft consultations -> no heavy filtering
-        core_text = text[:12000]
+        core_text = extract_public_consultation_core(text)
+
+        core_text = re.sub(
+            r'chapter\s+i.*?definitions.*?chapter\s+ii',
+            'Chapter II',
+            core_text,
+            flags=re.IGNORECASE | re.DOTALL
+        )
+        deadline = extract_comment_deadline(text)
 
         summary = llm.invoke(
             PUBLIC_CONSULTATION_PROMPT.format(text=core_text)
         ).strip()
 
-        # ❌ DO NOT clean – drafts can sound tentative
+        if deadline and deadline not in summary:
+            summary += f"\n• Public comments may be submitted until {deadline}."
+
+        summary = re.sub(
+            r'.*email address.*\n?',
+            '',
+            summary,
+            flags=re.IGNORECASE
+        )
+
         row["Summary"] = summary
         row["EmbeddingText"] = core_text
 
