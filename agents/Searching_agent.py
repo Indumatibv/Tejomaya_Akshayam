@@ -368,8 +368,22 @@ async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: s
         #     filename += ".pdf"
 
 
+        # filename = qs.get("fileName", [None])[0]
+
+        # if not filename:
+        #     filename = safe_pdf_filename(title, pdf_url)
+
+        # file_path = os.path.join(save_dir, filename)
+
         filename = qs.get("fileName", [None])[0]
 
+        # fallback to header filename
+        content_disp = resp.headers.get("Content-Disposition", "")
+
+        if not filename and "filename=" in content_disp:
+            filename = content_disp.split("filename=")[-1].strip('"')
+
+        # fallback to safe generated name
         if not filename:
             filename = safe_pdf_filename(title, pdf_url)
 
