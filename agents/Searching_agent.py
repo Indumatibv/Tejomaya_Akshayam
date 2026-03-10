@@ -349,31 +349,6 @@ async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: s
         parsed = urlparse(pdf_url)
         qs = parse_qs(parsed.query)
 
-        # filename = qs.get("fileName", [None])[0]
-        # if not filename:
-        #     filename = sanitize_filename(title or "document")
-
-        # filename = qs.get("fileName", [None])[0]
-
-        # if not filename:
-        #     if title:
-        #         filename = sanitize_filename(title)
-        #     else:
-        #         filename = os.path.basename(urlparse(pdf_url).path)
-
-        # if not filename.lower().endswith(".pdf"):
-        #     filename += ".pdf"
-
-        # if not filename.lower().endswith(".pdf"):
-        #     filename += ".pdf"
-
-
-        # filename = qs.get("fileName", [None])[0]
-
-        # if not filename:
-        #     filename = safe_pdf_filename(title, pdf_url)
-
-        # file_path = os.path.join(save_dir, filename)
 
         filename = qs.get("fileName", [None])[0]
 

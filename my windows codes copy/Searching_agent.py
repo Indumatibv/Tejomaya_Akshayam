@@ -349,27 +349,16 @@ async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: s
         parsed = urlparse(pdf_url)
         qs = parse_qs(parsed.query)
 
-        # filename = qs.get("fileName", [None])[0]
-        # if not filename:
-        #     filename = sanitize_filename(title or "document")
-
-        # filename = qs.get("fileName", [None])[0]
-
-        # if not filename:
-        #     if title:
-        #         filename = sanitize_filename(title)
-        #     else:
-        #         filename = os.path.basename(urlparse(pdf_url).path)
-
-        # if not filename.lower().endswith(".pdf"):
-        #     filename += ".pdf"
-
-        # if not filename.lower().endswith(".pdf"):
-        #     filename += ".pdf"
-
 
         filename = qs.get("fileName", [None])[0]
 
+        # fallback to header filename
+        content_disp = resp.headers.get("Content-Disposition", "")
+
+        if not filename and "filename=" in content_disp:
+            filename = content_disp.split("filename=")[-1].strip('"')
+
+        # fallback to safe generated name
         if not filename:
             filename = safe_pdf_filename(title, pdf_url)
 
@@ -2015,7 +2004,7 @@ async def scrape_generic_link(task, week_start, week_end):
 #---------------------------------------------------------------------
 
 async def main():
-    weeks_back = 0 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
+    weeks_back = 1 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
     week_start, week_end = get_week_range(weeks_back)
 
     tasks = load_link_tasks_from_excel()
