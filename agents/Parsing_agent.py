@@ -36,6 +36,119 @@ from langchain_community.llms import Ollama
 
 from langchain.prompts import PromptTemplate
 
+import tempfile
+
+import json
+from pathlib import Path
+import pandas as pd
+from storage.database import engine
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = BASE_DIR / "data"
+
+# -------------------------------
+# READ DB
+# -------------------------------
+df = pd.read_sql("SELECT * FROM documents", engine)
+
+# -------------------------------
+# TRANSFORM
+# -------------------------------
+df = df.drop(columns=["id"], errors="ignore")
+
+df = df.rename(columns={
+    "verticals": "Verticals",
+    "sub_category": "SubCategory",
+    "year": "Year",
+    "month": "Month",
+    "issue_date": "IssueDate",
+    "title": "Title",
+    "pdf_url": "PDF_URL",
+    "file_name": "File Name",
+    "path": "Path",
+    "uploaded_at": "UploadedAt"
+})
+
+# Override Verticals
+df["Verticals"] = "Companies Act"
+
+# Convert dates
+df["UploadedAt"] = pd.to_datetime(df["UploadedAt"], errors="coerce").dt.date
+df["IssueDate"] = pd.to_datetime(df["IssueDate"], errors="coerce")
+
+# -------------------------------
+# LOAD WEEK RANGE
+# -------------------------------
+week_json = DATA_DIR / "week_range.json"
+
+with open(week_json, "r") as f:
+    week = json.load(f)
+
+week_start = pd.to_datetime(week["week_start"])
+week_end = pd.to_datetime(week["week_end"])
+
+# -------------------------------
+# FILTER BY ISSUE DATE
+# -------------------------------
+df_filtered = df[
+    (df["IssueDate"] >= week_start) &
+    (df["IssueDate"] <= week_end)
+].copy()
+
+# Convert IssueDate back to string/date (optional clean)
+df_filtered["IssueDate"] = df_filtered["IssueDate"].dt.date
+
+# -------------------------------
+# SAVE EXCEL (OVERWRITE)
+# -------------------------------
+output_path = DATA_DIR / "MCA_output.xlsx"
+
+df_filtered.to_excel(output_path, index=False)
+
+print(f"\n✅ MCA_output.xlsx created at: {output_path}")
+print(f"📊 Rows in range: {len(df_filtered)}\n")
+
+print(df_filtered.head())
+
+# import pandas as pd
+# from storage.database import engine
+
+# # Read from DB
+# df = pd.read_sql("SELECT * FROM documents", engine)
+
+# # -------------------------------
+# # TRANSFORMATIONS
+# # -------------------------------
+
+# # 1. Drop 'id'
+# df = df.drop(columns=["id"], errors="ignore")
+
+# # 2. Rename columns
+# df = df.rename(columns={
+#     "verticals": "Verticals",
+#     "sub_category": "SubCategory",
+#     "year": "Year",
+#     "month": "Month",
+#     "issue_date": "IssueDate",
+#     "title": "Title",
+#     "pdf_url": "PDF_URL",
+#     "file_name": "File Name",
+#     "path": "Path",
+#     "uploaded_at": "UploadedAt"
+# })
+
+# # 3. Override Verticals → "Companies Act"
+# df["Verticals"] = "Companies Act"
+
+# # 4. Keep only DATE from uploaded_at
+# df["UploadedAt"] = pd.to_datetime(df["UploadedAt"], errors="coerce").dt.date
+
+# # -------------------------------
+# # PRINT
+# # -------------------------------
+# print("\n📊 Cleaned DataFrame for ETL:\n")
+# print(df.head())
+
 # ---------------------- Logging ----------------------
 logging.basicConfig(
     level=logging.INFO,
@@ -924,7 +1037,46 @@ def clean_summary_with_llm(summary: str) -> str:
 # PDF EXTRACTION (REGULATIONS-SAFE)
 # ============================================================
 
-def extract_pdf_text(pdf_path: str) -> str:
+
+def download_pdf_from_minio(object_path: str) -> str:
+    minio = MinIOClient()
+
+    # create temp file
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
+    temp_path = temp_file.name
+    temp_file.close()
+
+    # download from MinIO
+    minio.client.fget_object(
+        bucket_name=minio.bucket,
+        object_name=object_path,
+        file_path=temp_path
+    )
+
+    return temp_path
+
+# def extract_pdf_text(pdf_path: str) -> str:
+#     raw = partition_pdf(
+#         filename=str(pdf_path),
+#         strategy="fast",
+#         include_page_breaks=False
+#     )
+
+#     text = "\n".join(str(el) for el in raw if el).strip()
+
+#     if not text:
+#         logging.info("Fallback to hi_res OCR")
+#         raw = partition_pdf(filename=str(pdf_path), strategy="hi_res")
+#         text = "\n".join(str(el) for el in raw if el).strip()
+
+#     return text
+    
+def extract_pdf_text(pdf_path: str, source: str = "local") -> str:
+
+    # 🔹 If MinIO → download first
+    if source == "minio":
+        pdf_path = download_pdf_from_minio(pdf_path)
+
     raw = partition_pdf(
         filename=str(pdf_path),
         strategy="fast",
@@ -938,8 +1090,14 @@ def extract_pdf_text(pdf_path: str) -> str:
         raw = partition_pdf(filename=str(pdf_path), strategy="hi_res")
         text = "\n".join(str(el) for el in raw if el).strip()
 
+    # 🔹 cleanup temp file
+    if source == "minio":
+        try:
+            os.remove(pdf_path)
+        except:
+            pass
+
     return text
-    
 
 # ============================================================
 # REGULATIONS TEXT FILTERING
@@ -1038,11 +1196,33 @@ def update_excel(row: pd.Series):
 
     if sub not in wb.sheetnames:
         ws = wb.create_sheet(title=sub)
-        ws.append(list(row.index))
+        # ws.append(list(row.index))
+        if row.get("Verticals") == "Companies Act":
+            cols = [c for c in row.index if c not in ["UploadedAt", "Source"]]
+        else:
+            cols = list(row.index)
+
+        ws.append(cols)
+
     else:
         ws = wb[sub]
 
-    ws.append([row.get(c, "NA") for c in row.index])
+    # 👇 ONLY THIS BLOCK CHANGED
+    if row.get("Verticals") == "Companies Act":
+        row = row.drop(labels=["UploadedAt", "Source"], errors="ignore")
+
+        if "IssueDate" in row and pd.notna(row["IssueDate"]):
+            # row["IssueDate"] = str(row["IssueDate"])
+            row["IssueDate"] = pd.to_datetime(row["IssueDate"]).strftime("%Y-%m-%d")
+
+    # ws.append([row.get(c, "NA") for c in row.index])
+    if row.get("Verticals") == "Companies Act":
+        cols = [c for c in row.index if c not in ["UploadedAt", "Source"]]
+    else:
+        cols = list(row.index)
+
+    ws.append([row.get(c, "NA") for c in cols])
+
     wb.save(excel_path)
     wb.close()
 
@@ -1054,8 +1234,11 @@ def process_regulation_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
 
     try:
-        text = extract_pdf_text(pdf_path)
+        # text = extract_pdf_text(pdf_path)
         # summary, embedding_text = generate_regulation_summary(text)
+        source = row.get("Source", "local")  # 👈 NEW
+
+        text = extract_pdf_text(row["Path"], source=source)
 
         authority = resolve_authority(row["Verticals"])
         summary, embedding_text = generate_regulation_summary(text, authority)
@@ -1100,7 +1283,10 @@ def process_circular_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
 
     try:
-        text = extract_pdf_text(pdf_path)
+        # text = extract_pdf_text(pdf_path)
+        source = row.get("Source", "local")  # 👈 NEW
+
+        text = extract_pdf_text(row["Path"], source=source)
 
         # Circulars do NOT need regulation-style filtering
         core_text = text[:12000]
@@ -1138,7 +1324,11 @@ def process_press_release_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
 
     try:
-        text = extract_pdf_text(pdf_path)
+        # text = extract_pdf_text(pdf_path)
+        source = row.get("Source", "local")  # 👈 NEW
+
+        text = extract_pdf_text(row["Path"], source=source)
+
         text = re.sub(r'\s+', ' ', text).strip()
         core_text = text[:4000]
 
@@ -1180,7 +1370,10 @@ def process_consultation_paper_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
 
     try:
-        text = extract_pdf_text(pdf_path)
+        # text = extract_pdf_text(pdf_path)
+        source = row.get("Source", "local")  # 👈 NEW
+
+        text = extract_pdf_text(row["Path"], source=source)
 
         # No regulation-style filtering required
         core_text = text[:12000]
@@ -1237,7 +1430,10 @@ def process_master_circular_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
 
     try:
-        text = extract_pdf_text(pdf_path)
+        # text = extract_pdf_text(pdf_path)
+        source = row.get("Source", "local")  # 👈 NEW
+
+        text = extract_pdf_text(row["Path"], source=source)
 
         #  Only intro part, not full document
         core_text = extract_master_circular_core(text)
@@ -1272,7 +1468,10 @@ def process_notification_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
 
     try:
-        text = extract_pdf_text(pdf_path)
+        # text = extract_pdf_text(pdf_path)
+        source = row.get("Source", "local")  # 👈 NEW
+
+        text = extract_pdf_text(row["Path"], source=source)
 
         # Notifications are short -> no regulation-style filtering
         core_text = text[:8000]
@@ -1325,7 +1524,11 @@ def process_guidelines_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
 
     try:
-        text = extract_pdf_text(pdf_path)
+        # text = extract_pdf_text(pdf_path)
+        source = row.get("Source", "local")  # 👈 NEW
+
+        text = extract_pdf_text(row["Path"], source=source)
+
         core_text = extract_guidelines_core(text)[:12000]
 
         summary = llm.invoke(
@@ -1421,7 +1624,10 @@ def extract_public_consultation_core(text: str):
 #     pdf_path = Path(row["Path"])
 
 #     try:
-#         text = extract_pdf_text(pdf_path)
+#        # text = extract_pdf_text(pdf_path)
+        # source = row.get("Source", "local")  # 👈 NEW
+
+        # text = extract_pdf_text(row["Path"], source=source)
 
 #         # Draft consultations -> no heavy filtering
 #         # core_text = text[:12000]
@@ -1450,7 +1656,10 @@ def process_public_consultation_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
 
     try:
-        text = extract_pdf_text(pdf_path)
+        # text = extract_pdf_text(pdf_path)
+        source = row.get("Source", "local")  # 👈 NEW
+
+        text = extract_pdf_text(row["Path"], source=source)
 
         core_text = extract_public_consultation_core(text)
 
@@ -1492,7 +1701,10 @@ def process_faq_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
 
     try:
-        text = extract_pdf_text(pdf_path)
+        # text = extract_pdf_text(pdf_path)
+        source = row.get("Source", "local")  # 👈 NEW
+
+        text = extract_pdf_text(row["Path"], source=source)
 
         # FAQs -> only title / intro area
         core_text = text[:3000]
@@ -1536,7 +1748,10 @@ def process_informal_guidance_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
 
     try:
-        text = extract_pdf_text(pdf_path)
+        # text = extract_pdf_text(pdf_path)
+        source = row.get("Source", "local")  # 👈 NEW
+
+        text = extract_pdf_text(row["Path"], source=source)
 
         # Informal Guidance letters are short; no heavy filtering
         core_text = text[:8000]
@@ -1564,7 +1779,10 @@ def process_master_direction_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
 
     try:
-        text = extract_pdf_text(pdf_path)
+        # text = extract_pdf_text(pdf_path)
+        source = row.get("Source", "local")  # 👈 NEW
+
+        text = extract_pdf_text(row["Path"], source=source)
 
         core_text = extract_master_circular_core(text)[:6000]
 
@@ -1592,7 +1810,11 @@ def process_rules_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
 
     try:
-        text = extract_pdf_text(pdf_path)
+        # text = extract_pdf_text(pdf_path)
+        source = row.get("Source", "local")  # 👈 NEW
+
+        text = extract_pdf_text(row["Path"], source=source)
+
         core_text = text[:10000]
 
         summary = llm.invoke(
@@ -1633,7 +1855,11 @@ def process_announcement_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
 
     try:
-        text = extract_pdf_text(pdf_path)
+        # text = extract_pdf_text(pdf_path)
+        source = row.get("Source", "local")  # 👈 NEW
+
+        text = extract_pdf_text(row["Path"], source=source)
+
         core_text = text[:10000]
 
         authority = resolve_authority(row["Verticals"])
@@ -1667,7 +1893,10 @@ def process_discussion_paper_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
 
     try:
-        text = extract_pdf_text(pdf_path)
+        # text = extract_pdf_text(pdf_path)
+        source = row.get("Source", "local")  # 👈 NEW
+
+        text = extract_pdf_text(row["Path"], source=source)
 
         # Discussion papers can be long – limit to meaningful portion
         core_text = text[:15000]
@@ -1779,44 +2008,111 @@ def main(excel_file: str):
 
     logging.info(f"Completed in {time.time() - start:.2f}s")
     
-    # -------------------------------------------------
-    # EXACT PLACE FOR MINIO UPLOAD 
-    # -------------------------------------------------
+    # # -------------------------------------------------
+    # # EXACT PLACE FOR MINIO UPLOAD 
+    # # -------------------------------------------------
 
+    # try:
+    #     minio = MinIOClient()
+
+    #     week_folder_name = WEEK_FOLDER.name
+    #     minio_prefix = f"weekly_outputs/{week_folder_name}/"
+
+    #     #  HARD RESET week folder
+    #     minio.delete_prefix(minio_prefix)
+
+    #     #  Upload ONLY Excel files created in THIS run
+    #     for excel_name in CREATED_EXCELS:
+    #         local_excel = WEEK_FOLDER / excel_name
+    #         object_path = f"{minio_prefix}{excel_name}"  # ✅ NO DOUBLE SLASH
+
+    #         minio.upload_file(
+    #             local_path=str(local_excel),
+    #             object_path=object_path
+    #         )
+
+    #     logging.info(
+    #         f"Uploaded weekly Excel files to MinIO -> "
+    #         f"bucket={minio.bucket}, prefix={minio_prefix}"
+    #     )
+
+    # except Exception as e:
+    #     logging.error(f"MinIO upload failed: {e}")
+
+# ============================================================
+# ENTRY
+# ============================================================
+
+# if __name__ == "__main__":
+#     excel = DATA_DIR / "Searching_agent_output.xlsx"
+#     if not excel.exists():
+#         raise FileNotFoundError("Searching_agent_output.xlsx not found")
+
+#     main(excel)
+
+if __name__ == "__main__":
+
+    searching_excel = DATA_DIR / "Searching_agent_output.xlsx"
+    mca_excel = DATA_DIR / "MCA_output.xlsx"
+
+    if not searching_excel.exists():
+        raise FileNotFoundError("Searching_agent_output.xlsx not found")
+
+    # -------------------------------
+    # 1. Process Searching Agent (LOCAL PDFs)
+    # -------------------------------
+    print("\n🚀 Processing Searching Agent Output...\n")
+    main(searching_excel)
+
+    # -------------------------------
+    # 2. Process MCA Output (MINIO PDFs)
+    # -------------------------------
+    if mca_excel.exists():
+        print("\n🚀 Processing MCA Output (MinIO)...\n")
+
+        df_mca = pd.read_excel(mca_excel)
+        df_mca["Source"] = "minio"   # 👈 CRITICAL FLAG
+
+        start = time.time()
+
+        for idx, row in df_mca.iterrows():
+            logging.info(f"[MCA {idx+1}/{len(df_mca)}] {row['Path']}")
+            processed = process_row_by_domain(row)
+            if processed is None:
+                continue
+            update_excel(processed)
+
+        logging.info(f"MCA processing completed in {time.time() - start:.2f}s")
+
+    else:
+        print("⚠️ MCA_output.xlsx not found, skipping...")
+        
+    # -------------------------------
+    # FINAL MINIO UPLOAD (AFTER ALL PROCESSING)
+    # -------------------------------
     try:
         minio = MinIOClient()
 
         week_folder_name = WEEK_FOLDER.name
         minio_prefix = f"weekly_outputs/{week_folder_name}/"
 
-        #  HARD RESET week folder
+        # delete old
         minio.delete_prefix(minio_prefix)
 
-        #  Upload ONLY Excel files created in THIS run
-        for excel_name in CREATED_EXCELS:
-            local_excel = WEEK_FOLDER / excel_name
-            object_path = f"{minio_prefix}{excel_name}"  # ✅ NO DOUBLE SLASH
+        # upload ALL excel files (SEBI + MCA)
+        for excel_file in WEEK_FOLDER.glob("*.xlsx"):
+            object_path = f"{minio_prefix}{excel_file.name}"
 
             minio.upload_file(
-                local_path=str(local_excel),
+                local_path=str(excel_file),
                 object_path=object_path
             )
 
         logging.info(
-            f"Uploaded weekly Excel files to MinIO -> "
+            f"Uploaded ALL Excel files to MinIO -> "
             f"bucket={minio.bucket}, prefix={minio_prefix}"
         )
 
     except Exception as e:
         logging.error(f"MinIO upload failed: {e}")
 
-# ============================================================
-# ENTRY
-# ============================================================
-
-if __name__ == "__main__":
-    excel = DATA_DIR / "Searching_agent_output.xlsx"
-    if not excel.exists():
-        raise FileNotFoundError("Searching_agent_output.xlsx not found")
-
-    main(excel)
