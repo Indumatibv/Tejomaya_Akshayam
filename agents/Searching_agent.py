@@ -37,6 +37,7 @@ import unicodedata
 
 import hashlib
 
+
 # ---------------------- Logging ----------------------
 logging.basicConfig(
     level=logging.INFO,
@@ -104,7 +105,7 @@ ALL_DOWNLOADED = []
 LINKS_EXCEL = DATA_DIR / "Links.xlsx"
 
 # Only process these sheet names (categories)
-PROCESS_SHEETS = ["SEBI", "Listed Companies", "IFSCA", "RBI", "IBBI", "ICAI"]
+PROCESS_SHEETS = ["SEBI", "Listed Companies", "IFSCA", "RBI", "IBBI", "ICAI", "Companies Act"]
 
 # IBBI subdomains handled by IBBI v1 scraper
 IBBI_1_SCRAPE = [
@@ -267,6 +268,760 @@ def get_week_range(weeks_back: int = 0):
     logging.info("Target range (%d week(s) back): %s -> %s", weeks_back, target_monday.date(), target_sunday.date())
     return target_monday, target_sunday
 
+#----mca-----
+ 
+import base64
+import os
+import re
+import time
+import requests
+import unicodedata
+from datetime import datetime
+ 
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchWindowException, WebDriverException
+ 
+try:
+    import undetected_chromedriver as uc
+    _UC_AVAILABLE = True
+except ImportError:
+    _UC_AVAILABLE = False
+ 
+# ── Constants ──────────────────────────────────────────────
+ 
+MCA_HOME_URL        = "https://www.mca.gov.in/"
+MCA_DMS_BASE        = "https://www.mca.gov.in/bin/ebook/dms/getdocument"
+MCA_DMS_PR_BASE     = "https://www.mca.gov.in/bin/dms/getdocument"   # Press Release endpoint
+MCA_MAX_NAV_RETRIES = 5
+MCA_MAX_DRV_RETRIES = 3   # retries when driver window dies on startup
+MCA_DOMAIN_NAME     = "Companies Act"   # display name in Excel Verticals column
+ 
+MCA_IGNORE_KEYWORDS = [
+    "bid queries",
+    "vacancy advertisement",
+    "career notices",
+    "corrigendum filling up post",
+    "request for proposal",
+]
+ 
+# ── Ignore filter ──────────────────────────────────────────
+ 
+def is_ignored_mca_title(title: str) -> bool:
+    if not title:
+        return False
+    t = unicodedata.normalize("NFKD", title).lower()
+    t = re.sub(r"\s+", " ", t)
+    return any(kw in t for kw in MCA_IGNORE_KEYWORDS)
+ 
+ 
+# ── Driver builder ─────────────────────────────────────────
+ 
+def _build_mca_driver():
+    if _UC_AVAILABLE:
+        opts = uc.ChromeOptions()
+        opts.add_argument("--no-sandbox")
+        opts.add_argument("--disable-dev-shm-usage")
+        return uc.Chrome(options=opts)
+    else:
+        from selenium import webdriver
+        from selenium.webdriver.chrome.options import Options
+        opts = Options()
+        opts.add_argument("--no-sandbox")
+        opts.add_argument("--disable-dev-shm-usage")
+        opts.add_argument("--disable-blink-features=AutomationControlled")
+        opts.add_experimental_option("excludeSwitches", ["enable-automation"])
+        opts.add_experimental_option("useAutomationExtension", False)
+        return webdriver.Chrome(options=opts)
+ 
+ 
+# ── Navigation ─────────────────────────────────────────────
+ 
+def _on_target_page(driver, url: str) -> bool:
+    keyword = url.rstrip("/").split("/")[-1].split(".")[0]  # e.g. "notifications"
+    return keyword in driver.current_url
+ 
+ 
+def _navigate_mca(driver, target_url: str) -> bool:
+    """
+    Load MCA home (session), then navigate to target_url.
+    Retries if redirected back to home.
+    Raises NoSuchWindowException immediately so the caller can
+    rebuild the driver.
+    """
+    logging.info("MCA: loading home to establish session...")
+    driver.get(MCA_HOME_URL)   # may raise NoSuchWindowException on bad startup
+    time.sleep(5)
+ 
+    for attempt in range(1, MCA_MAX_NAV_RETRIES + 1):
+        logging.info("MCA navigate attempt %d/%d -> %s",
+                     attempt, MCA_MAX_NAV_RETRIES, target_url)
+        driver.get(target_url)
+ 
+        deadline = time.time() + 10
+        while time.time() < deadline:
+            if _on_target_page(driver, target_url):
+                break
+            time.sleep(0.5)
+ 
+        if _on_target_page(driver, target_url):
+            logging.info("MCA: landed on target page.")
+            return True
+ 
+        logging.warning("MCA: redirected — clearing cookies, retry...")
+        driver.delete_all_cookies()
+        driver.get(MCA_HOME_URL)
+        time.sleep(5)
+ 
+    logging.error("MCA: could not reach %s after %d attempts",
+                  target_url, MCA_MAX_NAV_RETRIES)
+    return False
+ 
+ 
+# ── Wait for table rows (redirect-recovery) ────────────────
+ 
+def _wait_for_mca_rows(driver, target_url: str, timeout: int = 90) -> list:
+    logging.info("MCA: waiting up to %ds for table rows...", timeout)
+    deadline = time.time() + timeout
+    re_nav   = 0
+ 
+    while time.time() < deadline:
+        if not _on_target_page(driver, target_url):
+            re_nav += 1
+            remaining = int(deadline - time.time())
+            logging.warning("MCA: redirected (#%d, %ds left) — re-navigating...",
+                            re_nav, remaining)
+            driver.delete_all_cookies()
+            driver.get(MCA_HOME_URL)
+            time.sleep(4)
+            driver.get(target_url)
+            settle = time.time() + 10
+            while time.time() < settle:
+                if _on_target_page(driver, target_url):
+                    break
+                time.sleep(0.5)
+            time.sleep(3)
+            continue
+ 
+        rows = driver.find_elements(By.XPATH, "//table//tr[td]")
+        valid = [
+            r for r in rows
+            if len(r.find_elements(By.TAG_NAME, "td")) >= 3
+            and r.find_elements(By.TAG_NAME, "td")[0].text.strip()
+        ]
+        if valid:
+            logging.info("MCA: table loaded with %d rows.", len(valid))
+            return valid
+ 
+        time.sleep(1)
+ 
+    logging.error("MCA: timed out waiting for table rows.")
+    return []
+ 
+ 
+# ── Snapshot rows → plain dicts (no live elements) ────────
+ 
+def _snapshot_mca_rows(driver) -> list[dict]:
+    rows = driver.find_elements(By.XPATH, "//table//tr[td]")
+    results = []
+ 
+    for row in rows:
+        try:
+            cols = row.find_elements(By.TAG_NAME, "td")
+            if len(cols) < 3:
+                continue
+ 
+            title    = cols[0].text.strip()
+            date_str = cols[2].text.strip()   # DD/MM/YYYY
+ 
+            if not title or title.lower() in ("particulars", "s.no", "sr.no", "#"):
+                continue
+ 
+            anchors = cols[0].find_elements(By.TAG_NAME, "a")
+            if not anchors:
+                continue
+ 
+            val     = anchors[0].get_attribute("val")
+            doc_cat = anchors[0].get_attribute("data-doccategory") or "Notifications"
+ 
+            results.append({
+                "title":    title,
+                "date_str": date_str,
+                "val":      val,
+                "doc_cat":  doc_cat,
+            })
+ 
+        except Exception:
+            continue
+ 
+    logging.info("MCA: snapshot captured %d rows.", len(results))
+    return results
+ 
+ 
+# ── DMS URL builder ────────────────────────────────────────
+ 
+def _mca_dms_url(val: str, doc_cat: str) -> str:
+    doc_b64   = base64.b64encode(val.encode()).decode()
+    timestamp = int(time.time() * 1000)
+    return (
+        f"{MCA_DMS_BASE}"
+        f"?doc={doc_b64}"
+        f"&docCategory={doc_cat}"
+        f"&_={timestamp}"
+    )
+ 
+def _mca_pr_dms_url(data_value: str) -> str:
+    """
+    Press Release endpoint: /bin/dms/getdocument?mds=<data-value>&type=open
+    data-value is already URL-encoded in the HTML — pass as-is.
+    """
+    return f"{MCA_DMS_PR_BASE}?mds={data_value}&type=open"
+ 
+# ── PDF downloader ─────────────────────────────────────────
+ 
+def _download_mca_pdf(val: str, doc_cat: str, filepath: str,
+                      cookies: dict, user_agent: str,
+                      page_url: str) -> bool:
+    url = _mca_dms_url(val, doc_cat)
+    headers = {
+        "User-Agent":       user_agent,
+        "Referer":          page_url,
+        "Accept":           "*/*",
+        "X-Requested-With": "XMLHttpRequest",
+    }
+ 
+    try:
+        resp = requests.get(url, cookies=cookies, headers=headers,
+                            timeout=30, stream=True)
+        resp.raise_for_status()
+ 
+        raw = b"".join(resp.iter_content(chunk_size=8192))
+ 
+        if len(raw) < 100 or not raw.startswith(b"%PDF"):
+            logging.warning(
+                "MCA: invalid PDF (size=%d, first4=%s) for val=%s",
+                len(raw), raw[:4], val
+            )
+            return False
+ 
+        with open(filepath, "wb") as f:
+            f.write(raw)
+ 
+        logging.info("MCA: saved %s (%.1f KB)",
+                     os.path.basename(filepath), len(raw) / 1024)
+        return True
+ 
+    except Exception as e:
+        logging.error("MCA: download failed val=%s : %s", val, e)
+        return False
+
+def _download_mca_pr_pdf(data_value: str, filepath: str,
+                          cookies: dict, user_agent: str,
+                          page_url: str) -> bool:
+    url = _mca_pr_dms_url(data_value)
+    headers = {
+        "User-Agent":       user_agent,
+        "Referer":          page_url,
+        "Accept":           "application/pdf,*/*",
+        "X-Requested-With": "XMLHttpRequest",
+    }
+    try:
+        resp = requests.get(url, cookies=cookies, headers=headers,
+                            timeout=30, stream=True)
+        resp.raise_for_status()
+        raw = b"".join(resp.iter_content(chunk_size=8192))
+
+        if len(raw) < 100 or not raw.startswith(b"%PDF"):
+            logging.warning(
+                "MCA PR: invalid PDF (size=%d, first4=%s) for data_value=%s",
+                len(raw), raw[:4], data_value
+            )
+            return False
+
+        with open(filepath, "wb") as f:
+            f.write(raw)
+
+        logging.info("MCA PR: saved %s (%.1f KB)",
+                     os.path.basename(filepath), len(raw) / 1024)
+        return True
+
+    except Exception as e:
+        logging.error("MCA PR: download failed data_value=%s : %s", data_value, e)
+        return False
+     
+# ── Pagination: click Next and wait for new rows ───────────
+ 
+MCA_MAX_PAGES = 3   # how many pages to scrape per URL
+ 
+def _click_next_page(driver, current_first_val: str) -> bool:
+    """
+    Click the DataTables Next button and wait for the table to refresh.
+    Returns True if a new page loaded, False if disabled or failed.
+    """
+    try:
+        # MCA uses a standard DataTables next button
+        next_btn = driver.find_element(
+            By.CSS_SELECTOR,
+            "a.paginate_button.next, li.next a, #notificationCircularResultTable_next"
+        )
+        classes = next_btn.get_attribute("class") or ""
+        if "disabled" in classes:
+            logging.info("MCA: Next button disabled — no more pages.")
+            return False
+ 
+        next_btn.click()
+ 
+        # Wait until first row val changes (new page loaded)
+        deadline = time.time() + 15
+        while time.time() < deadline:
+            rows = driver.find_elements(By.XPATH, "//table//tr[td]")
+            valid = [
+                r for r in rows
+                if len(r.find_elements(By.TAG_NAME, "td")) >= 3
+                and r.find_elements(By.TAG_NAME, "td")[0].text.strip()
+            ]
+            if valid:
+                try:
+                    anchors = valid[0].find_elements(By.TAG_NAME, "a")
+                    new_val = anchors[0].get_attribute("val") if anchors else None
+                    if new_val and new_val != current_first_val:
+                        logging.info("MCA: page turned (new first val=%s).", new_val)
+                        return True
+                except Exception:
+                    pass
+            time.sleep(0.5)
+ 
+        logging.warning("MCA: page turn timed out — table did not refresh.")
+        return False
+ 
+    except Exception as e:
+        logging.warning("MCA: Next button click failed: %s", e)
+        return False
+ 
+ 
+# ── Browser session: navigate + snapshot up to N pages ────
+ 
+def _get_mca_snapshot(target_url: str) -> tuple[list[dict], dict, str]:
+    """
+    Builds a driver, navigates to target_url, snapshots up to
+    MCA_MAX_PAGES pages of the DataTables listing, then quits.
+ 
+    Retries the entire sequence up to MCA_MAX_DRV_RETRIES times
+    if undetected_chromedriver's window dies on startup.
+ 
+    Returns (all_rows, cookies, user_agent).
+    """
+    for drv_attempt in range(1, MCA_MAX_DRV_RETRIES + 1):
+        driver = None
+        try:
+            logging.info("MCA: driver attempt %d/%d", drv_attempt, MCA_MAX_DRV_RETRIES)
+            driver = _build_mca_driver()
+ 
+            # Small warm-up pause — gives uc time to stabilise its tab
+            time.sleep(2)
+ 
+            landed = _navigate_mca(driver, target_url)
+            if not landed:
+                return [], {}, ""
+ 
+            _wait_for_mca_rows(driver, target_url, timeout=90)
+ 
+            all_rows = []
+ 
+            for page_no in range(1, MCA_MAX_PAGES + 1):
+                # Check we haven't been redirected mid-pagination
+                if not _on_target_page(driver, target_url):
+                    logging.warning("MCA: redirected during pagination at page %d — stopping.", page_no)
+                    break
+ 
+                page_rows = _snapshot_mca_rows(driver)
+                logging.info("MCA: page %d — %d rows snapshotted.", page_no, len(page_rows))
+                all_rows.extend(page_rows)
+ 
+                if page_no == MCA_MAX_PAGES:
+                    break   # reached limit, stop
+ 
+                # Get first val before clicking next (to detect page change)
+                first_val = page_rows[0]["val"] if page_rows else None
+                if not _click_next_page(driver, first_val):
+                    break   # no more pages
+ 
+                time.sleep(1)   # brief pause after page turn
+ 
+            cookies    = {c["name"]: c["value"] for c in driver.get_cookies()}
+            user_agent = driver.execute_script("return navigator.userAgent;")
+            logging.info("MCA: total rows across all pages: %d", len(all_rows))
+            return all_rows, cookies, user_agent
+ 
+        except (NoSuchWindowException, WebDriverException) as exc:
+            logging.warning(
+                "MCA: driver window lost on attempt %d/%d (%s). Retrying...",
+                drv_attempt, MCA_MAX_DRV_RETRIES, exc
+            )
+            time.sleep(3)
+ 
+        finally:
+            if driver:
+                try:
+                    driver.quit()
+                except Exception:
+                    pass
+ 
+    logging.error("MCA: all %d driver attempts failed.", MCA_MAX_DRV_RETRIES)
+    return [], {}, ""
+
+def _snapshot_mca_pr_rows(driver) -> list[dict]:
+    """Snapshot Press Release rows using data-value attribute."""
+    rows = driver.find_elements(By.XPATH, "//table//tr[td]")
+    results = []
+
+    for row in rows:
+        try:
+            cols = row.find_elements(By.TAG_NAME, "td")
+            if len(cols) < 2:
+                continue
+
+            title    = cols[0].text.strip()
+            date_str = cols[1].text.strip()
+
+            if not title or title.lower() in ("name", "title", "particulars"):
+                continue
+
+            # Press Release uses data-value (not val)
+            anchor = None
+            for col in cols:
+                anchors = col.find_elements(By.CSS_SELECTOR, "a[data-value]")
+                if anchors:
+                    anchor = anchors[0]
+                    break
+
+            if not anchor:
+                continue
+
+            data_value = anchor.get_attribute("data-value") or ""
+
+            results.append({
+                "title":      title,
+                "date_str":   date_str,
+                "data_value": data_value,
+            })
+
+        except Exception:
+            continue
+
+    logging.info("MCA PR: snapshot captured %d rows.", len(results))
+    return results
+
+def _click_next_page_pr(driver, current_first_val: str) -> bool:
+    """
+    PR page uses a different DataTables Next button selector.
+    Tries multiple known selectors before giving up.
+    """
+    PR_NEXT_SELECTORS = [
+        "a.paginate_button.next",
+        "li.next a",
+        "#pressReleaseTable_next",
+        "#tblPressRelease_next",
+        "[id$='_next']",   # any DataTables next button (suffix match)
+    ]
+    try:
+        next_btn = None
+        for sel in PR_NEXT_SELECTORS:
+            try:
+                next_btn = driver.find_element(By.CSS_SELECTOR, sel)
+                break
+            except Exception:
+                continue
+
+        if not next_btn:
+            logging.info("MCA PR: no Next button found — single page table.")
+            return False
+
+        classes = next_btn.get_attribute("class") or ""
+        if "disabled" in classes:
+            logging.info("MCA PR: Next button disabled — no more pages.")
+            return False
+
+        next_btn.click()
+
+        deadline = time.time() + 15
+        while time.time() < deadline:
+            rows = driver.find_elements(By.XPATH, "//table//tr[td]")
+            valid = [
+                r for r in rows
+                if len(r.find_elements(By.TAG_NAME, "td")) >= 2
+                and r.find_elements(By.TAG_NAME, "td")[0].text.strip()
+            ]
+            if valid:
+                try:
+                    anchors = valid[0].find_elements(By.CSS_SELECTOR, "a[data-value]")
+                    new_val = anchors[0].get_attribute("data-value") if anchors else None
+                    if new_val and new_val != current_first_val:
+                        logging.info("MCA PR: page turned.")
+                        return True
+                except Exception:
+                    pass
+            time.sleep(0.5)
+
+        logging.warning("MCA PR: page turn timed out.")
+        return False
+
+    except Exception as e:
+        logging.warning("MCA PR: Next button click failed: %s", e)
+        return False
+    
+def _get_mca_pr_snapshot(target_url: str) -> tuple[list[dict], dict, str]:
+    """
+    Same driver/navigation logic as _get_mca_snapshot but calls
+    _snapshot_mca_pr_rows (data-value based) instead of _snapshot_mca_rows.
+    """
+    for drv_attempt in range(1, MCA_MAX_DRV_RETRIES + 1):
+        driver = None
+        try:
+            logging.info("MCA PR: driver attempt %d/%d", drv_attempt, MCA_MAX_DRV_RETRIES)
+            driver = _build_mca_driver()
+            time.sleep(2)
+
+            landed = _navigate_mca(driver, target_url)
+            if not landed:
+                return [], {}, ""
+
+            _wait_for_mca_rows(driver, target_url, timeout=90)
+
+            all_rows = []
+
+            for page_no in range(1, MCA_MAX_PAGES + 1):
+                if not _on_target_page(driver, target_url):
+                    logging.warning("MCA PR: redirected during pagination at page %d.", page_no)
+                    break
+
+                page_rows = _snapshot_mca_pr_rows(driver)
+                logging.info("MCA PR: page %d — %d rows snapshotted.", page_no, len(page_rows))
+                all_rows.extend(page_rows)
+
+                if page_no == MCA_MAX_PAGES:
+                    break
+
+                # first_val = page_rows[0]["data_value"] if page_rows else None
+                # # Reuse _click_next_page; pass data_value as the "current_first_val"
+                # if not _click_next_page(driver, first_val):
+                #     break
+                first_val = page_rows[0]["data_value"] if page_rows else None
+                if not _click_next_page_pr(driver, first_val):
+                    break
+                time.sleep(1)
+
+            cookies    = {c["name"]: c["value"] for c in driver.get_cookies()}
+            user_agent = driver.execute_script("return navigator.userAgent;")
+            logging.info("MCA PR: total rows: %d", len(all_rows))
+            return all_rows, cookies, user_agent
+
+        except (NoSuchWindowException, WebDriverException) as exc:
+            logging.warning("MCA PR: driver lost on attempt %d/%d (%s). Retrying...",
+                            drv_attempt, MCA_MAX_DRV_RETRIES, exc)
+            time.sleep(3)
+
+        finally:
+            if driver:
+                try:
+                    driver.quit()
+                except Exception:
+                    pass
+
+    logging.error("MCA PR: all %d driver attempts failed.", MCA_MAX_DRV_RETRIES)
+    return [], {}, ""
+ 
+# ── Main scraper (called from scrape_generic_link) ────────
+async def scrape_mca_press_release(task: dict, week_start: datetime, week_end: datetime):
+    """
+    Scraper for MCA Press Release pages.
+    Uses data-value + mds endpoint (distinct from Notifications/Circulars).
+    """
+    category  = task["category"]
+    subfolder = task["subfolder"]
+    page_url  = task["url"]
+
+    logging.info("MCA PR SCRAPER -> [%s > %s] %s", category, subfolder, page_url)
+
+    rows, cookies, user_agent = _get_mca_pr_snapshot(page_url)
+
+    if not rows:
+        logging.warning("MCA PR: no rows captured — skipping.")
+        return
+
+    seen_titles = set()
+
+    for row in rows:
+        title      = row["title"]
+        date_str   = row["date_str"]
+        data_value = row["data_value"]
+
+        if is_ignored_mca_title(title):
+            logging.info("MCA PR: skipping (ignored): %s", title)
+            continue
+
+        # try:
+        #     dt = datetime.strptime(date_str, "%d/%m/%Y")
+        # except Exception:
+        #     logging.warning("MCA PR: bad date %r for: %s", date_str, title)
+        #     continue
+        dt = None
+        for fmt in ("%d/%m/%Y", "%d-%m-%Y", "%d %b %Y", "%d %B %Y"):
+            try:
+                dt = datetime.strptime(date_str.strip(), fmt)
+                break
+            except ValueError:
+                pass
+        if not dt:
+            logging.warning("MCA PR: bad date %r for: %s", date_str, title)
+            continue
+        if not (week_start <= dt <= week_end):
+            logging.info("MCA PR: outside week (%s): %s", dt.date(), title[:60])
+            continue
+
+        if not data_value:
+            logging.warning("MCA PR: no data-value for: %s", title)
+            continue
+
+        year       = str(dt.year)
+        month_full = dt.strftime("%B")
+
+        save_dir = ensure_year_month_structure(
+            BASE_PATH, category, subfolder, year, month_full
+        )
+
+        clean_title = title.split("|")[0].strip()
+        title_key   = clean_title.lower().strip()
+
+        if title_key in seen_titles:
+            logging.info("MCA PR: duplicate skipped: %s", clean_title[:60])
+            continue
+        seen_titles.add(title_key)
+
+        base_name  = sanitize_filename(clean_title).replace(".pdf", "")
+        # Use last 8 chars of data_value hash for uniqueness
+        import hashlib
+        h          = hashlib.sha1(data_value.encode()).hexdigest()[:8]
+        filename   = f"{base_name}_{h}.pdf"
+        filepath   = os.path.join(save_dir, filename)
+
+        ok = _download_mca_pr_pdf(data_value, filepath, cookies, user_agent, page_url)
+
+        if ok:
+            ALL_DOWNLOADED.append({
+                "Verticals":   MCA_DOMAIN_NAME,
+                "SubCategory": subfolder,
+                "Year":        year,
+                "Month":       month_full,
+                "IssueDate":   dt.strftime("%Y-%m-%d"),
+                "Title":       clean_title,
+                "PDF_URL":     _mca_pr_dms_url(data_value),
+                "File Name":   filename,
+                "Path":        os.path.abspath(filepath),
+            })
+        else:
+            logging.error("MCA PR: failed to download: %s", title)
+
+    logging.info("MCA PR SCRAPER -> DONE [%s > %s]", category, subfolder)
+
+
+async def scrape_mca(task: dict, week_start: datetime, week_end: datetime):
+
+    """
+    task = {
+        "category":  "MCA",
+        "subfolder": "Notifications",   # or "Circulars" / "Press Release"
+        "url":       "https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/notifications.html"
+    }
+    """
+    if task["subfolder"].strip().lower() == "press release":
+        return await scrape_mca_press_release(task, week_start, week_end)
+
+    category  = task["category"]
+    subfolder = task["subfolder"]
+    page_url  = task["url"]
+ 
+    logging.info("MCA SCRAPER -> [%s > %s] %s", category, subfolder, page_url)
+ 
+    # ── Browser phase (retried automatically on window crash) ──
+    rows, cookies, user_agent = _get_mca_snapshot(page_url)
+ 
+    if not rows:
+        logging.warning("MCA: no rows captured — skipping.")
+        return
+ 
+    # ── Offline phase: filter + download ──────────────────────
+    seen_titles = set()   # dedup: skip duplicate titles in Excel
+ 
+    for row in rows:
+        title    = row["title"]
+        date_str = row["date_str"]
+        val      = row["val"]
+        doc_cat  = row["doc_cat"]
+ 
+        # Ignore filter
+        if is_ignored_mca_title(title):
+            logging.info("MCA: skipping (ignored): %s", title)
+            continue
+ 
+        # Parse date
+        try:
+            dt = datetime.strptime(date_str, "%d/%m/%Y")
+        except Exception:
+            logging.warning("MCA: bad date %r for: %s", date_str, title)
+            continue
+ 
+        # Week range filter
+        if not (week_start <= dt <= week_end):
+            logging.info("MCA: outside week (%s): %s", dt.date(), title[:60])
+            continue
+ 
+        if not val:
+            logging.warning("MCA: no val for: %s", title)
+            continue
+ 
+        # Use data-doccategory as subfolder (auto-routes Notifications/Circulars/etc.)
+        effective_subfolder = doc_cat if doc_cat else subfolder
+ 
+        year       = str(dt.year)
+        month_full = dt.strftime("%B")
+ 
+        save_dir = ensure_year_month_structure(
+            BASE_PATH, category, effective_subfolder, year, month_full
+        )
+ 
+        clean_title = title.split("|")[0].strip()
+        title_key   = clean_title.lower().strip()
+ 
+        # MCA sometimes lists same circular twice (e.g. English + Hindi versions)
+        # Skip duplicates in Excel — each unique title recorded only once
+        if title_key in seen_titles:
+            logging.info("MCA: duplicate title skipped in Excel (val=%s): %s", val, clean_title[:60])
+            continue
+        seen_titles.add(title_key)
+ 
+        # val suffix ensures unique filename even if same title appears twice
+        base_name   = sanitize_filename(clean_title).replace(".pdf", "")
+        filename    = f"{base_name}_{val[-6:]}.pdf"
+        filepath    = os.path.join(save_dir, filename)
+ 
+        ok = _download_mca_pdf(val, doc_cat, filepath, cookies, user_agent, page_url)
+ 
+        if ok:
+            ALL_DOWNLOADED.append({
+                "Verticals":   MCA_DOMAIN_NAME,   # "Companies Act"
+                "SubCategory": effective_subfolder,
+                "Year":        year,
+                "Month":       month_full,
+                "IssueDate":   dt.strftime("%Y-%m-%d"),
+                "Title":       clean_title,
+                "PDF_URL":     _mca_dms_url(val, doc_cat),
+                "File Name":   filename,
+                "Path":        os.path.abspath(filepath),
+            })
+        else:
+            logging.error("MCA: failed to download: %s", title)
+ 
+    logging.info("MCA SCRAPER -> DONE [%s > %s]", category, subfolder)
 
 # -------- HELPERS --------
 
@@ -1906,6 +2661,9 @@ async def scrape_generic_link(task, week_start, week_end):
 
     if category == "ICAI":
         return await scrape_icai(task, week_start, week_end)
+    
+    if category == "Companies Act":
+        return await scrape_mca(task, week_start, week_end)
     
     logging.warning("Unknown category: %s", category)
 
