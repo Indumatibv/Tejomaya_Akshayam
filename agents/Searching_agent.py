@@ -2016,6 +2016,30 @@ async def scrape_ifsca(task, week_start, week_end):
         logging.info("IFSCA -> DONE")
 
 # -----------------------------------------------------
+# def is_ignored_rbi_title(title: str) -> bool:
+#     """
+#     Returns True if RBI notification title should be skipped.
+#     Case-insensitive keyword match with normalization.
+#     """
+#     if not title:
+#         return False
+
+#     t = unicodedata.normalize("NFKD", title).lower()
+#     t = re.sub(r"\s+", " ", t)
+
+#     ignore_keywords = [
+#         "auction",
+#         "auction results",
+#         "money market operations conversion",
+#         "money market",
+#         "redemption",
+#         "state government securities",
+#         "monetary penalty turnover data",
+#         "monetary penalty"
+#     ]
+
+#     return any(kw in t for kw in ignore_keywords)
+
 def is_ignored_rbi_title(title: str) -> bool:
     """
     Returns True if RBI notification title should be skipped.
@@ -2028,17 +2052,30 @@ def is_ignored_rbi_title(title: str) -> bool:
     t = re.sub(r"\s+", " ", t)
 
     ignore_keywords = [
+        # Auctions
         "auction",
         "auction results",
-        "money market operations conversion",
-        "money market",
+
+        # Money market
+        "money market operations",
+        "variable rate repo",
+
+        # Securities related
+        "conversion",
         "redemption",
         "state government securities",
-        "monetary penalty turnover data",
-        "monetary penalty"
+
+        # Penalties / data
+        "monetary penalty",
+        "turnover data",
+
+        # Publications
+        "bulletin",
+        "release of data",
     ]
 
     return any(kw in t for kw in ignore_keywords)
+
 async def scrape_rbi(task, week_start, week_end):
     logging.info("RBI SCRAPER -> %s", task["url"])
 
