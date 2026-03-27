@@ -26,7 +26,7 @@ EXCEL_OUTPUT = BASE_DIR / "data" / "Searching_agent_output.xlsx"
 
 
 def run_process(script_path, log_path):
-    logging.info(f"🚀 Running script → {script_path}")
+    logging.info(f"🚀 Running script -> {script_path}")
     with open(log_path, "a") as f:
         f.write(f"\n\n=== Run at {time.strftime('%Y-%m-%d %H:%M:%S')} ===\n")
         result = subprocess.run([PYTHON, script_path], stdout=f, stderr=f)
