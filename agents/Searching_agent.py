@@ -84,7 +84,7 @@ def safe_pdf_filename(title: str | None, pdf_url: str, max_base_len: int = 80) -
 
 # Where PDFs should be stored (keep as-is: your Downloads path)
 if platform.system() == "Windows":
-    BASE_PATH = r"C:\Users\Admin\Desktop\Indu\Tejomaya\Tejomaya_pdfs\Akshayam Data"
+    BASE_PATH = r"C:\Users\Admin\Desktop\Indu\Akshayam\Tejomaya_pdfs\Akshayam Data"
 else:
     BASE_PATH = "/Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data"
 
