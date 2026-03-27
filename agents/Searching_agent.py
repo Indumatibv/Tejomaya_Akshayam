@@ -37,7 +37,16 @@ import unicodedata
 
 import hashlib
 
+import requests
+ 
+from selenium.common.exceptions import NoSuchWindowException, WebDriverException
 
+try:
+    import undetected_chromedriver as uc
+    _UC_AVAILABLE = True
+except ImportError:
+    _UC_AVAILABLE = False
+  
 # ---------------------- Logging ----------------------
 logging.basicConfig(
     level=logging.INFO,
@@ -48,6 +57,27 @@ logging.basicConfig(
 # ---- GLOBAL TITLE TRACKING FOR BSE vs NSE DEDUP ----
 BSE_TITLES_NORMALIZED = set()
 
+#----mca-----
+ 
+
+# ── Constants ──────────────────────────────────────────────
+ 
+MCA_HOME_URL        = "https://www.mca.gov.in/"
+MCA_DMS_BASE        = "https://www.mca.gov.in/bin/ebook/dms/getdocument"
+MCA_DMS_PR_BASE     = "https://www.mca.gov.in/bin/dms/getdocument"   # Press Release endpoint
+MCA_MAX_NAV_RETRIES = 5
+MCA_MAX_DRV_RETRIES = 3   # retries when driver window dies on startup
+MCA_DOMAIN_NAME     = "Companies Act"   # display name in Excel Verticals column
+ 
+MCA_IGNORE_KEYWORDS = [
+    "bid queries",
+    "vacancy advertisement",
+    "career notices",
+    "corrigendum filling up post",
+    "request for proposal",
+]
+
+#------------------------
 def normalize_title_for_compare(title: str) -> str:
     """
     Normalize titles for cross-exchange comparison.
@@ -268,42 +298,7 @@ def get_week_range(weeks_back: int = 0):
     logging.info("Target range (%d week(s) back): %s -> %s", weeks_back, target_monday.date(), target_sunday.date())
     return target_monday, target_sunday
 
-#----mca-----
- 
-import base64
-import os
-import re
-import time
-import requests
-import unicodedata
-from datetime import datetime
- 
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchWindowException, WebDriverException
- 
-try:
-    import undetected_chromedriver as uc
-    _UC_AVAILABLE = True
-except ImportError:
-    _UC_AVAILABLE = False
- 
-# ── Constants ──────────────────────────────────────────────
- 
-MCA_HOME_URL        = "https://www.mca.gov.in/"
-MCA_DMS_BASE        = "https://www.mca.gov.in/bin/ebook/dms/getdocument"
-MCA_DMS_PR_BASE     = "https://www.mca.gov.in/bin/dms/getdocument"   # Press Release endpoint
-MCA_MAX_NAV_RETRIES = 5
-MCA_MAX_DRV_RETRIES = 3   # retries when driver window dies on startup
-MCA_DOMAIN_NAME     = "Companies Act"   # display name in Excel Verticals column
- 
-MCA_IGNORE_KEYWORDS = [
-    "bid queries",
-    "vacancy advertisement",
-    "career notices",
-    "corrigendum filling up post",
-    "request for proposal",
-]
- 
+
 # ── Ignore filter ──────────────────────────────────────────
  
 def is_ignored_mca_title(title: str) -> bool:
@@ -418,7 +413,7 @@ def _wait_for_mca_rows(driver, target_url: str, timeout: int = 90) -> list:
     return []
  
  
-# ── Snapshot rows → plain dicts (no live elements) ────────
+# ── Snapshot rows -> plain dicts (no live elements) ────────
  
 def _snapshot_mca_rows(driver) -> list[dict]:
     rows = driver.find_elements(By.XPATH, "//table//tr[td]")
