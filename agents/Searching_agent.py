@@ -1117,8 +1117,10 @@ async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: s
 
 
         filename = qs.get("fileName", [None])[0]
-
-        if not filename:
+        if filename:
+            # Sanitize URL-provided filenames too — they can be very long
+            filename = sanitize_filename(filename.replace(".pdf", "")[:80])
+        else:
             filename = safe_pdf_filename(title, pdf_url)
 
         file_path = os.path.join(save_dir, filename)
@@ -1173,12 +1175,13 @@ async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: s
                 )
                 return None
 
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)  # ← HERE ✓
             with open(file_path, "wb") as f:
                 f.write(data)
 
             logging.info("Valid PDF saved -> %s", file_path)
             return file_path
-
+        
     except Exception as e:
         logging.exception("Error downloading PDF %s : %s", pdf_url, e)
         return None
