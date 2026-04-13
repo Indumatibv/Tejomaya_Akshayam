@@ -840,36 +840,53 @@ Final Summary:
 
 ACTS_PROMPT = PromptTemplate(
     template="""
-You are a regulatory analyst preparing a high-level summary of an Act.
+You are a regulatory analyst preparing a high-level, client-ready summary of an Act or Amendment Act.
 
-MANDATORY START:
-“This {act_name} as introduced by {authority} …”
+MANDATORY FIRST SENTENCE — NON-NEGOTIABLE:
+- Your response MUST begin with exactly this pattern, filling in the blanks:
+  "This [act_name] as introduced by [authority] ..."
+- Example: "This Insolvency and Bankruptcy Code (Amendment) Act, 2026 as introduced by Parliament of India amends the Insolvency and Bankruptcy Code, 2016 to ..."
+- Do NOT begin with any other wording.
 
-CRITICAL INSTRUCTION:
-- Summarise ONLY the overall impact and purpose of the Act
-- DO NOT mention section numbers, clauses, definitions, or specific insertions
-- DO NOT describe amendments individually
-- Focus on how the Act changes the overall framework
+HARD PROHIBITIONS — these opening phrases are STRICTLY FORBIDDEN:
+- "The provided text appears to be ..."
+- "This document appears to be ..."
+- "This is a draft ..."
+- "The text introduces ..."
+- "Based on the provided text ..."
+- Any preamble, qualification, or meta-commentary about the document itself.
 
-CONTENT:
-- purpose
-- key areas impacted
-- applicability
-- effective date
-- overall outcome
+CONTENT RULES:
+- In ONE coherent paragraph of 4–6 sentences, cover:
+  • The overall purpose and regulatory intent of the Act (why it was enacted)
+  • The major real-world areas impacted — name them concretely
+    (e.g. "creditor-initiated insolvency resolution", "group insolvency coordination",
+    "cross-border insolvency", "liquidation process oversight by committee of creditors")
+  • Who it applies to (e.g. financial creditors, corporate debtors, insolvency professionals)
+  • The effective date or commencement mechanism, if mentioned
+  • The overall outcome or benefit for the system, investors, or regulated entities
+
+DO NOT:
+- List, number, or bullet any points — single paragraph only
+- Mention section numbers, clause numbers, or sub-sections
+- Use phrases like "introduces new provisions", "modifies existing ones",
+  "inserts a new chapter", "substitutes", "omits", or any drafting-mechanic language
+- Describe the structure of the Act (chapters, schedules, annexures)
+- Include penal provision amounts or fine details
+- Reproduce or paraphrase definitions
 
 FORMAT:
-- single paragraph
-- 4–6 sentences
+- Single paragraph, 4 to 6 sentences
+- Plain, business-facing language — no legal jargon
+- No bullet points, no headers, no numbering
 
 Text:
 {text}
 
-Final Summary:
+Final Summary (MUST start with "This {act_name} as introduced by {authority}"):
 """,
     input_variables=["text", "authority", "act_name"]
 )
-
 # ============================================================
 # Quality Check
 # ============================================================
@@ -1766,34 +1783,45 @@ def extract_act_metadata(text: str):
         "date": date_match.group(1) if date_match else None
     }
 
-# def process_acts_pdf(row: pd.Series):
-#     pdf_path = Path(row["Path"])
 
-#     try:
-#         text = extract_pdf_text(pdf_path)
+# def extract_act_core(text: str) -> str:
+#     lines = text.splitlines()
+#     keep = []
+#     capture = False
 
-#         # 👇 Same as rules, but slightly more context
-#         core_text = text[:12000]
+#     for line in lines:
+#         clean = line.strip()
 
-#         meta = extract_act_metadata(core_text)
+#         if not clean:
+#             continue
 
-#         summary = llm.invoke(
-#             ACTS_PROMPT.format(
-#                 text=core_text,
-#                 authority=meta["authority"],
-#                 act_name=meta["act_name"]
-#             )
-#         ).strip()
+#         # START after title (skip gazette noise)
+#         if re.search(r'An Act', clean, re.IGNORECASE):
+#             capture = True
+#             continue
 
-#         row["Summary"] = summary
-#         row["EmbeddingText"] = core_text
+#         if not capture:
+#             continue
 
-#     except Exception as e:
-#         logging.error(f"Failed -> {pdf_path}: {e}")
-#         row["Summary"] = "NA"
-#         row["EmbeddingText"] = "NA"
+#         # REMOVE section-level amendments
+#         if re.match(r'^\d+\.', clean):   # 1. 2. 3.
+#             continue
 
-#     return row
+#         if re.search(r'In section \d+', clean, re.IGNORECASE):
+#             continue
+
+#         if re.search(r'shall be substituted|shall be inserted', clean, re.IGNORECASE):
+#             continue
+
+#         # KEEP only meaningful narrative lines
+#         if len(clean) > 40:
+#             keep.append(clean)
+
+#         if len(keep) >= 200:
+#             break
+
+#     return "\n".join(keep)
+
 
 def extract_act_core(text: str) -> str:
     lines = text.splitlines()
@@ -1802,34 +1830,45 @@ def extract_act_core(text: str) -> str:
 
     for line in lines:
         clean = line.strip()
-
         if not clean:
             continue
 
-        # START after title (skip gazette noise)
-        if re.search(r'An Act', clean, re.IGNORECASE):
+        # Start capturing after the preamble ("An Act ..." or "BE it enacted")
+        if re.search(r'\bAn Act\b|\bBE it enacted\b', clean, re.IGNORECASE):
             capture = True
+            keep.append(clean)
             continue
 
         if not capture:
             continue
 
-        # ❌ REMOVE section-level amendments
-        if re.match(r'^\d+\.', clean):   # 1. 2. 3.
+        # Skip bare short numbered headings like "1." or "2." alone (section numbers)
+        # but KEEP substantive numbered lines like "2. In section 3 of the principal Act..."
+        if re.match(r'^\d+\.\s*$', clean):
             continue
 
-        if re.search(r'In section \d+', clean, re.IGNORECASE):
+        # Skip amendment drafting noise (pure substitution/insertion mechanics)
+        if re.search(
+            r'\bshall be substituted\b|\bshall be inserted\b|\bshall be omitted\b'
+            r'|\bfor the words\b|\bthe following.*shall be\b',
+            clean, re.IGNORECASE
+        ) and len(clean) < 120:
+            # Only skip short mechanic lines, not long substantive ones
             continue
 
-        if re.search(r'shall be substituted|shall be inserted', clean, re.IGNORECASE):
+        # Skip Gazette boilerplate
+        if re.search(r'gazette|mgipmrnd|uploaded by|controller of publications', clean, re.IGNORECASE):
             continue
 
-        # ✅ KEEP only meaningful narrative lines
-        if len(clean) > 40:
+        if len(clean) > 20:
             keep.append(clean)
 
-        if len(keep) >= 200:
+        if len(keep) >= 300:
             break
+
+    # Fallback
+    if len(keep) < 10:
+        return text[:8000]
 
     return "\n".join(keep)
 
@@ -1839,7 +1878,7 @@ def process_acts_pdf(row: pd.Series):
     try:
         text = extract_pdf_text(pdf_path)
 
-        # 🔥 NEW STEP
+        # NEW STEP
         core_text = extract_act_core(text)
 
         # fallback if too little content
@@ -1848,7 +1887,17 @@ def process_acts_pdf(row: pd.Series):
 
         meta = extract_act_metadata(text)
 
-        summary = llm.invoke(
+        # summary = llm.invoke(
+        #     ACTS_PROMPT.format(
+        #         text=core_text,
+        #         authority=meta["authority"],
+        #         act_name=meta["act_name"]
+        #     )
+        # ).strip()
+
+        # # row["Summary"] = summary
+        # row["Summary"] = clean_summary_with_llm(summary)
+        summary_body = llm.invoke(
             ACTS_PROMPT.format(
                 text=core_text,
                 authority=meta["authority"],
@@ -1856,7 +1905,15 @@ def process_acts_pdf(row: pd.Series):
             )
         ).strip()
 
-        row["Summary"] = summary
+        summary_body = clean_summary_with_llm(summary_body)
+
+        if summary_body.lower().startswith(meta["act_name"].lower()):
+            final_summary = summary_body
+        else:
+            final_summary = f"{meta['act_name']} as introduced by {meta['authority']} {summary_body}"
+
+        row["Summary"] = final_summary
+
         row["EmbeddingText"] = core_text
 
     except Exception as e:
