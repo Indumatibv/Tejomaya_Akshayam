@@ -1182,10 +1182,41 @@ async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: s
             logging.info("Valid PDF saved -> %s", file_path)
             return file_path
         
+    # except Exception as e:
+    #     logging.exception("Error downloading PDF %s : %s", pdf_url, e)
+    #     return None
     except Exception as e:
-        logging.exception("Error downloading PDF %s : %s", pdf_url, e)
-        return None
+        logging.warning("aiohttp failed, retrying with requests: %s | %s", pdf_url, e)
 
+        try:
+            resp = requests.get(pdf_url, headers=headers, timeout=60)
+            resp.raise_for_status()
+
+            content_type = resp.headers.get("Content-Type", "").lower()
+
+            if not (
+                resp.content[:4] == b"%PDF"
+                or "pdf" in content_type
+                or "octet-stream" in content_type
+            ):
+                logging.error(
+                    "Fallback not a valid PDF. Content-Type=%s URL=%s",
+                    content_type,
+                    pdf_url,
+                )
+                return None
+
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)  # IMPORTANT
+
+            with open(file_path, "wb") as f:
+                f.write(resp.content)
+
+            logging.info("Fallback PDF saved -> %s", file_path)
+            return file_path
+
+        except Exception as e2:
+            logging.error("Requests fallback failed: %s | %s", pdf_url, e2)
+            return None
 #-----------------------------------------------------
 
 async def direct_nse_pdf_download(pdf_url: str, save_path: str):

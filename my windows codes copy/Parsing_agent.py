@@ -60,7 +60,7 @@ else:
 # def print_device_usage(operation: str):
 #     device_name = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU"
 #     gpu_layers = os.environ.get("OLLAMA_NUM_GPU_LAYERS", "0")
-#     print(f"🔧 [{operation}] Using {device_name} (GPU layers: {gpu_layers})")
+#     print(f"[{operation}] Using {device_name} (GPU layers: {gpu_layers})")
 # ---------------------- LLM ----------------------
 llm = Ollama(model="mistral:latest")
 
@@ -838,52 +838,108 @@ Final Summary:
 #     input_variables=["text", "authority", "act_name"]
 # )
 
+# ACTS_PROMPT = PromptTemplate(
+#     template="""
+# You are a regulatory analyst preparing a high-level summary of an Act.
+
+# MANDATORY START:
+# “This {act_name} as introduced by {authority} …”
+
+# CRITICAL INSTRUCTION:
+# - Summarise ONLY the overall impact and purpose of the Act
+# - DO NOT mention section numbers, clauses, definitions, or specific insertions
+# - DO NOT describe amendments individually
+# - Focus on how the Act changes the overall framework
+
+# CONTENT:
+# - purpose
+# - key areas impacted
+# - applicability
+# - effective date
+# - overall outcome
+
+# FORMAT:
+# - single paragraph
+# - 4–6 sentences
+
+# Text:
+# {text}
+
+# Final Summary:
+# """,
+#     input_variables=["text", "authority", "act_name"]
+# )
+
+
+# ACTS_PROMPT = PromptTemplate(
+#     template="""
+# You are a regulatory analyst preparing a high-level, client-ready summary of an Act.
+
+# CRITICAL INSTRUCTION:
+# - Summarise ONLY the overall impact and purpose of the Act
+# - DO NOT mention section numbers, clauses, definitions, or specific insertions
+# - DO NOT describe amendments individually
+# - Focus on how the Act changes the overall framework
+
+# CONTENT (all must appear):
+# - Purpose — why this Act was introduced
+# - Major areas of change — name them specifically
+# - Applicability — who it applies to
+# - Exemptions — any categories explicitly excluded
+# - Effective date — when it comes into force
+
+# FORMAT (strictly enforced):
+# - Single paragraph only — 4 to 6 sentences
+# - No bullet points, no numbered lists, no headings
+# - No section numbers or clause references
+# - No specific timeframe figures or fine amounts
+# - No drafting language like "substitutes", "omits", "inserts", "introduces new provisions"
+
+# Text:
+# {text}
+
+# Final Summary (one paragraph, no lists, no section numbers):
+# """,
+#     input_variables=["text", "authority", "act_name"]
+# )
+
 ACTS_PROMPT = PromptTemplate(
     template="""
-You are a regulatory analyst preparing a high-level, client-ready summary of an Act or Amendment Act.
+You are a regulatory analyst preparing a high-level, client-ready summary of an Act.
 
-MANDATORY FIRST SENTENCE — NON-NEGOTIABLE:
-- Your response MUST begin with exactly this pattern, filling in the blanks:
-  "This [act_name] as introduced by [authority] ..."
-- Example: "This Insolvency and Bankruptcy Code (Amendment) Act, 2026 as introduced by Parliament of India amends the Insolvency and Bankruptcy Code, 2016 to ..."
-- Do NOT begin with any other wording.
+YOUR RESPONSE MUST BE ONE SINGLE PARAGRAPH OF 4 TO 6 SENTENCES.
+NO bullet points. NO numbered lists. NO headings. NO section numbers.
 
-HARD PROHIBITIONS — these opening phrases are STRICTLY FORBIDDEN:
-- "The provided text appears to be ..."
-- "This document appears to be ..."
-- "This is a draft ..."
-- "The text introduces ..."
-- "Based on the provided text ..."
-- Any preamble, qualification, or meta-commentary about the document itself.
+CONTENT (all must appear in the paragraph):
+- Purpose — why this Act was introduced
+- Major areas of change — name them specifically and concretely
+  (e.g. creditor-initiated insolvency resolution, group insolvency,
+  cross-border insolvency, liquidation oversight, voluntary liquidation)
+- Applicability — who it applies to
+- Exemptions — any categories explicitly excluded from scope
+- Effective date — when it comes into force
 
-CONTENT RULES:
-- In ONE coherent paragraph of 4–6 sentences, cover:
-  • The overall purpose and regulatory intent of the Act (why it was enacted)
-  • The major real-world areas impacted — name them concretely
-    (e.g. "creditor-initiated insolvency resolution", "group insolvency coordination",
-    "cross-border insolvency", "liquidation process oversight by committee of creditors")
-  • Who it applies to (e.g. financial creditors, corporate debtors, insolvency professionals)
-  • The effective date or commencement mechanism, if mentioned
-  • The overall outcome or benefit for the system, investors, or regulated entities
+HARD PROHIBITIONS — do NOT include any of the following:
+- Section numbers or clause references
+- Drafting language: "substitutes", "omits", "inserts", "introduces new provisions",
+  "amends", "modifies"
+- Specific timeframe figures (e.g. "30 days", "14 days")
+- Penal provisions or fine amounts
+- Gazette references, bill numbers, or legal citations
+- The phrase "The provided text", "This document", "This text contains",
+  "Key changes include", "The following act"
 
-DO NOT:
-- List, number, or bullet any points — single paragraph only
-- Mention section numbers, clause numbers, or sub-sections
-- Use phrases like "introduces new provisions", "modifies existing ones",
-  "inserts a new chapter", "substitutes", "omits", or any drafting-mechanic language
-- Describe the structure of the Act (chapters, schedules, annexures)
-- Include penal provision amounts or fine details
-- Reproduce or paraphrase definitions
-
-FORMAT:
-- Single paragraph, 4 to 6 sentences
-- Plain, business-facing language — no legal jargon
-- No bullet points, no headers, no numbering
+SELF CHECK BEFORE RESPONDING:
+- Is my response one paragraph? If not, rewrite it.
+- Does it mention purpose, key areas, applicability, exemptions and effective date?
+  If not, rewrite it.
+- Does it contain any bullet points, numbered lists or section numbers?
+  If yes, rewrite it as a single paragraph.
 
 Text:
 {text}
 
-Final Summary (MUST start with "This {act_name} as introduced by {authority}"):
+Final Summary (one paragraph only, 4 to 6 sentences, no lists):
 """,
     input_variables=["text", "authority", "act_name"]
 )
@@ -1723,7 +1779,7 @@ def process_announcement_pdf(row: pd.Series):
 
         authority = resolve_authority(row["Verticals"])
 
-        # 🔴 HARD EXAM FILTER
+        # HARD EXAM FILTER
         if is_icai_exam_related(core_text, row.get("Title", "")):
             row["Summary"] = "NA"
             row["EmbeddingText"] = "NA"
@@ -1773,16 +1829,44 @@ def process_discussion_paper_pdf(row: pd.Series):
 
 # ============================================================
 
-def extract_act_metadata(text: str):
-    name_match = re.search(r'(THE .*? ACT, \d{4})', text, re.IGNORECASE)
-    date_match = re.search(r'\[(\d{1,2}.*?\d{4})\]', text)
+# def extract_act_metadata(text: str):
+#     name_match = re.search(r'(THE .*? ACT, \d{4})', text, re.IGNORECASE)
+#     date_match = re.search(r'\[(\d{1,2}.*?\d{4})\]', text)
 
-    return {
-        "act_name": name_match.group(1).title() if name_match else "This Act",
-        "authority": "Parliament of India",
-        "date": date_match.group(1) if date_match else None
-    }
+#     return {
+#         "act_name": name_match.group(1).title() if name_match else "This Act",
+#         "authority": "Parliament of India",
+#         "date": date_match.group(1) if date_match else None
+#     }
 
+# def process_acts_pdf(row: pd.Series):
+#     pdf_path = Path(row["Path"])
+
+#     try:
+#         text = extract_pdf_text(pdf_path)
+
+#         # Same as rules, but slightly more context
+#         core_text = text[:12000]
+
+#         meta = extract_act_metadata(core_text)
+
+#         summary = llm.invoke(
+#             ACTS_PROMPT.format(
+#                 text=core_text,
+#                 authority=meta["authority"],
+#                 act_name=meta["act_name"]
+#             )
+#         ).strip()
+
+#         row["Summary"] = summary
+#         row["EmbeddingText"] = core_text
+
+#     except Exception as e:
+#         logging.error(f"Failed -> {pdf_path}: {e}")
+#         row["Summary"] = "NA"
+#         row["EmbeddingText"] = "NA"
+
+#     return row
 
 # def extract_act_core(text: str) -> str:
 #     lines = text.splitlines()
@@ -1823,41 +1907,163 @@ def extract_act_metadata(text: str):
 #     return "\n".join(keep)
 
 
-def extract_act_core(text: str) -> str:
-    lines = text.splitlines()
-    keep = []
-    capture = False
+# def process_acts_pdf(row: pd.Series):
+#     pdf_path = Path(row["Path"])
 
-    for line in lines:
-        clean = line.strip()
+#     try:
+#         text = extract_pdf_text(pdf_path)
+#         core_text = extract_act_core(text)
+
+#         if len(core_text) < 500:
+#             core_text = text[:8000]
+
+#         meta = extract_act_metadata(text)
+
+#         summary_body = llm.invoke(
+#             ACTS_PROMPT.format(
+#                 text=core_text,
+#                 authority=meta["authority"],
+#                 act_name=meta["act_name"]
+#             )
+#         ).strip()
+
+#         summary_body = clean_summary_with_llm(summary_body)
+
+#         # Strip any rogue opening the LLM may have added
+#         bad_starts = [
+#             r'^this text contains.*?[\.\n]',
+#             r'^this document.*?[\.\n]',
+#             r'^the provided text.*?[\.\n]',
+#             r'^these are proposed.*?[\.\n]',
+#             r'^key changes.*?[\.\n]',
+#             r'^the following act.*?[\.\n]',
+#             r'^this the \d+.*?[\.\n]',
+#         ]
+#         for pattern in bad_starts:
+#             summary_body = re.sub(
+#                 pattern, '', summary_body,
+#                 flags=re.IGNORECASE | re.DOTALL
+#             ).strip()
+
+#         # Python always controls the start
+#         mandatory_start = (
+#             f"This {meta['act_name']} as introduced by {meta['authority']}"
+#         )
+#         final_summary = f"{mandatory_start} {summary_body}"
+
+#         row["Summary"] = final_summary
+#         row["EmbeddingText"] = core_text
+
+#     except Exception as e:
+#         logging.error(f"Failed -> {pdf_path}: {e}")
+#         row["Summary"] = "NA"
+#         row["EmbeddingText"] = "NA"
+
+#     return row
+
+def extract_act_metadata(text: str) -> dict:
+
+    # Run on first 3000 chars only — Act name always appears early
+    sample = text[:3000]
+
+    # Find all matches of "THE ... ACT, YYYY" pattern
+    # Use strict pattern — no lowercase words allowed inside
+    matches = re.findall(
+        r'(THE(?:\s+[A-Z\(\)]+)+\s+ACT,\s*\d{4})',
+        sample
+    )
+
+    act_name = None
+    for match in matches:
+        # Reject if it contains any Gazette noise patterns
+        if re.search(
+            r'\d{1,2}(ST|ND|RD|TH)|CHAITRA|SAKA|EXTRAORDINARY|GAZETTE',
+            match, re.IGNORECASE
+        ):
+            continue
+        act_name = match.strip().title()
+        break
+
+    # Fallback — search for mixed case version
+    if not act_name:
+        match = re.search(
+            r'((?:[A-Z][a-z]+\s+){1,8}Act,\s*\d{4})',
+            sample
+        )
+        if match:
+            candidate = match.group(1).strip()
+            # Reject Gazette noise
+            if not re.search(
+                r'chaitra|saka|extraordinary|gazette|\d{1,2}(st|nd|rd|th)',
+                candidate, re.IGNORECASE
+            ):
+                act_name = candidate
+
+    act_name = act_name or "This Act"
+
+    date_match = re.search(r'\[(\d{1,2}(?:st|nd|rd|th)?\s+\w+,?\s*\d{4})\]', text)
+
+    return {
+        "act_name": act_name,
+        "authority": "Parliament of India",
+        "date": date_match.group(1) if date_match else None
+    }
+
+def strip_gazette_header(text: str) -> str:
+    """
+    Hard-cuts everything before BE it enacted / An Act.
+    Works on merged single-line text from partition_pdf fast strategy.
+    """
+    # Best anchor — most reliable in all IBC-style Acts
+    for pattern in [
+        r'BE\s+it\s+enacted\s+by\s+Parliament',
+        r'An\s+Act\s+(?:further\s+to|to\s+amend|to\s+provide|to\s+consolidate)',
+        r'Short\s+title\s+and\s+commencement',
+    ]:
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            logging.info(f"strip_gazette_header: matched at pos {match.start()} — '{pattern}'")
+            return text[match.start():]
+
+    logging.warning("strip_gazette_header: NO anchor found — returning full text")
+    return text
+
+
+def extract_act_core(text: str) -> str:
+    """
+    Works on already-stripped text (Gazette header already removed).
+    Splits on sentences/chunks rather than lines since fast PDF 
+    merges everything into long strings.
+    """
+    # Split on periods + space to get sentence-level chunks
+    # This handles merged single-line text from partition_pdf fast
+    chunks = re.split(r'(?<=[.;])\s+', text)
+    keep = []
+
+    for chunk in chunks:
+        clean = chunk.strip()
         if not clean:
             continue
 
-        # Start capturing after the preamble ("An Act ..." or "BE it enacted")
-        if re.search(r'\bAn Act\b|\bBE it enacted\b', clean, re.IGNORECASE):
-            capture = True
-            keep.append(clean)
-            continue
-
-        if not capture:
-            continue
-
-        # Skip bare short numbered headings like "1." or "2." alone (section numbers)
-        # but KEEP substantive numbered lines like "2. In section 3 of the principal Act..."
-        if re.match(r'^\d+\.\s*$', clean):
-            continue
-
-        # Skip amendment drafting noise (pure substitution/insertion mechanics)
+        # Skip any remaining Gazette noise
         if re.search(
-            r'\bshall be substituted\b|\bshall be inserted\b|\bshall be omitted\b'
-            r'|\bfor the words\b|\bthe following.*shall be\b',
+            r'gazette|registered no|extraordinary|published by authority'
+            r'|ministry of law|legislative department'
+            r'|chaitra|saka|mgipmrnd'
+            r'|assent of the president'
+            r'|hereby published for general information'
+            r'|bill no\.|as passed by the houses'
+            r'|uploaded by the manager'
+            r'|controller of publications',
             clean, re.IGNORECASE
-        ) and len(clean) < 120:
-            # Only skip short mechanic lines, not long substantive ones
+        ):
             continue
 
-        # Skip Gazette boilerplate
-        if re.search(r'gazette|mgipmrnd|uploaded by|controller of publications', clean, re.IGNORECASE):
+        # Skip pure short mechanic lines
+        if re.search(
+            r'\bshall be substituted\b|\bshall be inserted\b|\bshall be omitted\b',
+            clean, re.IGNORECASE
+        ) and len(clean) < 80:
             continue
 
         if len(clean) > 20:
@@ -1866,11 +2072,12 @@ def extract_act_core(text: str) -> str:
         if len(keep) >= 300:
             break
 
-    # Fallback
     if len(keep) < 10:
+        logging.warning("extract_act_core: too few chunks kept, using raw fallback")
         return text[:8000]
 
-    return "\n".join(keep)
+    return " ".join(keep)
+
 
 def process_acts_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
@@ -1878,25 +2085,21 @@ def process_acts_pdf(row: pd.Series):
     try:
         text = extract_pdf_text(pdf_path)
 
-        # NEW STEP
-        core_text = extract_act_core(text)
-
-        # fallback if too little content
-        if len(core_text) < 500:
-            core_text = text[:8000]
-
+        # Metadata from raw text BEFORE any stripping
         meta = extract_act_metadata(text)
+        logging.info(f"Act metadata: {meta}")
 
-        # summary = llm.invoke(
-        #     ACTS_PROMPT.format(
-        #         text=core_text,
-        #         authority=meta["authority"],
-        #         act_name=meta["act_name"]
-        #     )
-        # ).strip()
+        # Strip Gazette header
+        clean_text = strip_gazette_header(text)
+        logging.info(f"clean_text starts with: {clean_text[:120]!r}")
 
-        # # row["Summary"] = summary
-        # row["Summary"] = clean_summary_with_llm(summary)
+        # Extract core from clean text
+        core_text = extract_act_core(clean_text)
+        logging.info(f"core_text starts with: {core_text[:120]!r}")
+
+        if len(core_text) < 500:
+            core_text = clean_text[:8000]
+
         summary_body = llm.invoke(
             ACTS_PROMPT.format(
                 text=core_text,
@@ -1906,14 +2109,46 @@ def process_acts_pdf(row: pd.Series):
         ).strip()
 
         summary_body = clean_summary_with_llm(summary_body)
+        summary_body = re.sub(
+            r'\b[Aa]mends sections?[^.]*\.',
+            '',
+            summary_body
+        ).strip()
+        summary_body = re.sub(
+            r'\b[Ss]ection\s+\d+[A-Za-z]*[^.]*\.',
+            '',
+            summary_body
+        ).strip()
+        # Strip rogue openings
+        bad_starts = [
+            r'^this text contains[^.]*\.',
+            r'^this document[^.]*\.',
+            r'^the provided text[^.]*\.',
+            r'^these are proposed[^.]*\.',
+            r'^key changes[^.]*\.',
+            r'^the following act[^.]*\.',
+            r'^this the \d+[^.]*\.',
+        ]
+        for pattern in bad_starts:
+            summary_body = re.sub(
+                pattern, '', summary_body,
+                flags=re.IGNORECASE | re.DOTALL
+            ).strip()
 
-        if summary_body.lower().startswith(meta["act_name"].lower()):
+        # mandatory_start = (
+        #     f"This {meta['act_name']} as introduced by {meta['authority']}"
+        # )
+
+        act_name_clean = re.sub(r'^The\s+', '', meta['act_name'], flags=re.IGNORECASE)
+        mandatory_start = f"This {act_name_clean} as introduced by {meta['authority']}"
+        if summary_body.lower().startswith(
+            f"this {meta['act_name'].lower()}"
+        ):
             final_summary = summary_body
         else:
-            final_summary = f"{meta['act_name']} as introduced by {meta['authority']} {summary_body}"
+            final_summary = f"{mandatory_start} {summary_body}"
 
         row["Summary"] = final_summary
-
         row["EmbeddingText"] = core_text
 
     except Exception as e:

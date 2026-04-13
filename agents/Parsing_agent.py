@@ -60,7 +60,7 @@ else:
 # def print_device_usage(operation: str):
 #     device_name = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU"
 #     gpu_layers = os.environ.get("OLLAMA_NUM_GPU_LAYERS", "0")
-#     print(f"🔧 [{operation}] Using {device_name} (GPU layers: {gpu_layers})")
+#     print(f"[{operation}] Using {device_name} (GPU layers: {gpu_layers})")
 # ---------------------- LLM ----------------------
 llm = Ollama(model="mistral:latest")
 
