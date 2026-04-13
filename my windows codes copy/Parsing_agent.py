@@ -803,6 +803,73 @@ Final Summary:
     input_variables=["text"]
 )
 
+# ===========================================================
+# ACTS SUMMARY PROMPT
+# ===========================================================
+
+# ACTS_PROMPT = PromptTemplate(
+#     template="""
+# You are a regulatory analyst preparing a short, client-ready summary of an Act (primary legislation).
+
+# MANDATORY START:
+# - “This {act_name} as introduced by {authority} …”
+
+# CONTENT:
+# - purpose of the Act
+# - key changes introduced
+# - applicability
+# - effective date (if mentioned)
+# - overall impact
+
+# DO NOT:
+# - mention sections or clauses
+# - give detailed breakdown
+# - include legal drafting language
+
+# FORMAT:
+# - single paragraph
+# - 4 to 6 sentences
+
+# Text:
+# {text}
+
+# Final Summary:
+# """,
+#     input_variables=["text", "authority", "act_name"]
+# )
+
+ACTS_PROMPT = PromptTemplate(
+    template="""
+You are a regulatory analyst preparing a high-level summary of an Act.
+
+MANDATORY START:
+“This {act_name} as introduced by {authority} …”
+
+CRITICAL INSTRUCTION:
+- Summarise ONLY the overall impact and purpose of the Act
+- DO NOT mention section numbers, clauses, definitions, or specific insertions
+- DO NOT describe amendments individually
+- Focus on how the Act changes the overall framework
+
+CONTENT:
+- purpose
+- key areas impacted
+- applicability
+- effective date
+- overall outcome
+
+FORMAT:
+- single paragraph
+- 4–6 sentences
+
+Text:
+{text}
+
+Final Summary:
+""",
+    input_variables=["text", "authority", "act_name"]
+)
+
 # ============================================================
 # Quality Check
 # ============================================================
@@ -1599,7 +1666,8 @@ def process_rules_pdf(row: pd.Series):
             RULES_PROMPT.format(text=core_text)
         ).strip()
 
-        row["Summary"] = summary
+        # row["Summary"] = summary
+        row["Summary"] = clean_summary_with_llm(summary)
         row["EmbeddingText"] = core_text
 
     except Exception as e:
@@ -1688,6 +1756,117 @@ def process_discussion_paper_pdf(row: pd.Series):
 
 # ============================================================
 
+def extract_act_metadata(text: str):
+    name_match = re.search(r'(THE .*? ACT, \d{4})', text, re.IGNORECASE)
+    date_match = re.search(r'\[(\d{1,2}.*?\d{4})\]', text)
+
+    return {
+        "act_name": name_match.group(1).title() if name_match else "This Act",
+        "authority": "Parliament of India",
+        "date": date_match.group(1) if date_match else None
+    }
+
+# def process_acts_pdf(row: pd.Series):
+#     pdf_path = Path(row["Path"])
+
+#     try:
+#         text = extract_pdf_text(pdf_path)
+
+#         # 👇 Same as rules, but slightly more context
+#         core_text = text[:12000]
+
+#         meta = extract_act_metadata(core_text)
+
+#         summary = llm.invoke(
+#             ACTS_PROMPT.format(
+#                 text=core_text,
+#                 authority=meta["authority"],
+#                 act_name=meta["act_name"]
+#             )
+#         ).strip()
+
+#         row["Summary"] = summary
+#         row["EmbeddingText"] = core_text
+
+#     except Exception as e:
+#         logging.error(f"Failed -> {pdf_path}: {e}")
+#         row["Summary"] = "NA"
+#         row["EmbeddingText"] = "NA"
+
+#     return row
+
+def extract_act_core(text: str) -> str:
+    lines = text.splitlines()
+    keep = []
+    capture = False
+
+    for line in lines:
+        clean = line.strip()
+
+        if not clean:
+            continue
+
+        # START after title (skip gazette noise)
+        if re.search(r'An Act', clean, re.IGNORECASE):
+            capture = True
+            continue
+
+        if not capture:
+            continue
+
+        # ❌ REMOVE section-level amendments
+        if re.match(r'^\d+\.', clean):   # 1. 2. 3.
+            continue
+
+        if re.search(r'In section \d+', clean, re.IGNORECASE):
+            continue
+
+        if re.search(r'shall be substituted|shall be inserted', clean, re.IGNORECASE):
+            continue
+
+        # ✅ KEEP only meaningful narrative lines
+        if len(clean) > 40:
+            keep.append(clean)
+
+        if len(keep) >= 200:
+            break
+
+    return "\n".join(keep)
+
+def process_acts_pdf(row: pd.Series):
+    pdf_path = Path(row["Path"])
+
+    try:
+        text = extract_pdf_text(pdf_path)
+
+        # 🔥 NEW STEP
+        core_text = extract_act_core(text)
+
+        # fallback if too little content
+        if len(core_text) < 500:
+            core_text = text[:8000]
+
+        meta = extract_act_metadata(text)
+
+        summary = llm.invoke(
+            ACTS_PROMPT.format(
+                text=core_text,
+                authority=meta["authority"],
+                act_name=meta["act_name"]
+            )
+        ).strip()
+
+        row["Summary"] = summary
+        row["EmbeddingText"] = core_text
+
+    except Exception as e:
+        logging.error(f"Failed -> {pdf_path}: {e}")
+        row["Summary"] = "NA"
+        row["EmbeddingText"] = "NA"
+
+    return row
+# ============================================================
+
 def process_row_by_domain(row: pd.Series):
     sub = row["SubCategory"]
 
@@ -1700,6 +1879,9 @@ def process_row_by_domain(row: pd.Series):
     #  Master Circular FIRST (important)
     if is_master_circular(sub_clean):
         return process_master_circular_pdf(row)
+
+    elif sub_clean == "acts":
+        return process_acts_pdf(row)
 
     elif sub_clean == "master directions":
         return process_master_direction_pdf(row)

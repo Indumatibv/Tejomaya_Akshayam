@@ -26,7 +26,7 @@ EXCEL_OUTPUT = BASE_DIR / "data" / "Searching_agent_output.xlsx"
 
 
 def run_process(script_path, log_path):
-    logging.info(f"🚀 Running script -> {script_path}")
+    logging.info(f"Running script -> {script_path}")
     with open(log_path, "a") as f:
         f.write(f"\n\n=== Run at {time.strftime('%Y-%m-%d %H:%M:%S')} ===\n")
         result = subprocess.run([PYTHON, script_path], stdout=f, stderr=f)
@@ -38,20 +38,20 @@ def main():
     logging.info("===== Starting 2-Agent ETL Chain =====")
 
     if run_process(SEARCH_AGENT, SEARCH_LOG) != 0:
-        logging.error("❌ Searching agent failed")
+        logging.error("Searching agent failed")
         return
 
     if not EXCEL_OUTPUT.exists():
-        logging.error(f"❌ Excel not generated: {EXCEL_OUTPUT}")
+        logging.error(f"Excel not generated: {EXCEL_OUTPUT}")
         return
 
-    logging.info(f"📄 Excel found: {EXCEL_OUTPUT}")
+    logging.info(f"Excel found: {EXCEL_OUTPUT}")
 
     if run_process(PARSE_AGENT, PARSE_LOG) != 0:
-        logging.error("❌ Parsing agent failed")
+        logging.error("Parsing agent failed")
         return
 
-    logging.info("🎉 BOTH AGENTS COMPLETED SUCCESSFULLY!")
+    logging.info("BOTH AGENTS COMPLETED SUCCESSFULLY!")
 
 
 if __name__ == "__main__":
