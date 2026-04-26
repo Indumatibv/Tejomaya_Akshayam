@@ -128,6 +128,30 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 EXCEL_OUTPUT = DATA_DIR / "Searching_agent_output.xlsx"
 
+# -------- CLEAN PREVIOUS RUN OUTPUTS --------
+
+def clean_previous_outputs():
+    try:
+        week_range_file = DATA_DIR / "week_range.json"
+        excel_file = EXCEL_OUTPUT
+
+        # Delete week_range.json
+        if week_range_file.exists():
+            week_range_file.unlink()
+            logging.info("Deleted previous week_range.json")
+
+        # Delete Searching_agent_output.xlsx
+        if excel_file.exists():
+            excel_file.unlink()
+            logging.info("Deleted previous Searching_agent_output.xlsx")
+
+    except Exception as e:
+        logging.error("Error cleaning previous outputs: %s", e)
+
+
+# Call this BEFORE anything starts
+clean_previous_outputs()
+
 # GLOBAL LIST FOR FINAL EXCEL
 ALL_DOWNLOADED = []
 
