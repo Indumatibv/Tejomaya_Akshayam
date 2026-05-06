@@ -10,6 +10,8 @@ import nest_asyncio
 import platform
 import os
 from pathlib import Path
+
+from nltk import data
 # Apply Windows-specific event loop fix (must run before other asyncio use)
 if sys.platform.startswith("win"):
     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
@@ -340,7 +342,8 @@ def _build_mca_driver():
         opts = uc.ChromeOptions()
         opts.add_argument("--no-sandbox")
         opts.add_argument("--disable-dev-shm-usage")
-        return uc.Chrome(options=opts)
+        # return uc.Chrome(options=opts)
+        return uc.Chrome(options=opts, version_main=147)
     else:
         from selenium import webdriver
         from selenium.webdriver.chrome.options import Options
@@ -1361,186 +1364,165 @@ async def scrape_nse(task, week_start, week_end):
 
     logging.info("NSE LISTED COMPANIES -> DONE")
 
-
 async def scrape_bse(task, week_start, week_end):
-    logging.info("BSE LISTED COMPANIES SCRAPER -> %s", task["url"])
+    logging.info("BSE SCRAPER (Angular) -> %s", task["url"])
 
-    # Configure Chrome with custom download folder
-    chrome_opts = webdriver.ChromeOptions()
-    prefs = {
-        "download.default_directory": BASE_PATH,     # PDF auto saved here
-        "download.prompt_for_download": False,
-        "plugins.always_open_pdf_externally": True
-    }
-    chrome_opts.add_experimental_option("prefs", prefs)
-    chrome_opts.add_argument("--headless=new")
-    chrome_opts.add_argument("--disable-gpu")
-    chrome_opts.add_argument("--no-sandbox")
-    chrome_opts.add_argument("--window-size=1920,1080")
+    MAX_RETRIES = 3
+    driver = None
 
-    chrome_opts.add_argument(
-    "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
-    )
-
-    driver = webdriver.Chrome(options=chrome_opts)
-
-    # Load listing page
-    # driver.get(task["url"])
-    # time.sleep(3)
-
-    # soup = BeautifulSoup(driver.page_source, "html.parser")
-    # # rows = soup.select("tr.ng-scope")
-    # rows = soup.select("tr.ng-scope, tr[ng-repeat]")
-
-    driver.get(task["url"])
-
-    # WebDriverWait(driver, 20).until(
-    #     # EC.presence_of_element_located((By.CSS_SELECTOR, "tr[ng-repeat]"))
-    #     EC.presence_of_element_located((By.CSS_SELECTOR, "tr[ng-repeat], tr.ng-scope"))
-    # )
-
-    # time.sleep(1)
-
-    WebDriverWait(driver, 30).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, "tr[ng-repeat]"))
-    )
-    time.sleep(3)
-
-    soup = BeautifulSoup(driver.page_source, "html.parser")
-    rows = soup.select("tr[ng-repeat]")
-
-    if not rows:
-        logging.error("No BSE rows found after JS load")
-        driver.quit()
-        return
-
-    logging.info("Processing TOP 10 BSE Circulars")
-    top_10 = rows[:10]
-
-    for row in top_10:
-        cols = row.find_all("td")
-        if len(cols) < 2:
-            continue
-
-        title_elem = cols[0].find("a", href=True)
-        if not title_elem:
-            continue
-
-        title = title_elem.get_text(strip=True)
-        detail_link = urljoin("https://www.bseindia.com", title_elem["href"])
-
-        # Parse Issue Date
-        date_text = cols[1].get_text(strip=True)
+    for attempt in range(1, MAX_RETRIES + 1):
         try:
-            dt = datetime.strptime(date_text, "%B %d, %Y")
-        except:
-            logging.warning("Cannot parse date: %s", date_text)
-            continue
+            logging.info("BSE: driver attempt %d/%d", attempt, MAX_RETRIES)
 
-        if not (week_start <= dt <= week_end):
-            logging.info("Skipping (outside week): %s", dt.date())
-            continue
+            if _UC_AVAILABLE:
+                opts = uc.ChromeOptions()
+                opts.add_argument("--no-sandbox")
+                opts.add_argument("--disable-dev-shm-usage")
+                driver = uc.Chrome(options=opts, version_main=147)
+            else:
+                opts = webdriver.ChromeOptions()
+                opts.add_argument("--no-sandbox")
+                opts.add_argument("--disable-dev-shm-usage")
+                opts.add_argument("--disable-blink-features=AutomationControlled")
+                opts.add_experimental_option("excludeSwitches", ["enable-automation"])
+                opts.add_experimental_option("useAutomationExtension", False)
+                driver = webdriver.Chrome(options=opts)
 
-        logging.info("Opening detail page: %s", detail_link)
-        driver.get(detail_link)
-        # time.sleep(2)
-        # WebDriverWait(driver, 10).until(
-        #     EC.presence_of_element_located((By.CSS_SELECTOR, "td#tc52 a"))
-        # )
+            time.sleep(2)  # let uc stabilise before touching the window
 
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.TAG_NAME, "body"))
-        )
+            driver.get(task["url"])
+            logging.info("BSE: page loaded, waiting for Angular table...")
 
-        time.sleep(2)
+            time.sleep(5)  # let Angular fully render
+            driver.execute_script("window.scrollTo(0, 300);")
+            time.sleep(2)
 
-        detail_soup = BeautifulSoup(driver.page_source, "html.parser")
+            selectors = [
+                "table tr td.tdcolumn",
+                "table tr td",
+                "tr td a[href*='bseindia.com/downloads']",
+                "tbody tr",
+            ]
 
-        year = str(dt.year)
-        month_full = dt.strftime("%B")
+            found = False
+            for sel in selectors:
+                try:
+                    WebDriverWait(driver, 30).until(
+                        EC.presence_of_element_located((By.CSS_SELECTOR, sel))
+                    )
+                    logging.info("BSE: table found with selector: %s", sel)
+                    found = True
+                    break
+                except Exception:
+                    logging.warning("BSE: selector not found: %s", sel)
+                    continue
 
-        save_dir = ensure_year_month_structure(
-            BASE_PATH, task["category"], task["subfolder"], year, month_full
-        )
-        # filename = sanitize_filename(title)
-        filename = safe_pdf_filename(title, detail_link)
+            if not found:
+                logging.warning("BSE: no selector matched — waiting 15s and trying anyway")
+                time.sleep(15)
 
-        final_path = os.path.join(save_dir, filename)
+            page_src = driver.page_source
+            logging.info("BSE: page source length: %d", len(page_src))
 
-        # ---- CHECK FOR ATTACHMENT ----
-        attach = detail_soup.select_one("td#tc52 a[href]")
-        if attach:
-            pdf_url = urljoin("https://www.bseindia.com", attach["href"])
-            logging.info("Attachment -> %s", pdf_url)
+            if "tdcolumn" in page_src:
+                logging.info("BSE: 'tdcolumn' found in page source — Angular rendered OK")
+            elif "Circulars" in page_src:
+                logging.info("BSE: 'Circulars' found but tdcolumn missing — partial render")
+            else:
+                logging.error("BSE: page source seems wrong — possible block or redirect")
+                logging.info("BSE page snippet: %s", page_src[:2000])
+                return
 
-            # CLICK USING SELENIUM (IMPORTANT)
-            try:
-                link = driver.find_element(By.CSS_SELECTOR, "td#tc52 a")
-                link.click()
-                time.sleep(3)   # allow browser to download
+            soup = BeautifulSoup(page_src, "html.parser")
+            rows = soup.select("table tr")
+            logging.info("BSE: total rows found: %d", len(rows))
 
-                # Now move the latest downloaded file into final_path
-                dl_folder = BASE_PATH
-                downloaded_file = sorted(
-                    [os.path.join(dl_folder, f) for f in os.listdir(dl_folder)],
-                    key=os.path.getmtime
-                )[-1]
+            async with aiohttp.ClientSession() as session:
+                for row in rows:
+                    cols = row.find_all("td", class_="tdcolumn")
+                    if len(cols) < 2:
+                        continue
 
-                os.rename(downloaded_file, final_path)
-                logging.info("Downloaded via click -> %s", final_path)
+                    a = cols[0].find("a", href=True)
+                    if not a:
+                        continue
 
-                ALL_DOWNLOADED.append({
-                    "Verticals": task["category"],
-                    "SubCategory": task["subfolder"],
-                    "Year": year,
-                    "Month": month_full,
-                    "IssueDate": dt.strftime("%Y-%m-%d"),
-                    "Title": title,
-                    "PDF_URL": pdf_url,
-                    "File Name": filename,
-                    "Path": final_path
-                })
-                BSE_TITLES_NORMALIZED.add(normalize_title_for_compare(title))
+                    title = a.get_text(strip=True)
+                    pdf_url = a["href"]
 
-                driver.get(task["url"])
-                time.sleep(1)
-                continue
+                    date_text = cols[1].get_text(strip=True)
+                    try:
+                        dt = datetime.strptime(date_text.strip(), "%B %d, %Y")
+                    except Exception:
+                        logging.warning("BSE bad date: %s", date_text)
+                        continue
 
-            except Exception as e:
-                logging.error("Selenium click download failed: %s", e)
+                    if not (week_start <= dt <= week_end):
+                        logging.info("BSE skipping outside week: %s | %s", dt.date(), title[:60])
+                        continue
 
-        # ---- NO ATTACHMENTS -> printToPDF fallback ----
-        logging.info("Using printToPDF fallback")
+                    normalized_title = normalize_title_for_compare(title)
+                    if normalized_title in BSE_TITLES_NORMALIZED:
+                        logging.info("BSE duplicate skipped: %s", title)
+                        continue
 
-        try:
-            pdf_data = driver.execute_cdp_cmd("Page.printToPDF", {"printBackground": True})
-            with open(final_path, "wb") as f:
-                f.write(base64.b64decode(pdf_data["data"]))
+                    year = str(dt.year)
+                    month_full = dt.strftime("%B")
 
-            logging.info("Saved printToPDF -> %s", final_path)
+                    save_dir = ensure_year_month_structure(
+                        BASE_PATH,
+                        task["category"],
+                        task["subfolder"],
+                        year,
+                        month_full
+                    )
 
-            ALL_DOWNLOADED.append({
-                "Verticals": task["category"],
-                "SubCategory": task["subfolder"],
-                "Year": year,
-                "Month": month_full,
-                "IssueDate": dt.strftime("%Y-%m-%d"),
-                "Title": title,
-                # "PDF_URL": "PrintToPDF",
-                "PDF_URL": detail_link,   # use detail page when no direct attachment
-                "File Name": filename,
-                "Path": final_path
-            })
-            BSE_TITLES_NORMALIZED.add(normalize_title_for_compare(title))
+                    downloaded_path = await download_pdf(
+                        session, pdf_url, save_dir, title
+                    )
+
+                    if not downloaded_path:
+                        logging.error("BSE PDF failed: %s", pdf_url)
+                        continue
+
+                    filename = os.path.basename(downloaded_path)
+
+                    ALL_DOWNLOADED.append({
+                        "Verticals": task["category"],
+                        "SubCategory": task["subfolder"],
+                        "Year": year,
+                        "Month": month_full,
+                        "IssueDate": dt.strftime("%Y-%m-%d"),
+                        "Title": title,
+                        "PDF_URL": pdf_url,
+                        "File Name": filename,
+                        "Path": os.path.abspath(downloaded_path)
+                    })
+
+                    BSE_TITLES_NORMALIZED.add(normalized_title)
+                    logging.info("BSE downloaded: %s", filename)
+
+            # success — break out of retry loop
+            break
+
+        except (NoSuchWindowException, WebDriverException) as exc:
+            logging.warning("BSE: driver window lost on attempt %d/%d (%s). Retrying...",
+                            attempt, MAX_RETRIES, exc)
+            time.sleep(3)
 
         except Exception as e:
-            logging.error("printToPDF failed: %s", e)
+            logging.exception("BSE scraper error: %s", e)
+            break  # non-driver errors shouldn't retry
 
-        driver.get(task["url"])
-        time.sleep(1)
+        finally:
+            if driver:
+                try:
+                    driver.quit()
+                except Exception:
+                    pass
+                driver = None
 
-    driver.quit()
-    logging.info("BSE LISTED COMPANIES -> DONE")
+    logging.info("BSE SCRAPER -> DONE")
 
 async def scrape_sebi_informal_guidance(task, week_start, week_end):
     logging.info("SEBI INFORMAL GUIDANCE SCRAPER -> %s", task["url"])
