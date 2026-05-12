@@ -36,7 +36,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import json
 
 import unicodedata
-
+import tempfile
 import hashlib
 import glob
 import shutil
@@ -1366,7 +1366,7 @@ async def scrape_nse(task, week_start, week_end):
     logging.info("NSE LISTED COMPANIES -> DONE")
 
 
-BSE_DOWNLOADS_DIR = os.path.expanduser("~/Downloads")
+# BSE_DOWNLOADS_DIR = os.path.expanduser("~/Downloads")
 
 # def get_latest_bse_pdf(existing, wait_seconds=15) -> str | None:
 # # def get_latest_bse_pdf(wait_seconds=15) -> str | None:
@@ -1388,11 +1388,13 @@ BSE_DOWNLOADS_DIR = os.path.expanduser("~/Downloads")
 
 #     return None
 
-def get_latest_bse_pdf(existing, wait_seconds=15) -> str | None:
+# def get_latest_bse_pdf(existing, wait_seconds=15) -> str | None:
+def get_latest_bse_pdf(download_dir, existing, wait_seconds=15) -> str | None:
     end_time = time.time() + wait_seconds
 
     while time.time() < end_time:
-        current = set(glob.glob(os.path.join(BSE_DOWNLOADS_DIR, "*.pdf")))
+        # current = set(glob.glob(os.path.join(BSE_DOWNLOADS_DIR, "*.pdf")))
+        current = set(glob.glob(os.path.join(download_dir, "*.pdf")))
         new_files = current - existing
 
         for f in new_files:
@@ -1514,7 +1516,7 @@ def bse_get_pdf_url_from_detail_page(detail_url: str, driver) -> str | None:
 
 async def scrape_bse(task, week_start, week_end):
     logging.info("BSE SCRAPER (Angular) -> %s", task["url"])
-
+    run_download_dir = tempfile.mkdtemp(prefix="bse_dl_")
     MAX_RETRIES = 3
     driver = None
 
@@ -1534,7 +1536,7 @@ async def scrape_bse(task, week_start, week_end):
                 opts.add_argument("--disable-dev-shm-usage")
                 # Force Chrome to download PDFs instead of opening in viewer
                 prefs = {
-                    "download.default_directory": BSE_DOWNLOADS_DIR,
+                    "download.default_directory": run_download_dir,
                     "download.prompt_for_download": False,
                     "plugins.always_open_pdf_externally": True,
                     "download.directory_upgrade": True,
@@ -1644,7 +1646,7 @@ async def scrape_bse(task, week_start, week_end):
                         logging.info("BSE detail page detected: %s", pdf_url)
 
                         existing_downloads = set(
-                            glob.glob(os.path.join(BSE_DOWNLOADS_DIR, "*.pdf"))
+                            glob.glob(os.path.join(run_download_dir, "*.pdf"))
                         )
 
                         actual_pdf_url = bse_get_pdf_url_from_detail_page(pdf_url, driver)
@@ -1676,14 +1678,35 @@ async def scrape_bse(task, week_start, week_end):
                     # For direct PDF links, use normal download
                     if is_detail_page:
                         # latest_pdf = get_latest_bse_pdf(wait_seconds=15)
-                        latest_pdf = get_latest_bse_pdf(existing_downloads,wait_seconds=15)
+                        # latest_pdf = get_latest_bse_pdf(existing_downloads,wait_seconds=15)
+                        latest_pdf =get_latest_bse_pdf(run_download_dir,existing_downloads,wait_seconds=15)
                         if not latest_pdf:
                             logging.error("BSE: browser download not found for: %s", title)
                             continue
 
                         filename = safe_pdf_filename(title, actual_pdf_url)
                         final_path = os.path.join(save_dir, filename)
+                        # shutil.move(latest_pdf, final_path)
+                        # downloaded_path = final_path
                         shutil.move(latest_pdf, final_path)
+
+                        downloaded_filename = os.path.basename(latest_pdf)
+
+                        # if (
+                        #     not actual_pdf_url
+                        #     or "DispNewNoticesCirculars" in actual_pdf_url
+                        #     or not actual_pdf_url.lower().endswith(".pdf")
+                        # ):
+                        #     actual_pdf_url = (
+                        #         "https://www.bseindia.com/downloads/UploadDocs/Notices/"
+                        #         + downloaded_filename
+                        #     )
+                        if (
+                            not actual_pdf_url
+                            or "DispNewNoticesCirculars" in actual_pdf_url
+                            or not actual_pdf_url.lower().endswith(".pdf")
+                        ):
+                            actual_pdf_url = pdf_url
                         downloaded_path = final_path
                         logging.info("BSE: moved browser download -> %s", final_path)
                     else:
@@ -1737,7 +1760,10 @@ async def scrape_bse(task, week_start, week_end):
                 except Exception:
                     pass
                 driver = None
-
+            try:
+                shutil.rmtree(run_download_dir, ignore_errors=True)
+            except Exception:
+                pass
     logging.info("BSE SCRAPER -> DONE")
 
 async def scrape_sebi_informal_guidance(task, week_start, week_end):
