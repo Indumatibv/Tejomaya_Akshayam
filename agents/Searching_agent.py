@@ -2452,31 +2452,6 @@ async def scrape_rbi(task, week_start, week_end):
                 })
                 logging.info("RBI Successfully downloaded: %s", title)
 
-#-----------------------------------------------------
-def is_ignored_icai_title(title: str) -> bool:
-    """
-    Returns True if ICAI title should be skipped.
-    Case-insensitive keyword match.
-    """
-    if not title:
-        return False
-
-    ignore_keywords = [
-        "test",
-        "results",
-        "commencement of batch",
-        "courses",
-        "exams",
-        "fees",
-        "books",
-        "exam",
-        "result",
-        "course",
-        "book"
-    ]
-
-    t = title.lower()
-    return any(kw in t for kw in ignore_keywords)
 
 async def scrape_icai(task, week_start, week_end):
     logging.info("ICAI SCRAPER -> %s", task["url"])
