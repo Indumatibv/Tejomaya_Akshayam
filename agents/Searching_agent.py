@@ -10,7 +10,7 @@ import nest_asyncio
 import platform
 import os
 from pathlib import Path
-
+import random
 from nltk import data
 # Apply Windows-specific event loop fix (must run before other asyncio use)
 if sys.platform.startswith("win"):
@@ -1177,8 +1177,14 @@ async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: s
         }
 
         # ---- RBI REFERER FIX ----
+        # if "rbidocs.rbi.org.in" in parsed.netloc:
+        #     headers["Referer"] = "https://www.rbi.org.in/"
+        # else:
+        #     headers["Referer"] = f"{parsed.scheme}://{parsed.netloc}"
+
+        # ---- RBI REFERER FIX ----
         if "rbidocs.rbi.org.in" in parsed.netloc:
-            headers["Referer"] = "https://www.rbi.org.in/"
+            headers["Referer"] = "https://www.rbi.org.in/Scripts/NotificationUser.aspx"
         else:
             headers["Referer"] = f"{parsed.scheme}://{parsed.netloc}"
 
@@ -2353,10 +2359,110 @@ def is_ignored_rbi_title(title: str) -> bool:
 
     return any(kw in t for kw in ignore_keywords)
 
+# async def scrape_rbi(task, week_start, week_end):
+#     logging.info("RBI SCRAPER -> %s", task["url"])
+
+#     # 1. Use Crawl4AI to get the HTML (Keep this as is)
+#     async with AsyncWebCrawler() as crawler:
+#         result = await crawler.arun(url=task["url"])
+
+#     soup = BeautifulSoup(result.html, "html.parser")
+#     rows = soup.select("table tr")
+
+#     if not rows:
+#         logging.warning("No RBI rows found")
+#         return
+
+#     current_dt = None
+    
+#     # Use a persistent session for the whole RBI task
+#     connector = aiohttp.TCPConnector(ssl=False) # Helps with some Mac SSL handshake issues
+#     async with aiohttp.ClientSession(connector=connector) as session:
+#         # First, hit the main page to establish a session/cookie
+#         # await session.get("https://www.rbi.org.in/Scripts/NotificationUser.aspx")
+
+#         async with session.get("https://www.rbi.org.in/Scripts/NotificationUser.aspx"):
+#             pass
+
+#         for row in rows:
+#             # -------- DATE HEADER --------
+#             # date_h2 = row.select_one("h2.dop_header")
+#             # if date_h2:
+#             #     try:
+#             #         # RBI Date format: "Feb 03, 2026"
+#             #         current_dt = datetime.strptime(date_h2.get_text(strip=True), "%b %d, %Y")
+#             #     except Exception:
+#             #         current_dt = None
+#             #     continue
+
+#             date_h2 = row.select_one("h2.dop_header")
+#             if date_h2:
+#                 text = date_h2.get_text(strip=True)
+
+#                 # Try parsing as RBI date
+#                 try:
+#                     parsed_dt = datetime.strptime(text, "%b %d, %Y")
+#                     current_dt = parsed_dt
+#                 except ValueError:
+#                     # This is a section heading like:
+#                     # "Banker and Debt Manager to Government"
+#                     # Do NOT reset current_dt
+#                     pass
+
+#                 continue
+
+#             if not current_dt:
+#                 continue
+
+#             # -------- WEEK FILTER --------
+#             if current_dt < week_start:
+#                 continue
+#             if current_dt > week_end:
+#                 continue
+
+#             # -------- TITLE & PDF LINK --------
+#             title_a = row.select_one("a.link2")
+#             pdf_a = row.select_one("a[href*='rbidocs.rbi.org.in']")
+            
+#             if not title_a or not pdf_a:
+#                 continue
+
+#             title = unicodedata.normalize("NFKD", title_a.get_text(strip=True))
+            
+#             if is_ignored_rbi_title(title):
+#                 logging.info("Skipping RBI (filtered title): %s", title)
+#                 continue
+
+#             pdf_url = pdf_a["href"]
+#             year = str(current_dt.year)
+#             month_full = current_dt.strftime("%B")
+
+#             save_dir = ensure_year_month_structure(
+#                 BASE_PATH, task["category"], task["subfolder"], year, month_full
+#             )
+
+#             # Use the specialized download logic
+#             downloaded_path = await download_pdf(session, pdf_url, save_dir, title)
+
+#             if downloaded_path:
+#                 ALL_DOWNLOADED.append({
+#                     "Verticals": task["category"],
+#                     "SubCategory": task["subfolder"],
+#                     "Year": year,
+#                     "Month": month_full,
+#                     "IssueDate": current_dt.strftime("%Y-%m-%d"),
+#                     "Title": title,
+#                     "PDF_URL": pdf_url,
+#                     "File Name": os.path.basename(downloaded_path),
+#                     "Path": os.path.abspath(downloaded_path)
+#                 })
+#                 logging.info("RBI Successfully downloaded: %s", title)
+
+
 async def scrape_rbi(task, week_start, week_end):
     logging.info("RBI SCRAPER -> %s", task["url"])
 
-    # 1. Use Crawl4AI to get the HTML (Keep this as is)
+    # ── Step 1: Crawl listing page ──────────────────────────
     async with AsyncWebCrawler() as crawler:
         result = await crawler.arun(url=task["url"])
 
@@ -2367,91 +2473,113 @@ async def scrape_rbi(task, week_start, week_end):
         logging.warning("No RBI rows found")
         return
 
-    current_dt = None
-    
-    # Use a persistent session for the whole RBI task
-    connector = aiohttp.TCPConnector(ssl=False) # Helps with some Mac SSL handshake issues
-    async with aiohttp.ClientSession(connector=connector) as session:
-        # First, hit the main page to establish a session/cookie
-        # await session.get("https://www.rbi.org.in/Scripts/NotificationUser.aspx")
+    # ── Step 2: Build session with proper headers ───────────
+    connector = aiohttp.TCPConnector(ssl=False)
 
-        async with session.get("https://www.rbi.org.in/Scripts/NotificationUser.aspx"):
-            pass
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/121.0.0.0 Safari/537.36"
+        ),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-IN,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Connection": "keep-alive",
+    }
+
+    async with aiohttp.ClientSession(
+        connector=connector,
+        headers=headers,
+        cookie_jar=aiohttp.CookieJar()      # ← explicit jar
+    ) as session:
+
+        # ── Step 3: Warm-up — MUST consume body so cookies stick ──
+        try:
+            async with session.get(
+                "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
+                allow_redirects=True,
+                timeout=aiohttp.ClientTimeout(total=15)
+            ) as warm:
+                await warm.read()           # ← THIS was missing before
+                logging.info(
+                    "RBI warm-up done: status=%s cookies=%s",
+                    warm.status,
+                    [c.key for c in session.cookie_jar]
+                )
+        except Exception as e:
+            logging.warning("RBI warm-up failed (continuing anyway): %s", e)
+
+        # Human-like pause after landing on site
+        await asyncio.sleep(random.uniform(2, 4))
+
+        # ── Step 4: Parse rows ──────────────────────────────
+        current_dt = None
 
         for row in rows:
-            # -------- DATE HEADER --------
-            # date_h2 = row.select_one("h2.dop_header")
-            # if date_h2:
-            #     try:
-            #         # RBI Date format: "Feb 03, 2026"
-            #         current_dt = datetime.strptime(date_h2.get_text(strip=True), "%b %d, %Y")
-            #     except Exception:
-            #         current_dt = None
-            #     continue
 
+            # ---- DATE HEADER ----
             date_h2 = row.select_one("h2.dop_header")
             if date_h2:
                 text = date_h2.get_text(strip=True)
-
-                # Try parsing as RBI date
                 try:
-                    parsed_dt = datetime.strptime(text, "%b %d, %Y")
-                    current_dt = parsed_dt
+                    current_dt = datetime.strptime(text, "%b %d, %Y")
                 except ValueError:
-                    # This is a section heading like:
-                    # "Banker and Debt Manager to Government"
-                    # Do NOT reset current_dt
-                    pass
-
+                    pass   # section heading — keep current_dt
                 continue
 
             if not current_dt:
                 continue
 
-            # -------- WEEK FILTER --------
+            # ---- WEEK FILTER ----
             if current_dt < week_start:
                 continue
             if current_dt > week_end:
                 continue
 
-            # -------- TITLE & PDF LINK --------
+            # ---- TITLE & PDF LINK ----
             title_a = row.select_one("a.link2")
-            pdf_a = row.select_one("a[href*='rbidocs.rbi.org.in']")
-            
+            pdf_a   = row.select_one("a[href*='rbidocs.rbi.org.in']")
+
             if not title_a or not pdf_a:
                 continue
 
             title = unicodedata.normalize("NFKD", title_a.get_text(strip=True))
-            
+
             if is_ignored_rbi_title(title):
-                logging.info("Skipping RBI (filtered title): %s", title)
+                logging.info("Skipping RBI (filtered): %s", title)
                 continue
 
-            pdf_url = pdf_a["href"]
-            year = str(current_dt.year)
+            pdf_url    = pdf_a["href"]
+            year       = str(current_dt.year)
             month_full = current_dt.strftime("%B")
 
             save_dir = ensure_year_month_structure(
                 BASE_PATH, task["category"], task["subfolder"], year, month_full
             )
 
-            # Use the specialized download logic
+            # ── Step 5: Polite delay BEFORE every download ──
+            delay = random.uniform(3, 7)
+            logging.info("RBI: sleeping %.1fs before download...", delay)
+            await asyncio.sleep(delay)
+
             downloaded_path = await download_pdf(session, pdf_url, save_dir, title)
 
             if downloaded_path:
                 ALL_DOWNLOADED.append({
-                    "Verticals": task["category"],
+                    "Verticals":   task["category"],
                     "SubCategory": task["subfolder"],
-                    "Year": year,
-                    "Month": month_full,
-                    "IssueDate": current_dt.strftime("%Y-%m-%d"),
-                    "Title": title,
-                    "PDF_URL": pdf_url,
-                    "File Name": os.path.basename(downloaded_path),
-                    "Path": os.path.abspath(downloaded_path)
+                    "Year":        year,
+                    "Month":       month_full,
+                    "IssueDate":   current_dt.strftime("%Y-%m-%d"),
+                    "Title":       title,
+                    "PDF_URL":     pdf_url,
+                    "File Name":   os.path.basename(downloaded_path),
+                    "Path":        os.path.abspath(downloaded_path),
                 })
-                logging.info("RBI Successfully downloaded: %s", title)
-
+                logging.info("RBI downloaded: %s", title)
+            else:
+                logging.warning("RBI download failed: %s", title)
 
 async def scrape_icai(task, week_start, week_end):
     logging.info("ICAI SCRAPER -> %s", task["url"])
