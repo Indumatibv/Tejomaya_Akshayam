@@ -734,10 +734,6 @@ SUB-DOMAIN: Announcements
 ABOUT:
 Announcements include guidance, clarifications, accounting standards releases, regulatory updates, or policy communications.
 
-STRICT EXCLUSION RULE:
-- If the document relates to examinations, empanelment, courses, fees, results, books, publications or convocation,
-  return exactly: NA
-
 CONTENT RULES:
 - Summarise only substantive regulatory or professional guidance.
 - Clearly state what has been introduced, clarified, or released.
@@ -1751,24 +1747,6 @@ def process_rules_pdf(row: pd.Series):
     return row
 
 # ============================================================
-def is_icai_exam_related(text: str, title: str = "") -> bool:
-    combined = f"{title} {text}".lower()
-
-    exam_keywords = [
-        "examination",
-        "exam",
-        "foundation",
-        "intermediate",
-        "final",
-        "empanelment",
-        "observer",
-        "question paper",
-        "examination centre",
-        "honorarium",
-        "cooling off period"
-    ]
-
-    return any(word in combined for word in exam_keywords)
 
 def process_announcement_pdf(row: pd.Series):
     pdf_path = Path(row["Path"])
@@ -1778,12 +1756,6 @@ def process_announcement_pdf(row: pd.Series):
         core_text = text[:10000]
 
         authority = resolve_authority(row["Verticals"])
-
-        # HARD EXAM FILTER
-        if is_icai_exam_related(core_text, row.get("Title", "")):
-            row["Summary"] = "NA"
-            row["EmbeddingText"] = "NA"
-            return row
 
         summary = llm.invoke(
             ANNOUNCEMENTS_PROMPT.format(
