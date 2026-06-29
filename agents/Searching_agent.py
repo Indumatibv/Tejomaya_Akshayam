@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# agents/searching_agent.py
+# python agents/Searching_agent.py
 # =========================================================================
 # CRITICAL FIX FOR WINDOWS - MUST BE AT THE VERY TOP OF THE SCRIPT
 # =========================================================================
@@ -344,7 +344,7 @@ def _build_mca_driver():
         opts.add_argument("--no-sandbox")
         opts.add_argument("--disable-dev-shm-usage")
         # return uc.Chrome(options=opts)
-        return uc.Chrome(options=opts, version_main=147)
+        return uc.Chrome(options=opts, version_main=149)
     else:
         from selenium import webdriver
         from selenium.webdriver.chrome.options import Options

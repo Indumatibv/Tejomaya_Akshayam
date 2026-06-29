@@ -2,7 +2,6 @@
 # python -m agents.Parsing_agent
 
 #!/usr/bin/env python
-# agents/parsing_agent.py
 # ============================================================
 # REGULATIONS-ONLY PARSING & SUMMARY (TEJOMAYA v1)
 # ============================================================
