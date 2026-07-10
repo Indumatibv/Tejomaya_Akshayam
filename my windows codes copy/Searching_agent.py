@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# agents/searching_agent.py
+# python agents/Searching_agent.py
 # =========================================================================
 # CRITICAL FIX FOR WINDOWS - MUST BE AT THE VERY TOP OF THE SCRIPT
 # =========================================================================
@@ -10,7 +10,7 @@ import nest_asyncio
 import platform
 import os
 from pathlib import Path
-
+import random
 from nltk import data
 # Apply Windows-specific event loop fix (must run before other asyncio use)
 if sys.platform.startswith("win"):
@@ -41,7 +41,7 @@ import hashlib
 import glob
 import shutil
 import requests
- 
+from langchain_community.llms import Ollama 
 from selenium.common.exceptions import NoSuchWindowException, WebDriverException
 
 try:
@@ -344,7 +344,7 @@ def _build_mca_driver():
         opts.add_argument("--no-sandbox")
         opts.add_argument("--disable-dev-shm-usage")
         # return uc.Chrome(options=opts)
-        return uc.Chrome(options=opts, version_main=147)
+        return uc.Chrome(options=opts, version_main=149)
     else:
         from selenium import webdriver
         from selenium.webdriver.chrome.options import Options
@@ -882,11 +882,6 @@ async def scrape_mca_press_release(task: dict, week_start: datetime, week_end: d
             logging.info("MCA PR: skipping (ignored): %s", title)
             continue
 
-        # try:
-        #     dt = datetime.strptime(date_str, "%d/%m/%Y")
-        # except Exception:
-        #     logging.warning("MCA PR: bad date %r for: %s", date_str, title)
-        #     continue
         dt = None
         for fmt in ("%d/%m/%Y", "%d-%m-%Y", "%d %b %Y", "%d %B %Y"):
             try:
@@ -1099,50 +1094,11 @@ def ensure_year_month_structure(base_folder: str, category: str, subfolder: str,
     os.makedirs(month_path, exist_ok=True)
     return month_path
 
-# async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_path: str) -> str | None:
-#     try:
-#         filename = os.path.basename(urlparse(pdf_url).path) or sanitize_filename("downloaded.pdf")
-#         file_path = os.path.join(save_path, filename)
-#         if os.path.exists(file_path):
-#             logging.info("Skipping download (exists): %s", file_path)
-#             return file_path
-
-#         async with session.get(pdf_url, timeout=30) as resp:
-#             if resp.status == 200:
-#                 content = await resp.read()
-#                 with open(file_path, "wb") as f:
-#                     f.write(content)
-#                 logging.info("Downloaded PDF: %s", file_path)
-#                 return file_path
-#             else:
-#                 logging.warning("Failed PDF download (%s) for %s", resp.status, pdf_url)
-#     except Exception as e:
-#         logging.exception("Error downloading PDF %s : %s", pdf_url, e)
-#     return None
 
 async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: str, title: str | None = None) -> str | None:
     try:
         parsed = urlparse(pdf_url)
         qs = parse_qs(parsed.query)
-
-        # filename = qs.get("fileName", [None])[0]
-        # if not filename:
-        #     filename = sanitize_filename(title or "document")
-
-        # filename = qs.get("fileName", [None])[0]
-
-        # if not filename:
-        #     if title:
-        #         filename = sanitize_filename(title)
-        #     else:
-        #         filename = os.path.basename(urlparse(pdf_url).path)
-
-        # if not filename.lower().endswith(".pdf"):
-        #     filename += ".pdf"
-
-        # if not filename.lower().endswith(".pdf"):
-        #     filename += ".pdf"
-
 
         filename = qs.get("fileName", [None])[0]
         if filename:
@@ -1156,16 +1112,6 @@ async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: s
         if os.path.exists(file_path):
             logging.warning("Overwriting existing file: %s", file_path)
 
-        # headers = {
-        #     "User-Agent": "Mozilla/5.0",
-        #     "Accept": "application/pdf",
-        #     "Referer": "https://ifsca.gov.in/",
-        # }
-        # headers = {
-        #     "User-Agent": "Mozilla/5.0",
-        #     "Accept": "application/pdf",
-        #     "Referer": urlparse(pdf_url).scheme + "://" + urlparse(pdf_url).netloc,
-        # }
 
         headers = {
             "User-Agent": (
@@ -1178,7 +1124,7 @@ async def download_pdf(session: aiohttp.ClientSession, pdf_url: str, save_dir: s
 
         # ---- RBI REFERER FIX ----
         if "rbidocs.rbi.org.in" in parsed.netloc:
-            headers["Referer"] = "https://www.rbi.org.in/"
+            headers["Referer"] = "https://www.rbi.org.in/Scripts/NotificationUser.aspx"
         else:
             headers["Referer"] = f"{parsed.scheme}://{parsed.netloc}"
 
@@ -1365,28 +1311,6 @@ async def scrape_nse(task, week_start, week_end):
 
     logging.info("NSE LISTED COMPANIES -> DONE")
 
-
-# BSE_DOWNLOADS_DIR = os.path.expanduser("~/Downloads")
-
-# def get_latest_bse_pdf(existing, wait_seconds=15) -> str | None:
-# # def get_latest_bse_pdf(wait_seconds=15) -> str | None:
-#     """Wait for a new PDF to appear in Downloads, return its path."""
-#     # Snapshot existing PDFs before we start waiting
-#     # existing = set(glob.glob(os.path.join(BSE_DOWNLOADS_DIR, "*.pdf")))
-#     end_time = time.time() + wait_seconds
-
-#     while time.time() < end_time:
-#         current = set(glob.glob(os.path.join(BSE_DOWNLOADS_DIR, "*.pdf")))
-#         new_files = current - existing
-
-#         for f in new_files:
-#             # Skip partial Chrome downloads
-#             if not f.endswith(".crdownload"):
-#                 return f
-
-#         time.sleep(1)
-
-#     return None
 
 # def get_latest_bse_pdf(existing, wait_seconds=15) -> str | None:
 def get_latest_bse_pdf(download_dir, existing, wait_seconds=15) -> str | None:
@@ -1811,7 +1735,13 @@ async def scrape_sebi_informal_guidance(task, week_start, week_end):
                     detail_html = await resp.text()
                 
                 detail_soup = BeautifulSoup(detail_html, "html.parser")
-                
+                # Get the complete title from the detail page
+                for tag in detail_soup.find_all(["h1", "h2", "h3", "h4", "strong", "b", "p", "td"]):
+                    text = tag.get_text(" ", strip=True)
+                    if text.startswith("Request for Informal Guidance"):
+                        title = text
+                        break
+
                 # Look for the specific link text you mentioned
                 pdf_link_tag = detail_soup.find("a", string=re.compile("Informal Guidance Letter by SEBI", re.I))
                 
@@ -2026,6 +1956,9 @@ async def scrape_sebi(task, week_start, week_end):
             "File Name": os.path.basename(file_path),
             "Path": os.path.abspath(file_path)
         })
+
+
+# -----------------------------------------------------
 
 def is_ifsca_public_consultation(url: str) -> bool:
     """
@@ -2292,30 +2225,491 @@ async def scrape_ifsca(task, week_start, week_end):
         driver.quit()
         logging.info("IFSCA -> DONE")
 
+def select_response_pdf(pdfs):
+
+    if len(pdfs) == 1:
+        return pdfs[0]
+
+    llm = Ollama(
+        model="mistral:latest",
+        temperature=0.0
+    )
+
+    titles_text = "\n".join(
+        [f"{i+1}. {p['title']}" for i, p in enumerate(pdfs)]
+    )
+
+    prompt = f"""
+You are filtering IFSCA Informal Guidance documents.
+
+The titles below belong to the same Informal Guidance case.
+
+One document is usually:
+- applicant request letter
+- request letter
+- query letter
+
+Another document is usually:
+- IFSCA response
+- interpretative letter
+- informal guidance
+- clarification issued by IFSCA
+
+Select ONLY the IFSCA response document.
+
+Titles:
+{titles_text}
+
+Return ONLY JSON.
+
+{{
+    "selected_title":"exact title"
+}}
+"""
+
+    response = llm.invoke(prompt).strip()
+
+    if "```json" in response:
+        response = response.split("```json")[1].split("```")[0].strip()
+
+    data = json.loads(response)
+
+    selected_title = data["selected_title"]
+
+    for pdf in pdfs:
+        if pdf["title"] == selected_title:
+            return pdf
+
+    return pdfs[0]
+
+# async def scrape_ifsca_informal_guidance(
+#     task,
+#     week_start,
+#     week_end
+# ):
+#     logging.info(
+#         "IFSCA INFORMAL GUIDANCE SCRAPER STARTING -> %s",
+#         task["url"]
+#     )
+
+#     chrome_opts = webdriver.ChromeOptions()
+#     chrome_opts.add_argument("--headless=new")
+#     chrome_opts.add_argument("--no-sandbox")
+#     chrome_opts.add_argument("--disable-gpu")
+
+#     driver = webdriver.Chrome(options=chrome_opts)
+
+#     try:
+
+#         wait = WebDriverWait(driver, 20)
+
+#         driver.get(task["url"])
+
+#         rows = wait.until(
+#             EC.presence_of_all_elements_located(
+#                 (By.CSS_SELECTOR, "tbody tr")
+#             )
+#         )
+
+#         logging.info(
+#             "IFSCA IG MAIN ROWS FOUND: %s",
+#             len(rows)
+#         )
+
+#         session = requests.Session()
+
+#         for cookie in driver.get_cookies():
+#             session.cookies.set(
+#                 cookie["name"],
+#                 cookie["value"]
+#             )
+
+#         for row in rows:
+
+#             cols = row.find_elements(By.TAG_NAME, "td")
+
+#             if len(cols) < 3:
+#                 continue
+
+#             try:
+#                 dt = datetime.strptime(
+#                     cols[1].text.strip(),
+#                     "%d/%m/%Y"
+#                 )
+#             except:
+#                 continue
+
+#             if not (week_start <= dt <= week_end):
+#                 continue
+
+#             title_link = cols[2].find_element(
+#                 By.TAG_NAME,
+#                 "a"
+#             )
+
+#             main_title = title_link.text.strip()
+
+#             detail_url = title_link.get_attribute(
+#                 "href"
+#             )
+
+#             logging.info(
+#                 "Opening inner page -> %s",
+#                 detail_url
+#             )
+
+#             driver.get(detail_url)
+
+#             pdf_links = wait.until(
+#                 EC.presence_of_all_elements_located(
+#                     (
+#                         By.CSS_SELECTOR,
+#                         "tbody tr td:nth-child(3) a"
+#                     )
+#                 )
+#             )
+
+#             pdf_data = []
+
+#             for pdf in pdf_links:
+#                 pdf_data.append({
+#                     "title": pdf.text.strip(),
+#                     "getfile_url": pdf.get_attribute("href")
+#                 })
+
+#             logging.info(
+#                 "IFSCA IG PDF LINKS FOUND: %s",
+#                 len(pdf_data)
+#             )
+
+#             selected_pdf = select_response_pdf(
+#                 pdf_data
+#             )
+
+#             logging.info(
+#                 "LLM SELECTED -> %s",
+#                 selected_pdf["title"]
+#             )
+
+#             driver.get(
+#                 selected_pdf["getfile_url"]
+#             )
+
+#             iframe = wait.until(
+#                 EC.presence_of_element_located(
+#                     (By.TAG_NAME, "iframe")
+#                 )
+#             )
+
+#             real_pdf_url = iframe.get_attribute(
+#                 "src"
+#             )
+
+#             year = str(dt.year)
+#             month_full = dt.strftime("%B")
+
+#             save_dir = ensure_year_month_structure(
+#                 BASE_PATH,
+#                 task["category"],
+#                 task["subfolder"],
+#                 year,
+#                 month_full
+#             )
+
+#             filename = real_pdf_url.split(
+#                 "fileName="
+#             )[-1]
+
+#             filepath = os.path.join(
+#                 save_dir,
+#                 filename
+#             )
+
+#             response = session.get(
+#                 real_pdf_url,
+#                 headers={
+#                     "Referer": selected_pdf["getfile_url"],
+#                     "User-Agent": "Mozilla/5.0"
+#                 },
+#                 timeout=60
+#             )
+
+#             with open(filepath, "wb") as f:
+#                 f.write(response.content)
+
+#             ALL_DOWNLOADED.append({
+#                 "Verticals": task["category"],
+#                 "SubCategory": task["subfolder"],
+#                 "Year": year,
+#                 "Month": month_full,
+#                 "IssueDate": dt.strftime("%Y-%m-%d"),
+
+#                 # IMPORTANT
+#                 "Title": main_title,
+
+#                 "PDF_URL": real_pdf_url,
+#                 "File Name": filename,
+#                 "Path": os.path.abspath(filepath)
+#             })
+
+#             logging.info(
+#                 "Downloaded IG response -> %s",
+#                 filename
+#             )
+
+#             driver.get(task["url"])
+
+#             rows = wait.until(
+#                 EC.presence_of_all_elements_located(
+#                     (By.CSS_SELECTOR, "tbody tr")
+#                 )
+#             )
+
+#     finally:
+#         driver.quit()
+
+async def scrape_ifsca_informal_guidance(
+    task,
+    week_start,
+    week_end
+):
+    logging.info(
+        "IFSCA INFORMAL GUIDANCE SCRAPER STARTING -> %s",
+        task["url"]
+    )
+
+    chrome_opts = webdriver.ChromeOptions()
+    chrome_opts.add_argument("--headless=new")
+    chrome_opts.add_argument("--no-sandbox")
+    chrome_opts.add_argument("--disable-gpu")
+
+    driver = webdriver.Chrome(options=chrome_opts)
+
+    try:
+
+        wait = WebDriverWait(driver, 20)
+
+        driver.get(task["url"])
+
+        rows = wait.until(
+            EC.presence_of_all_elements_located(
+                (By.CSS_SELECTOR, "tbody tr")
+            )
+        )
+
+        logging.info(
+            "IFSCA IG MAIN ROWS FOUND: %s",
+            len(rows)
+        )
+
+        # --------------------------------------------------
+        # SNAPSHOT ROW DATA
+        # --------------------------------------------------
+
+        row_data = []
+
+        for row in rows:
+
+            cols = row.find_elements(By.TAG_NAME, "td")
+
+            if len(cols) < 3:
+                continue
+
+            try:
+                dt = datetime.strptime(
+                    cols[1].text.strip(),
+                    "%d/%m/%Y"
+                )
+            except:
+                continue
+
+            title_link = cols[2].find_element(
+                By.TAG_NAME,
+                "a"
+            )
+
+            row_data.append({
+                "dt": dt,
+                "main_title": title_link.text.strip(),
+                "detail_url": title_link.get_attribute(
+                    "href"
+                )
+            })
+
+        session = requests.Session()
+
+        for cookie in driver.get_cookies():
+            session.cookies.set(
+                cookie["name"],
+                cookie["value"]
+            )
+
+        # --------------------------------------------------
+        # PROCESS SNAPSHOT DATA
+        # --------------------------------------------------
+
+        for item in row_data:
+
+            dt = item["dt"]
+
+            if not (
+                week_start <= dt <= week_end
+            ):
+                continue
+
+            main_title = item["main_title"]
+            detail_url = item["detail_url"]
+
+            logging.info(
+                "Opening inner page -> %s",
+                detail_url
+            )
+
+            driver.get(detail_url)
+
+            pdf_links = wait.until(
+                EC.presence_of_all_elements_located(
+                    (
+                        By.CSS_SELECTOR,
+                        "tbody tr td:nth-child(3) a"
+                    )
+                )
+            )
+
+            pdf_data = []
+
+            for pdf in pdf_links:
+
+                pdf_data.append({
+                    "title": pdf.text.strip(),
+                    "getfile_url": pdf.get_attribute(
+                        "href"
+                    )
+                })
+
+            logging.info(
+                "IFSCA IG PDF LINKS FOUND: %s",
+                len(pdf_data)
+            )
+
+            for pdf in pdf_data:
+                logging.info(
+                    "PDF FOUND -> %s",
+                    pdf["title"]
+                )
+
+            # --------------------------------------------------
+            # LLM FILTER
+            # --------------------------------------------------
+
+            selected_pdf = select_response_pdf(
+                pdf_data
+            )
+
+            logging.info(
+                "LLM SELECTED -> %s",
+                selected_pdf["title"]
+            )
+
+            # --------------------------------------------------
+            # OPEN PDF PAGE
+            # --------------------------------------------------
+
+            driver.get(
+                selected_pdf["getfile_url"]
+            )
+
+            iframe = wait.until(
+                EC.presence_of_element_located(
+                    (By.TAG_NAME, "iframe")
+                )
+            )
+
+            real_pdf_url = iframe.get_attribute(
+                "src"
+            )
+
+            year = str(dt.year)
+            month_full = dt.strftime("%B")
+
+            save_dir = ensure_year_month_structure(
+                BASE_PATH,
+                task["category"],
+                task["subfolder"],
+                year,
+                month_full
+            )
+
+            filename = real_pdf_url.split(
+                "fileName="
+            )[-1]
+
+            filepath = os.path.join(
+                save_dir,
+                filename
+            )
+
+            response = session.get(
+                real_pdf_url,
+                headers={
+                    "Referer":
+                        selected_pdf["getfile_url"],
+                    "User-Agent":
+                        "Mozilla/5.0"
+                },
+                timeout=60
+            )
+
+            if response.status_code != 200:
+                logging.warning(
+                    "Failed to download PDF -> %s",
+                    real_pdf_url
+                )
+                continue
+
+            with open(filepath, "wb") as f:
+                f.write(response.content)
+
+            ALL_DOWNLOADED.append({
+                "Verticals":
+                    task["category"],
+                "SubCategory":
+                    task["subfolder"],
+                "Year":
+                    year,
+                "Month":
+                    month_full,
+                "IssueDate":
+                    dt.strftime("%Y-%m-%d"),
+
+                # MAIN TITLE
+                "Title":
+                    main_title,
+
+                # RESPONSE PDF URL
+                "PDF_URL":
+                    real_pdf_url,
+
+                "File Name":
+                    filename,
+
+                "Path":
+                    os.path.abspath(filepath)
+            })
+
+            logging.info(
+                "Downloaded IG response -> %s",
+                filename
+            )
+
+    except Exception:
+        logging.exception(
+            "IFSCA Informal Guidance scraper failed"
+        )
+
+    finally:
+        driver.quit()
 # -----------------------------------------------------
-# def is_ignored_rbi_title(title: str) -> bool:
-#     """
-#     Returns True if RBI notification title should be skipped.
-#     Case-insensitive keyword match with normalization.
-#     """
-#     if not title:
-#         return False
-
-#     t = unicodedata.normalize("NFKD", title).lower()
-#     t = re.sub(r"\s+", " ", t)
-
-#     ignore_keywords = [
-#         "auction",
-#         "auction results",
-#         "money market operations conversion",
-#         "money market",
-#         "redemption",
-#         "state government securities",
-#         "monetary penalty turnover data",
-#         "monetary penalty"
-#     ]
-
-#     return any(kw in t for kw in ignore_keywords)
 
 def is_ignored_rbi_title(title: str) -> bool:
     """
@@ -2353,10 +2747,11 @@ def is_ignored_rbi_title(title: str) -> bool:
 
     return any(kw in t for kw in ignore_keywords)
 
+
 async def scrape_rbi(task, week_start, week_end):
     logging.info("RBI SCRAPER -> %s", task["url"])
 
-    # 1. Use Crawl4AI to get the HTML (Keep this as is)
+    # ── Step 1: Crawl listing page ──────────────────────────
     async with AsyncWebCrawler() as crawler:
         result = await crawler.arun(url=task["url"])
 
@@ -2367,93 +2762,116 @@ async def scrape_rbi(task, week_start, week_end):
         logging.warning("No RBI rows found")
         return
 
-    current_dt = None
-    
-    # Use a persistent session for the whole RBI task
-    connector = aiohttp.TCPConnector(ssl=False) # Helps with some Mac SSL handshake issues
-    async with aiohttp.ClientSession(connector=connector) as session:
-        # First, hit the main page to establish a session/cookie
-        # await session.get("https://www.rbi.org.in/Scripts/NotificationUser.aspx")
+    # ── Step 2: Build session with proper headers ───────────
+    connector = aiohttp.TCPConnector(ssl=False)
 
-        async with session.get("https://www.rbi.org.in/Scripts/NotificationUser.aspx"):
-            pass
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/121.0.0.0 Safari/537.36"
+        ),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-IN,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Connection": "keep-alive",
+    }
+
+    async with aiohttp.ClientSession(
+        connector=connector,
+        headers=headers,
+        cookie_jar=aiohttp.CookieJar()      # ← explicit jar
+    ) as session:
+
+        # ── Step 3: Warm-up — MUST consume body so cookies stick ──
+        try:
+            async with session.get(
+                "https://www.rbi.org.in/Scripts/NotificationUser.aspx",
+                allow_redirects=True,
+                timeout=aiohttp.ClientTimeout(total=15)
+            ) as warm:
+                await warm.read()           # ← THIS was missing before
+                logging.info(
+                    "RBI warm-up done: status=%s cookies=%s",
+                    warm.status,
+                    [c.key for c in session.cookie_jar]
+                )
+        except Exception as e:
+            logging.warning("RBI warm-up failed (continuing anyway): %s", e)
+
+        # Human-like pause after landing on site
+        await asyncio.sleep(random.uniform(2, 4))
+
+        # ── Step 4: Parse rows ──────────────────────────────
+        current_dt = None
 
         for row in rows:
-            # -------- DATE HEADER --------
-            # date_h2 = row.select_one("h2.dop_header")
-            # if date_h2:
-            #     try:
-            #         # RBI Date format: "Feb 03, 2026"
-            #         current_dt = datetime.strptime(date_h2.get_text(strip=True), "%b %d, %Y")
-            #     except Exception:
-            #         current_dt = None
-            #     continue
 
+            # ---- DATE HEADER ----
             date_h2 = row.select_one("h2.dop_header")
             if date_h2:
                 text = date_h2.get_text(strip=True)
-
-                # Try parsing as RBI date
                 try:
-                    parsed_dt = datetime.strptime(text, "%b %d, %Y")
-                    current_dt = parsed_dt
+                    current_dt = datetime.strptime(text, "%b %d, %Y")
                 except ValueError:
-                    # This is a section heading like:
-                    # "Banker and Debt Manager to Government"
-                    # Do NOT reset current_dt
-                    pass
-
+                    pass   # section heading — keep current_dt
                 continue
 
             if not current_dt:
                 continue
 
-            # -------- WEEK FILTER --------
+            # ---- WEEK FILTER ----
             if current_dt < week_start:
                 continue
             if current_dt > week_end:
                 continue
 
-            # -------- TITLE & PDF LINK --------
+            # ---- TITLE & PDF LINK ----
             title_a = row.select_one("a.link2")
-            pdf_a = row.select_one("a[href*='rbidocs.rbi.org.in']")
-            
+            pdf_a   = row.select_one("a[href*='rbidocs.rbi.org.in']")
+
             if not title_a or not pdf_a:
                 continue
 
             title = unicodedata.normalize("NFKD", title_a.get_text(strip=True))
-            
+
             if is_ignored_rbi_title(title):
-                logging.info("Skipping RBI (filtered title): %s", title)
+                logging.info("Skipping RBI (filtered): %s", title)
                 continue
 
-            pdf_url = pdf_a["href"]
-            year = str(current_dt.year)
+            pdf_url    = pdf_a["href"]
+            year       = str(current_dt.year)
             month_full = current_dt.strftime("%B")
 
             save_dir = ensure_year_month_structure(
                 BASE_PATH, task["category"], task["subfolder"], year, month_full
             )
 
-            # Use the specialized download logic
+            # ── Step 5: Polite delay BEFORE every download ──
+            delay = random.uniform(3, 7)
+            logging.info("RBI: sleeping %.1fs before download...", delay)
+            await asyncio.sleep(delay)
+
             downloaded_path = await download_pdf(session, pdf_url, save_dir, title)
 
             if downloaded_path:
                 ALL_DOWNLOADED.append({
-                    "Verticals": task["category"],
+                    "Verticals":   task["category"],
                     "SubCategory": task["subfolder"],
-                    "Year": year,
-                    "Month": month_full,
-                    "IssueDate": current_dt.strftime("%Y-%m-%d"),
-                    "Title": title,
-                    "PDF_URL": pdf_url,
-                    "File Name": os.path.basename(downloaded_path),
-                    "Path": os.path.abspath(downloaded_path)
+                    "Year":        year,
+                    "Month":       month_full,
+                    "IssueDate":   current_dt.strftime("%Y-%m-%d"),
+                    "Title":       title,
+                    "PDF_URL":     pdf_url,
+                    "File Name":   os.path.basename(downloaded_path),
+                    "Path":        os.path.abspath(downloaded_path),
                 })
-                logging.info("RBI Successfully downloaded: %s", title)
+                logging.info("RBI downloaded: %s", title)
+            else:
+                logging.warning("RBI download failed: %s", title)
 
 
-# -----------------------------------------------------
+#-----------------------------------------------------
 def is_ignored_icai_title(title: str) -> bool:
     """
     Returns True if ICAI title should be skipped.
@@ -2583,99 +3001,6 @@ def is_ignored_ibbi_title(title: str) -> bool:
     title_lower = title.lower()
     return any(kw in title_lower for kw in ignore_keywords)
 
-# async def scrape_ibbi_discussion_paper(task, week_start, week_end):
-#     logging.info("IBBI DISCUSSION PAPER SCRAPER -> %s", task["url"])
-
-#     async with AsyncWebCrawler() as crawler:
-#         result = await crawler.arun(url=task["url"])
-
-#     soup = BeautifulSoup(result.html, "html.parser")
-
-#     # IBBI Discussion Papers are DIRECTLY in the table (no detail pages)
-#     rows = soup.select("table tbody tr")
-
-#     if not rows:
-#         logging.warning("No IBBI Discussion Paper rows found")
-#         return
-
-#     async with aiohttp.ClientSession() as session:
-#         for row in rows:
-#             tds = row.find_all("td")
-#             if len(tds) < 3:
-#                 continue
-
-#             # ---- DATE ----
-#             raw_date = tds[1].get_text(" ", strip=True)
-#             raw_date = re.sub(r'(\d+)(st|nd|rd|th)', r'\1', raw_date)
-
-#             parsed = None
-#             for fmt in ("%d %B, %Y", "%d %b, %Y"):
-#                 try:
-#                     parsed = datetime.strptime(raw_date, fmt)
-#                     break
-#                 except ValueError:
-#                     pass
-
-#             if not parsed:
-#                 continue
-
-#             dt = parsed
-
-#             if not (week_start <= dt <= week_end):
-#                 continue
-
-#             # ---- TITLE ----
-#             title = unicodedata.normalize(
-#                 "NFKD",
-#                 tds[2].get_text(" ", strip=True)
-#             )
-
-#             # ---- PDF URL (onclick=newwindow1) ----
-#             download_a = row.select_one("a[onclick*='newwindow1']")
-#             if not download_a:
-#                 continue
-
-#             onclick = download_a.get("onclick", "")
-#             m = re.search(r"newwindow1\(['\"]([^'\"]+\.pdf)['\"]\)", onclick)
-#             if not m:
-#                 continue
-
-#             pdf_url = m.group(1)
-#             if pdf_url.startswith("/"):
-#                 pdf_url = urljoin(task["url"], pdf_url)
-
-#             year = str(dt.year)
-#             month_full = dt.strftime("%B")
-
-#             save_dir = ensure_year_month_structure(
-#                 BASE_PATH,
-#                 task["category"],
-#                 task["subfolder"],
-#                 year,
-#                 month_full
-#             )
-
-#             downloaded_path = await download_pdf(
-#                 session,
-#                 pdf_url,
-#                 save_dir,
-#                 title
-#             )
-
-#             if downloaded_path:
-#                 ALL_DOWNLOADED.append({
-#                     "Verticals": task["category"],
-#                     "SubCategory": task["subfolder"],
-#                     "Year": year,
-#                     "Month": month_full,
-#                     "IssueDate": dt.strftime("%Y-%m-%d"),
-#                     "Title": title,
-#                     "PDF_URL": pdf_url,
-#                     "File Name": os.path.basename(downloaded_path),
-#                     "Path": os.path.abspath(downloaded_path),
-#                 })
-
-#                 logging.info("IBBI Discussion Paper downloaded: %s", title)
 
 async def scrape_ibbi_discussion_paper(task, week_start, week_end):
     logging.info("IBBI DISCUSSION PAPER SCRAPER -> %s", task["url"])
@@ -2942,12 +3267,17 @@ async def scrape_generic_link(task, week_start, week_end):
 
     if category == "IFSCA":
 
+        # SPECIAL CASE: Informal Guidance with LLM filtering
+        if "informal guidance" in subfolder.lower():
+            return await scrape_ifsca_informal_guidance(task, week_start, week_end)
+        
         # SPECIAL CASE: Public Consultation
         if is_ifsca_public_consultation(task["url"]):
             return await scrape_ifsca_public_consultation(task, week_start, week_end)
 
         # DEFAULT: Notifications / Circulars / Others
         return await scrape_ifsca(task, week_start, week_end)
+
 
     # LISTED COMPANIES (NSE/BSE logic)
     if category == "Listed Companies":
