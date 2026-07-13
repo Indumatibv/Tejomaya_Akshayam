@@ -2282,191 +2282,6 @@ Return ONLY JSON.
 
     return pdfs[0]
 
-# async def scrape_ifsca_informal_guidance(
-#     task,
-#     week_start,
-#     week_end
-# ):
-#     logging.info(
-#         "IFSCA INFORMAL GUIDANCE SCRAPER STARTING -> %s",
-#         task["url"]
-#     )
-
-#     chrome_opts = webdriver.ChromeOptions()
-#     chrome_opts.add_argument("--headless=new")
-#     chrome_opts.add_argument("--no-sandbox")
-#     chrome_opts.add_argument("--disable-gpu")
-
-#     driver = webdriver.Chrome(options=chrome_opts)
-
-#     try:
-
-#         wait = WebDriverWait(driver, 20)
-
-#         driver.get(task["url"])
-
-#         rows = wait.until(
-#             EC.presence_of_all_elements_located(
-#                 (By.CSS_SELECTOR, "tbody tr")
-#             )
-#         )
-
-#         logging.info(
-#             "IFSCA IG MAIN ROWS FOUND: %s",
-#             len(rows)
-#         )
-
-#         session = requests.Session()
-
-#         for cookie in driver.get_cookies():
-#             session.cookies.set(
-#                 cookie["name"],
-#                 cookie["value"]
-#             )
-
-#         for row in rows:
-
-#             cols = row.find_elements(By.TAG_NAME, "td")
-
-#             if len(cols) < 3:
-#                 continue
-
-#             try:
-#                 dt = datetime.strptime(
-#                     cols[1].text.strip(),
-#                     "%d/%m/%Y"
-#                 )
-#             except:
-#                 continue
-
-#             if not (week_start <= dt <= week_end):
-#                 continue
-
-#             title_link = cols[2].find_element(
-#                 By.TAG_NAME,
-#                 "a"
-#             )
-
-#             main_title = title_link.text.strip()
-
-#             detail_url = title_link.get_attribute(
-#                 "href"
-#             )
-
-#             logging.info(
-#                 "Opening inner page -> %s",
-#                 detail_url
-#             )
-
-#             driver.get(detail_url)
-
-#             pdf_links = wait.until(
-#                 EC.presence_of_all_elements_located(
-#                     (
-#                         By.CSS_SELECTOR,
-#                         "tbody tr td:nth-child(3) a"
-#                     )
-#                 )
-#             )
-
-#             pdf_data = []
-
-#             for pdf in pdf_links:
-#                 pdf_data.append({
-#                     "title": pdf.text.strip(),
-#                     "getfile_url": pdf.get_attribute("href")
-#                 })
-
-#             logging.info(
-#                 "IFSCA IG PDF LINKS FOUND: %s",
-#                 len(pdf_data)
-#             )
-
-#             selected_pdf = select_response_pdf(
-#                 pdf_data
-#             )
-
-#             logging.info(
-#                 "LLM SELECTED -> %s",
-#                 selected_pdf["title"]
-#             )
-
-#             driver.get(
-#                 selected_pdf["getfile_url"]
-#             )
-
-#             iframe = wait.until(
-#                 EC.presence_of_element_located(
-#                     (By.TAG_NAME, "iframe")
-#                 )
-#             )
-
-#             real_pdf_url = iframe.get_attribute(
-#                 "src"
-#             )
-
-#             year = str(dt.year)
-#             month_full = dt.strftime("%B")
-
-#             save_dir = ensure_year_month_structure(
-#                 BASE_PATH,
-#                 task["category"],
-#                 task["subfolder"],
-#                 year,
-#                 month_full
-#             )
-
-#             filename = real_pdf_url.split(
-#                 "fileName="
-#             )[-1]
-
-#             filepath = os.path.join(
-#                 save_dir,
-#                 filename
-#             )
-
-#             response = session.get(
-#                 real_pdf_url,
-#                 headers={
-#                     "Referer": selected_pdf["getfile_url"],
-#                     "User-Agent": "Mozilla/5.0"
-#                 },
-#                 timeout=60
-#             )
-
-#             with open(filepath, "wb") as f:
-#                 f.write(response.content)
-
-#             ALL_DOWNLOADED.append({
-#                 "Verticals": task["category"],
-#                 "SubCategory": task["subfolder"],
-#                 "Year": year,
-#                 "Month": month_full,
-#                 "IssueDate": dt.strftime("%Y-%m-%d"),
-
-#                 # IMPORTANT
-#                 "Title": main_title,
-
-#                 "PDF_URL": real_pdf_url,
-#                 "File Name": filename,
-#                 "Path": os.path.abspath(filepath)
-#             })
-
-#             logging.info(
-#                 "Downloaded IG response -> %s",
-#                 filename
-#             )
-
-#             driver.get(task["url"])
-
-#             rows = wait.until(
-#                 EC.presence_of_all_elements_located(
-#                     (By.CSS_SELECTOR, "tbody tr")
-#                 )
-#             )
-
-#     finally:
-#         driver.quit()
 
 async def scrape_ifsca_informal_guidance(
     task,
@@ -3063,20 +2878,80 @@ async def scrape_ibbi_discussion_paper(task, week_start, week_end):
             )
 
             # ---- PDF URL EXTRACTION ----
-            # Discussion papers often have the link in the 3rd or 4th cell
-            download_a = row.select_one("a[onclick*='newwindow1']")
-            if not download_a:
+           
+            pdf_url = None
+
+            # --------------------------------------------------
+            # 1. Direct PDF link (MOST RELIABLE)
+            # --------------------------------------------------
+            download_a = row.select_one('a[href$=".pdf"], a[href*=".pdf"]')
+            if download_a:
+                href = download_a.get("href", "").strip()
+                if href:
+                    pdf_url = urljoin(task["url"], href)
+
+            # --------------------------------------------------
+            # 2. JavaScript onclick = newwindow1(...)
+            # --------------------------------------------------
+            if not pdf_url:
+                download_a = row.select_one("a[onclick]")
+                if download_a:
+                    onclick = download_a.get("onclick", "")
+
+                    m = re.search(
+                        r"newwindow1\(['\"]([^'\"]+)['\"]\)",
+                        onclick,
+                        re.I,
+                    )
+
+                    if m:
+                        pdf_url = urljoin(task["url"], m.group(1))
+
+            # --------------------------------------------------
+            # 3. data-href attribute
+            # --------------------------------------------------
+            if not pdf_url:
+                a = row.select_one("[data-href]")
+                if a:
+                    pdf_url = urljoin(task["url"], a["data-href"])
+
+            # --------------------------------------------------
+            # 4. data-url attribute
+            # --------------------------------------------------
+            if not pdf_url:
+                a = row.select_one("[data-url]")
+                if a:
+                    pdf_url = urljoin(task["url"], a["data-url"])
+
+            # --------------------------------------------------
+            # 5. Any anchor containing ".pdf"
+            # --------------------------------------------------
+            if not pdf_url:
+                for a in row.find_all("a", href=True):
+                    href = a["href"]
+                    if ".pdf" in href.lower():
+                        pdf_url = urljoin(task["url"], href)
+                        break
+
+            # --------------------------------------------------
+            # 6. Last resort: regex anywhere in row HTML
+            # --------------------------------------------------
+            if not pdf_url:
+                html = str(row)
+
+                m = re.search(
+                    r'https?://[^"\']+\.pdf|/[^"\']+\.pdf',
+                    html,
+                    re.I,
+                )
+
+                if m:
+                    pdf_url = urljoin(task["url"], m.group(0))
+
+            if not pdf_url:
+                logging.warning("No PDF link found for: %s", title)
                 continue
 
-            onclick = download_a.get("onclick", "")
-            # Regex handles both single quotes and double quotes in the JS function
-            m = re.search(r"newwindow1\(['\"]([^'\"]+\.pdf)['\"]\)", onclick)
-            if not m:
-                continue
-
-            pdf_url = m.group(1)
-            if pdf_url.startswith("/"):
-                pdf_url = urljoin(task["url"], pdf_url)
 
             # ---- DIRECTORY & DOWNLOAD ----
             year = str(dt.year)
@@ -3118,24 +2993,8 @@ async def scrape_ibbi_1(task, week_start, week_end):
     async with AsyncWebCrawler() as crawler:
         result = await crawler.arun(url=task["url"])
 
-    # soup = BeautifulSoup(result.html, "html.parser")
-    # rows = soup.select("table tbody tr")
-
-    # if not rows:
-    #     logging.warning("No IBBI rows found")
-    #     return
 
     soup = BeautifulSoup(result.html, "html.parser")
-
-    # if task["subfolder"] == "Discussion Paper":
-    #     # Discussion Paper pages do NOT use table/tbody consistently
-    #     rows = soup.select("tr")
-    # else:
-    #     rows = soup.select("table tbody tr")
-
-    # if not rows:
-    #     logging.warning("No IBBI rows found for subfolder: %s", task["subfolder"])
-    #     return
 
     # Discussion Paper is NOT a row-based listing
     if task["subfolder"] == "Discussion Paper":
@@ -3154,15 +3013,6 @@ async def scrape_ibbi_1(task, week_start, week_end):
             tds = row.find_all("td")
             if len(tds) < 3:
                 continue
-
-            # ---- DATE ----
-            # try:
-            #     dt = datetime.strptime(
-            #         tds[1].get_text(strip=True),
-            #         "%d %b, %Y"
-            #     )
-            # except Exception:
-            #     continue
 
             raw_date = tds[1].get_text(" ", strip=True)
 
@@ -3196,19 +3046,80 @@ async def scrape_ibbi_1(task, week_start, week_end):
                 logging.info("Skipping IBBI (filtered title): %s", title)
                 continue
 
-            # ---- PDF URL (onclick anywhere in row) ----
-            download_a = row.select_one("a[onclick]")
-            if not download_a:
+
+            pdf_url = None
+
+            # --------------------------------------------------
+            # 1. Direct PDF link (MOST RELIABLE)
+            # --------------------------------------------------
+            download_a = row.select_one('a[href$=".pdf"], a[href*=".pdf"]')
+            if download_a:
+                href = download_a.get("href", "").strip()
+                if href:
+                    pdf_url = urljoin(task["url"], href)
+
+            # --------------------------------------------------
+            # 2. JavaScript onclick = newwindow1(...)
+            # --------------------------------------------------
+            if not pdf_url:
+                download_a = row.select_one("a[onclick]")
+                if download_a:
+                    onclick = download_a.get("onclick", "")
+
+                    m = re.search(
+                        r"newwindow1\(['\"]([^'\"]+)['\"]\)",
+                        onclick,
+                        re.I,
+                    )
+
+                    if m:
+                        pdf_url = urljoin(task["url"], m.group(1))
+
+            # --------------------------------------------------
+            # 3. data-href attribute
+            # --------------------------------------------------
+            if not pdf_url:
+                a = row.select_one("[data-href]")
+                if a:
+                    pdf_url = urljoin(task["url"], a["data-href"])
+
+            # --------------------------------------------------
+            # 4. data-url attribute
+            # --------------------------------------------------
+            if not pdf_url:
+                a = row.select_one("[data-url]")
+                if a:
+                    pdf_url = urljoin(task["url"], a["data-url"])
+
+            # --------------------------------------------------
+            # 5. Any anchor containing ".pdf"
+            # --------------------------------------------------
+            if not pdf_url:
+                for a in row.find_all("a", href=True):
+                    href = a["href"]
+                    if ".pdf" in href.lower():
+                        pdf_url = urljoin(task["url"], href)
+                        break
+
+            # --------------------------------------------------
+            # 6. Last resort: regex anywhere in row HTML
+            # --------------------------------------------------
+            if not pdf_url:
+                html = str(row)
+
+                m = re.search(
+                    r'https?://[^"\']+\.pdf|/[^"\']+\.pdf',
+                    html,
+                    re.I,
+                )
+
+                if m:
+                    pdf_url = urljoin(task["url"], m.group(0))
+
+            if not pdf_url:
+                logging.warning("No PDF link found for: %s", title)
                 continue
 
-            onclick = download_a.get("onclick", "")
-            m = re.search(r"newwindow1\('([^']+\.pdf)'\)", onclick)
-            if not m:
-                continue
-
-            pdf_url = m.group(1)
-            if pdf_url.startswith("/"):
-                pdf_url = urljoin(task["url"], pdf_url)
 
             year = str(dt.year)
             month_full = dt.strftime("%B")
