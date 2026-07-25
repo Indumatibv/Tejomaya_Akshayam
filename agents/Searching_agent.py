@@ -49,7 +49,39 @@ try:
     _UC_AVAILABLE = True
 except ImportError:
     _UC_AVAILABLE = False
-  
+
+
+import subprocess
+
+def get_chrome_major_version() -> int | None:
+    """
+    Detect the installed Chrome browser's major version at runtime,
+    so undetected_chromedriver always pairs with the right build.
+    """
+    try:
+        if platform.system() == "Darwin":
+            out = subprocess.check_output(
+                ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "--version"],
+                text=True, timeout=10
+            )
+        elif platform.system() == "Windows":
+            out = subprocess.check_output(
+                ["reg", "query", r"HKCU\Software\Google\Chrome\BLBeacon", "/v", "version"],
+                text=True, timeout=10
+            )
+        else:  # Linux
+            out = subprocess.check_output(
+                ["google-chrome", "--version"], text=True, timeout=10
+            )
+
+        m = re.search(r"(\d+)\.", out)
+        version = int(m.group(1)) if m else None
+        return version
+    except Exception:
+        return None
+
+CHROME_MAJOR_VERSION = get_chrome_major_version()
+
 # ---------------------- Logging ----------------------
 logging.basicConfig(
     level=logging.INFO,
@@ -344,7 +376,8 @@ def _build_mca_driver():
         opts.add_argument("--no-sandbox")
         opts.add_argument("--disable-dev-shm-usage")
         # return uc.Chrome(options=opts)
-        return uc.Chrome(options=opts, version_main=149)
+        # return uc.Chrome(options=opts, version_main=149)
+        return uc.Chrome(options=opts, version_main=CHROME_MAJOR_VERSION)
     else:
         from selenium import webdriver
         from selenium.webdriver.chrome.options import Options
@@ -1466,7 +1499,9 @@ async def scrape_bse(task, week_start, week_end):
                     "download.directory_upgrade": True,
                 }
                 opts.add_experimental_option("prefs", prefs)
-                driver = uc.Chrome(options=opts, version_main=148)
+                # driver = uc.Chrome(options=opts, version_main=150)
+                driver = uc.Chrome(options=opts, version_main=CHROME_MAJOR_VERSION)
+                # driver = uc.Chrome(options=opts)
             else:
                 opts = webdriver.ChromeOptions()
                 opts.add_argument("--no-sandbox")
@@ -1758,13 +1793,28 @@ async def scrape_sebi_informal_guidance(task, week_start, week_end):
 
                 # 4. DOWNLOAD AND RECORD
                 year, month_full = str(dt.year), dt.strftime("%B")
-                save_dir = ensure_year_month_structure(BASE_PATH, task["category"], task["subfolder"], year, month_full)
+
+                # ---- AIF Logic ----
+                category = task["category"]
+                if category == "SEBI":
+                    if detect_aif_category(title):
+                        logging.info("AIF detected -> storing under AIF")
+                        category = "AIF"
+                save_dir = ensure_year_month_structure(
+                    BASE_PATH,
+                    category,
+                    task["subfolder"],
+                    year,
+                    month_full
+                )
+                # save_dir = ensure_year_month_structure(BASE_PATH, task["category"], task["subfolder"], year, month_full)
                 
                 downloaded_path = await download_pdf(session, pdf_url, save_dir, title)
 
                 if downloaded_path:
                     ALL_DOWNLOADED.append({
-                        "Verticals": task["category"],
+                        # "Verticals": task["category"],
+                        "Verticals": category,
                         "SubCategory": task["subfolder"],
                         "Year": year,
                         "Month": month_full,
@@ -3226,6 +3276,9 @@ async def scrape_generic_link(task, week_start, week_end):
 #---------------------------------------------------------------------
 
 async def main():
+    
+    logging.info("Using Chrome major version: %s", CHROME_MAJOR_VERSION)
+    
     weeks_back = 0 # 0=this week, 1=last week, 2=two weeks back (week= this week monday to next sunday)
     week_start, week_end = get_week_range(weeks_back)
 
