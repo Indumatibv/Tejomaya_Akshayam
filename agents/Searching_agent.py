@@ -2587,27 +2587,64 @@ def is_ignored_rbi_title(title: str) -> bool:
     t = unicodedata.normalize("NFKD", title).lower()
     t = re.sub(r"\s+", " ", t)
 
+    # ignore_keywords = [
+    #     # Auctions
+    #     "auction",
+    #     "auction results",
+
+    #     # Money market
+    #     "money market operations",
+    #     "variable rate repo",
+
+    #     # Securities related
+    #     "conversion",
+    #     "redemption",
+    #     "state government securities",
+
+    #     # Penalties / data
+    #     "monetary penalty",
+    #     "turnover data",
+
+    #     # Publications
+    #     "bulletin",
+    #     "release of data",
+    # ]
+
     ignore_keywords = [
-        # Auctions
         "auction",
         "auction results",
-
-        # Money market
         "money market operations",
-        "variable rate repo",
-
-        # Securities related
         "conversion",
         "redemption",
         "state government securities",
-
-        # Penalties / data
-        "monetary penalty",
+        "imposes monetary penalty",
         "turnover data",
-
-        # Publications
+        "variable rate repo",
         "bulletin",
         "release of data",
+        "treasury bills",
+        "directions under section 35a",
+        "money supply for fortnight",
+        "releases data",
+        "rural bank",
+        "commercial banks",
+        "scheduled banks",
+        "urban banks",
+        "consumer survey",
+        "urban co-operative banks",
+        "regional rural banks",
+        "omo sale",
+        "local area banks",
+        "statement of position",
+        "small finance banks",
+        "issuance of calendar",
+        "wma limit",
+        "deployment of bank credit",
+        "external debt data",
+        "international position",
+        "data on invisibles",
+        "rate of interest on floating bonds",
+        "appointment of executive director",
     ]
 
     return any(kw in t for kw in ignore_keywords)
