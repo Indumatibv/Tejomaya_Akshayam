@@ -151,7 +151,7 @@ def safe_pdf_filename(title: str | None, pdf_url: str, max_base_len: int = 80) -
 if platform.system() == "Windows":
     BASE_PATH = r"C:\Users\Admin\Desktop\Indu\Akshayam\Tejomaya_pdfs\Akshayam Data"
 else:
-    BASE_PATH = "/Users/admin/Downloads/Tejomaya_pdfs/Akshayam Data"
+    BASE_PATH = "/Users/apple/Downloads/Tejomaya_pdfs/Akshayam Data"
 
 # Ensure base download folder exists
 os.makedirs(BASE_PATH, exist_ok=True)
