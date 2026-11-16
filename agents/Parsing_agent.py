@@ -33,7 +33,10 @@ from langchain_community.llms import Ollama
 
 #from langchain_ollama import OllamaLLM
 
-from langchain.prompts import PromptTemplate
+try:
+    from langchain_core.prompts import PromptTemplate
+except ImportError:
+    from langchain.prompts import PromptTemplate
 
 # ---------------------- Logging ----------------------
 logging.basicConfig(
