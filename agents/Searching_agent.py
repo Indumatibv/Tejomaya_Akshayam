@@ -1248,15 +1248,126 @@ async def direct_nse_pdf_download(pdf_url: str, save_path: str):
         logging.error("NSE Direct download error: %s", e)
         return False
 
+
+def fetch_nse_listing_html(url: str) -> str | None:
+    """
+    Fetch NSE listing page using Selenium as a fallback
+    when Crawl4AI / Playwright fails.
+    """
+    driver = None
+
+    try:
+        logging.info("NSE: Starting Selenium fallback...")
+
+        if _UC_AVAILABLE:
+            opts = uc.ChromeOptions()
+            opts.add_argument("--no-sandbox")
+            opts.add_argument("--disable-dev-shm-usage")
+            opts.add_argument("--disable-blink-features=AutomationControlled")
+            opts.add_argument("--window-size=1440,1000")
+
+            driver = uc.Chrome(
+                options=opts,
+                version_main=CHROME_MAJOR_VERSION
+            )
+        else:
+            opts = webdriver.ChromeOptions()
+            opts.add_argument("--disable-blink-features=AutomationControlled")
+            opts.add_argument("--window-size=1440,1000")
+
+            driver = webdriver.Chrome(options=opts)
+
+        driver.set_page_load_timeout(60)
+        driver.get(url)
+
+        logging.info("NSE: Waiting for listing table...")
+
+        WebDriverWait(driver, 45).until(
+            lambda d: len(
+                d.find_elements(By.CSS_SELECTOR, "table tbody tr")
+            ) > 0
+        )
+
+        time.sleep(3)
+
+        html = driver.page_source
+
+        logging.info(
+            "NSE: Selenium fetched page successfully. HTML size: %d",
+            len(html)
+        )
+
+        return html
+
+    except Exception:
+        logging.exception("NSE Selenium fallback failed")
+        return None
+
+    finally:
+        if driver:
+            try:
+                driver.quit()
+            except Exception:
+                pass
+
+
 async def scrape_nse(task, week_start, week_end):
     logging.info("NSE LISTED COMPANIES SCRAPER -> %s", task["url"])
 
-    # 1) Crawl page using Crawl4AI
-    async with AsyncWebCrawler() as crawler:
-        result = await crawler.arun(url=task["url"])
+    # # 1) Crawl page using Crawl4AI
+    # async with AsyncWebCrawler() as crawler:
+    #     result = await crawler.arun(url=task["url"])
 
-    soup = BeautifulSoup(result.html, "html.parser")
+    # soup = BeautifulSoup(result.html, "html.parser")
+    # rows = soup.select("table tbody tr")
+
+
+    # 1) Try Crawl4AI first
+    html = None
+
+    try:
+        logging.info("NSE: Trying Crawl4AI...")
+
+        async with AsyncWebCrawler() as crawler:
+            result = await crawler.arun(url=task["url"])
+
+        if result and result.html:
+            soup = BeautifulSoup(result.html, "html.parser")
+            rows = soup.select("table tbody tr")
+
+            if rows:
+                html = result.html
+                logging.info("NSE: Crawl4AI successful. Rows: %d", len(rows))
+
+    except Exception as e:
+        logging.warning("NSE Crawl4AI failed: %s", e)
+
+    # 2) Selenium fallback
+    if not html:
+        logging.warning("NSE: Switching to Selenium fallback...")
+        html = fetch_nse_listing_html(task["url"])
+
+    if not html:
+        logging.error("NSE: Both Crawl4AI and Selenium failed.")
+        return
+
+    # 3) Parse listing page
+    soup = BeautifulSoup(html, "html.parser")
     rows = soup.select("table tbody tr")
+
+    if not rows:
+        rows = soup.select("table tr")
+
+    logging.info("NSE rows detected: %d", len(rows))
+
+    if not rows:
+        logging.error("No rows found on NSE page")
+        return
+
+    top_10 = rows[:10]
+    logging.info("Processing top 10 NSE circulars")
+
+
     logging.info("NSE rows detected: %d", len(rows))
 
     if not rows:
